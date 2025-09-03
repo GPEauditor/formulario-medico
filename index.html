@@ -1,0 +1,775 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Formulario de Registro - Médico de Control</title>
+    <style>
+        body { font-family: Arial, sans-serif; max-width: 800px; margin: auto; padding: 20px; background-color: #f4f7f6; }
+        h1, h2 { color: #005662; }
+        form { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; background: #fff; padding: 20px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+        label { font-weight: bold; margin-bottom: 5px; }
+        input, select { width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; }
+        input[readonly] { background-color: #e9ecef; }
+        .full-width { grid-column: 1 / -1; }
+        .button-container { grid-column: 1 / -1; display: flex; justify-content: center; gap: 20px; }
+        button { padding: 10px 20px; border: none; border-radius: 5px; color: #fff; font-size: 16px; cursor: pointer; }
+        #btn-guardar { background-color: #007bff; }
+        #btn-limpiar { background-color: #6c757d; }
+        .section { margin-bottom: 20px; background: #fff; padding: 15px; border-radius: 8px; }
+        /* Estilo para vista móvil */
+        @media (max-width: 600px) {
+            form { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+    <h1>Formulario de Ingreso de Datos</h1>
+    
+    <div class="section">
+        <h2>Recursos y Capacitaciones</h2>
+        <ul>
+            <li><a href="https://www.youtube.com/live/lJyopRFUAag?si=5E35Icv-C9htTxAE" target="_blank">Actividades del Médico de Control (CENATE)</a></li>
+            <li><a href="https://youtu.be/h0X7MqMWCp0" target="_blank">Análisis de la ITP y Derivación a COMECI</a></li>
+            <!-- Agrega aquí más enlaces de capacitación, YouTube, etc. -->
+        </ul>
+        <h2>Contacto</h2>
+        <p><strong>Soporte Técnico:</strong> Dr. Peña/Romero | Cel: 921013657 / 950622495</p>
+        <p><strong>Consultas Generales:</strong> <a href="mailto:medicodecontrol@essalud.gob.pe">medicodecontrol@essalud.gob.pe</a></p>
+    </div>
+    
+    <form id="formulario" novalidate>
+        <!-- Fila 1 -->
+        <div class="form-group">
+            <label for="red">RED:</label>
+            <select id="red" required onchange="actualizarIpress()"><option value="">Seleccione una Red</option></select>
+        </div>
+        <div class="form-group">
+            <label for="ipress">IPRESS:</label>
+            <select id="ipress" required onchange="asignarCodigoIpress()"><option value="">Seleccione una IPRESS</option></select>
+        </div>
+
+        <!-- Fila 2 -->
+        <div class="form-group">
+            <label for="tipo">TIPO:</label>
+            <input id="tipo" readonly>
+        </div>
+        <div class="form-group">
+            <label for="codigoIpress">CÓDIGO DE IPRESS:</label>
+            <input id="codigoIpress" readonly>
+        </div>
+
+        <!-- Fila 3 -->
+        <div class="form-group">
+            <label for="apellidos">APELLIDOS:</label>
+            <input id="apellidos" required pattern="[A-Za-zñÑ\s]+" oninput="this.value = this.value.toUpperCase().replace(/[^A-ZÑ\s]/g, '')">
+        </div>
+        <div class="form-group">
+            <label for="nombres">NOMBRES:</label>
+            <input id="nombres" required pattern="[A-Za-zñÑ\s]+" oninput="this.value = this.value.toUpperCase().replace(/[^A-ZÑ\s]/g, '')">
+        </div>
+
+        <!-- Fila 4 -->
+        <div class="form-group">
+            <label for="tipoDoc">TIPO DE DOCUMENTO:</label>
+            <select id="tipoDoc" required><option value="DNI">DNI</option><option value="CE">CARNE DE EXTRANJERIA</option></select>
+        </div>
+        <div class="form-group">
+            <label for="numeroDoc">NÚMERO DE DOCUMENTO:</label>
+            <input id="numeroDoc" type="text" required onblur="padearDocumento(this)">
+        </div>
+
+        <!-- Fila 5 -->
+        <div class="form-group">
+            <label for="cargo">CARGO:</label>
+            <select id="cargo" required><option value="Médico de Control">Médico de Control</option><option value="OGIT">OGIT</option><option value="COMAI">COMAI</option><option value="COMECI">COMECI</option></select>
+        </div>
+        <div class="form-group">
+            <label for="profesional">PROFESIONAL:</label>
+            <select id="profesional" required><option value="Médico">Médico</option><option value="Obstetra">Obstetra</option><option value="Ingeniero">Ingeniero</option><option value="Odontólogo">Odontólogo</option><option value="Otros">Otros profesionales de salud</option></select>
+        </div>
+
+        <!-- Fila 6 -->
+        <div class="form-group">
+            <label for="codigoPlanilla">CÓDIGO DE PLANILLA:</label>
+            <input id="codigoPlanilla" placeholder="8 dígitos o marque externa">
+            <input type="checkbox" id="esExterna" onclick="togglePlanilla(this)"> Personal de IPRESS Externa
+        </div>
+        <div class="form-group">
+            <label for="colegiatura">COLEGIATURA (CMP):</label>
+            <input id="colegiatura" type="text" onblur="padearConCeros(this, 6)" placeholder="6 dígitos">
+        </div>
+
+        <!-- Fila 7 -->
+        <div class="form-group full-width">
+            <label for="numResolucion">NÚMERO DE RESOLUCIÓN:</label>
+            <input id="numResolucion" required oninput="this.value = this.value.toUpperCase()">
+        </div>
+        
+        <!-- Fila 8 -->
+        <div class="form-group">
+            <label for="fechaEmision">FECHA DE EMISIÓN DE RESOLUCIÓN:</label>
+            <input id="fechaEmision" type="date" required onchange="validarFechas()">
+        </div>
+        <div class="form-group">
+            <label for="fechaTermino">FECHA DE TÉRMINO DE VIGENCIA:</label>
+            <input id="fechaTermino" type="date" required onchange="validarFechas()">
+        </div>
+
+        <!-- Fila 9 -->
+        <div class="form-group full-width">
+            <label for="archivo">CARGAR RESOLUCIÓN (PDF o Imagen):</label>
+            <input id="archivo" type="file" accept="image/*,.pdf">
+        </div>
+        
+        <!-- Fila 10 -->
+        <div class="form-group">
+            <label for="telefono">TELÉFONO PERSONAL:</label>
+            <input id="telefono" type="tel" required placeholder="Debe empezar con 9">
+        </div>
+        <div class="form-group">
+            <label for="telefonoIpress">TELÉFONO IPRESS:</label>
+            <input id="telefonoIpress" type="tel">
+        </div>
+
+        <!-- Fila 11 -->
+        <div class="form-group">
+            <label for="correoInstitucional">CORREO INSTITUCIONAL:</label>
+            <input id="correoInstitucional" type="email" required placeholder="usuario@essalud.gob.pe">
+        </div>
+        <div class="form-group">
+            <label for="correoParticular">CORREO PARTICULAR:</label>
+            <input id="correoParticular" type="email" required>
+        </div>
+        
+        <!-- Fila 12 -->
+        <div class="form-group">
+            <label for="solicitud">TIPO DE SOLICITUD:</label>
+            <select id="solicitud" required><option value="ACCESO SIGI">ACCESO SIGI</option><option value="CAPACITACION">CAPACITACIÓN</option><option value="RENOVACIÓN DE CONTRASEÑA">RENOVACIÓN DE CONTRASEÑA</option></select>
+        </div>
+        <div class="form-group">
+            <label for="auditor">MÉDICO AUDITOR GPE:</label>
+            <input id="auditor" readonly>
+        </div>
+        
+        <!-- Botones -->
+        <div class="button-container">
+            <button id="btn-limpiar" type="button" onclick="limpiarFormulario()">Limpiar</button>
+            <button id="btn-guardar" type="button" onclick="guardarDatos()">Guardar</button>
+        </div>
+    </form>
+
+    <script>
+        // ### PASO 1: PEGA AQUÍ LOS DATOS DE TU EXCEL ###
+        // Extrae los datos de tu archivo PADRON_GIT.xlsx y formatéalos como un array de objetos.
+        const datosExcel = [
+            { "codigoRed": 2, "red": "ALMENARA", "tipo": "PRESTACIONAL", "codigoIpress": 478, "ipress": "CAP III ALFREDO PIAZZA ROBERTS" },
+            { "codigoRed": 2, "red": "ALMENARA", "tipo": "PRESTACIONAL", "codigoIpress": 446, "ipress": "CAP III EL AGUSTINO" },
+            { "codigoRed": 2, "red": "ALMENARA", "tipo": "PRESTACIONAL", "codigoIpress": 447, "ipress": "CAP III HUAYCAN" },
+            { "codigoRed": 2, "red": "ALMENARA", "tipo": "PRESTACIONAL", "codigoIpress": 481, "ipress": "CAP III INDEPENDENCIA" },
+            { "codigoRed": 2, "red": "ALMENARA", "tipo": "PRESTACIONAL", "codigoIpress": 20, "ipress": "CM CASAPALCA" },
+            { "codigoRed": 2, "red": "ALMENARA", "tipo": "PRESTACIONAL", "codigoIpress": 406, "ipress": "HI AURELIO DIAZ-UFANO Y PERAL" },
+            { "codigoRed": 2, "red": "ALMENARA", "tipo": "PRESTACIONAL", "codigoIpress": 404, "ipress": "HI JORGE VOTO BERNALES CORPANCHO" },
+            { "codigoRed": 2, "red": "ALMENARA", "tipo": "PRESTACIONAL", "codigoIpress": 17, "ipress": "HII RAMON CASTILLA" },
+            { "codigoRed": 2, "red": "ALMENARA", "tipo": "PRESTACIONAL", "codigoIpress": 403, "ipress": "HII SAN ISIDRO LABRADOR" },
+            { "codigoRed": 2, "red": "ALMENARA", "tipo": "PRESTACIONAL", "codigoIpress": 8, "ipress": "HII VITARTE" },
+            { "codigoRed": 2, "red": "ALMENARA", "tipo": "PRESTACIONAL", "codigoIpress": 7, "ipress": "HIII HOSPITAL DE EMERGENCIAS GRAU" },
+            { "codigoRed": 2, "red": "ALMENARA", "tipo": "PRESTACIONAL", "codigoIpress": 2, "ipress": "HN GUILLERMO ALMENARA IRIGOYEN" },
+            { "codigoRed": 2, "red": "ALMENARA", "tipo": "PRESTACIONAL", "codigoIpress": 23, "ipress": "PM CONSTRUCCION CIVIL" },
+            { "codigoRed": 2, "red": "ALMENARA", "tipo": "PRESTACIONAL", "codigoIpress": 11, "ipress": "POL CHOSICA" },
+            { "codigoRed": 2, "red": "ALMENARA", "tipo": "PRESTACIONAL", "codigoIpress": 14, "ipress": "POL FRANCISCO PIZARRO" },
+            { "codigoRed": 2, "red": "ALMENARA", "tipo": "PRESTACIONAL", "codigoIpress": 376, "ipress": "POL SAN LUIS" },
+            { "codigoRed": 5, "red": "AMAZONAS", "tipo": "ASISTENCIAL", "codigoIpress": 507, "ipress": "CAP I IMAZA" },
+            { "codigoRed": 5, "red": "AMAZONAS", "tipo": "ASISTENCIAL", "codigoIpress": 156, "ipress": "CAP I LAMUD" },
+            { "codigoRed": 5, "red": "AMAZONAS", "tipo": "ASISTENCIAL", "codigoIpress": 157, "ipress": "CAP I LONYA GRANDE" },
+            { "codigoRed": 5, "red": "AMAZONAS", "tipo": "ASISTENCIAL", "codigoIpress": 158, "ipress": "CAP I OCALLI" },
+            { "codigoRed": 5, "red": "AMAZONAS", "tipo": "ASISTENCIAL", "codigoIpress": 159, "ipress": "CAP I PEDRO RUIZ GALLO" },
+            { "codigoRed": 5, "red": "AMAZONAS", "tipo": "ASISTENCIAL", "codigoIpress": 160, "ipress": "CAP II RODRIGUEZ DE MENDOZA" },
+            { "codigoRed": 5, "red": "AMAZONAS", "tipo": "ASISTENCIAL", "codigoIpress": 377, "ipress": "CAP II SANTA MARIA DE NIEVA" },
+            { "codigoRed": 5, "red": "AMAZONAS", "tipo": "ASISTENCIAL", "codigoIpress": 153, "ipress": "HI EL BUEN SAMARITANO" },
+            { "codigoRed": 5, "red": "AMAZONAS", "tipo": "ASISTENCIAL", "codigoIpress": 154, "ipress": "HI HEROES DEL CENEPA" },
+            { "codigoRed": 5, "red": "AMAZONAS", "tipo": "ASISTENCIAL", "codigoIpress": 155, "ipress": "HI HIGOS URCO" },
+            { "codigoRed": 6, "red": "ANCASH", "tipo": "ASISTENCIAL", "codigoIpress": 185, "ipress": "CAP II SAN JACINTO" },
+            { "codigoRed": 6, "red": "ANCASH", "tipo": "ASISTENCIAL", "codigoIpress": 165, "ipress": "CM CASMA" },
+            { "codigoRed": 6, "red": "ANCASH", "tipo": "ASISTENCIAL", "codigoIpress": 166, "ipress": "CM COISHCO" },
+            { "codigoRed": 6, "red": "ANCASH", "tipo": "ASISTENCIAL", "codigoIpress": 169, "ipress": "CM HUARMEY" },
+            { "codigoRed": 6, "red": "ANCASH", "tipo": "ASISTENCIAL", "codigoIpress": 170, "ipress": "CM SIHUAS" },
+            { "codigoRed": 6, "red": "ANCASH", "tipo": "ASISTENCIAL", "codigoIpress": 167, "ipress": "HI CONO SUR" },
+            { "codigoRed": 6, "red": "ANCASH", "tipo": "ASISTENCIAL", "codigoIpress": 161, "ipress": "HIII CHIMBOTE" },
+            { "codigoRed": 6, "red": "ANCASH", "tipo": "ASISTENCIAL", "codigoIpress": 171, "ipress": "PM CABANA" },
+            { "codigoRed": 6, "red": "ANCASH", "tipo": "ASISTENCIAL", "codigoIpress": 175, "ipress": "PM CONCHUCOS" },
+            { "codigoRed": 6, "red": "ANCASH", "tipo": "ASISTENCIAL", "codigoIpress": 379, "ipress": "PM PALLASCA" },
+            { "codigoRed": 6, "red": "ANCASH", "tipo": "ASISTENCIAL", "codigoIpress": 178, "ipress": "PM PAMPAS" },
+            { "codigoRed": 6, "red": "ANCASH", "tipo": "ASISTENCIAL", "codigoIpress": 487, "ipress": "POL VICTOR PANTA RODRIGUEZ" },
+            { "codigoRed": 7, "red": "APURIMAC", "tipo": "ASISTENCIAL", "codigoIpress": 468, "ipress": "CAP I ANTABAMBA" },
+            { "codigoRed": 7, "red": "APURIMAC", "tipo": "ASISTENCIAL", "codigoIpress": 70, "ipress": "CAP II CHALHUANCA" },
+            { "codigoRed": 7, "red": "APURIMAC", "tipo": "ASISTENCIAL", "codigoIpress": 72, "ipress": "CAP II CHINCHEROS" },
+            { "codigoRed": 7, "red": "APURIMAC", "tipo": "ASISTENCIAL", "codigoIpress": 512, "ipress": "CAP II COTABAMBAS" },
+            { "codigoRed": 7, "red": "APURIMAC", "tipo": "ASISTENCIAL", "codigoIpress": 68, "ipress": "HI ANDAHUAYLAS" },
+            { "codigoRed": 7, "red": "APURIMAC", "tipo": "ASISTENCIAL", "codigoIpress": 67, "ipress": "HII ABANCAY" },
+            { "codigoRed": 7, "red": "APURIMAC", "tipo": "ASISTENCIAL", "codigoIpress": 71, "ipress": "PM CHUQUIBAMBILLA" },
+            { "codigoRed": 7, "red": "APURIMAC", "tipo": "ASISTENCIAL", "codigoIpress": 69, "ipress": "PM CURAHUASI" },
+            { "codigoRed": 8, "red": "AREQUIPA", "tipo": "ASISTENCIAL", "codigoIpress": 87, "ipress": "CAP I CHIVAY" },
+            { "codigoRed": 8, "red": "AREQUIPA", "tipo": "ASISTENCIAL", "codigoIpress": 97, "ipress": "CAP I EL PEDREGAL" },
+            { "codigoRed": 8, "red": "AREQUIPA", "tipo": "ASISTENCIAL", "codigoIpress": 101, "ipress": "CAP I YURA" },
+            { "codigoRed": 8, "red": "AREQUIPA", "tipo": "ASISTENCIAL", "codigoIpress": 94, "ipress": "CAP II HUNTER" },
+            { "codigoRed": 8, "red": "AREQUIPA", "tipo": "ASISTENCIAL", "codigoIpress": 482, "ipress": "CAP III ALTO SELVA ALEGRE" },
+            { "codigoRed": 8, "red": "AREQUIPA", "tipo": "ASISTENCIAL", "codigoIpress": 80, "ipress": "CAP III MELITON SALAS TEJADA" },
+            { "codigoRed": 8, "red": "AREQUIPA", "tipo": "ASISTENCIAL", "codigoIpress": 522, "ipress": "CAP III MIRAFLORES" },
+            { "codigoRed": 8, "red": "AREQUIPA", "tipo": "ASISTENCIAL", "codigoIpress": 453, "ipress": "CAP III PAUCARPATA" },
+            { "codigoRed": 8, "red": "AREQUIPA", "tipo": "ASISTENCIAL", "codigoIpress": 83, "ipress": "CM APLAO" },
+            { "codigoRed": 8, "red": "AREQUIPA", "tipo": "ASISTENCIAL", "codigoIpress": 79, "ipress": "HI EDMUNDO ESCOMEL" },
+            { "codigoRed": 8, "red": "AREQUIPA", "tipo": "ASISTENCIAL", "codigoIpress": 75, "ipress": "HI SAMUEL PASTOR" },
+            { "codigoRed": 8, "red": "AREQUIPA", "tipo": "ASISTENCIAL", "codigoIpress": 74, "ipress": "HII MANUEL DE TORRES MUÑOZ" },
+            { "codigoRed": 8, "red": "AREQUIPA", "tipo": "ASISTENCIAL", "codigoIpress": 76, "ipress": "HIII YANAHUARA" },
+            { "codigoRed": 8, "red": "AREQUIPA", "tipo": "ASISTENCIAL", "codigoIpress": 3, "ipress": "HN CARLOS ALBERTO SEGUIN ESCOBEDO" },
+            { "codigoRed": 8, "red": "AREQUIPA", "tipo": "ASISTENCIAL", "codigoIpress": 82, "ipress": "PM ACARI" },
+            { "codigoRed": 8, "red": "AREQUIPA", "tipo": "ASISTENCIAL", "codigoIpress": 84, "ipress": "PM ATICO" },
+            { "codigoRed": 8, "red": "AREQUIPA", "tipo": "ASISTENCIAL", "codigoIpress": 85, "ipress": "PM CARAVELI" },
+            { "codigoRed": 8, "red": "AREQUIPA", "tipo": "ASISTENCIAL", "codigoIpress": 86, "ipress": "PM CHALA" },
+            { "codigoRed": 8, "red": "AREQUIPA", "tipo": "ASISTENCIAL", "codigoIpress": 88, "ipress": "PM CHUCARAPI" },
+            { "codigoRed": 8, "red": "AREQUIPA", "tipo": "ASISTENCIAL", "codigoIpress": 89, "ipress": "PM CHUQUIBAMBA" },
+            { "codigoRed": 8, "red": "AREQUIPA", "tipo": "ASISTENCIAL", "codigoIpress": 91, "ipress": "PM CORIRE" },
+            { "codigoRed": 8, "red": "AREQUIPA", "tipo": "ASISTENCIAL", "codigoIpress": 92, "ipress": "PM COTAHUASI" },
+            { "codigoRed": 8, "red": "AREQUIPA", "tipo": "ASISTENCIAL", "codigoIpress": 95, "ipress": "PM LA JOYA" },
+            { "codigoRed": 8, "red": "AREQUIPA", "tipo": "ASISTENCIAL", "codigoIpress": 96, "ipress": "PM MATARANI" },
+            { "codigoRed": 8, "red": "AREQUIPA", "tipo": "ASISTENCIAL", "codigoIpress": 99, "ipress": "PM SANTA RITA" },
+            { "codigoRed": 8, "red": "AREQUIPA", "tipo": "ASISTENCIAL", "codigoIpress": 100, "ipress": "PM VITOR" },
+            { "codigoRed": 8, "red": "AREQUIPA", "tipo": "ASISTENCIAL", "codigoIpress": 77, "ipress": "POL METROPOLITANO" },
+            { "codigoRed": 8, "red": "AREQUIPA", "tipo": "ASISTENCIAL", "codigoIpress": 697, "ipress": "IPRESS PCC CERRO COLORADO" },
+            { "codigoRed": 9, "red": "AYACUCHO", "tipo": "ASISTENCIAL", "codigoIpress": 103, "ipress": "CAP II HUANTA" },
+            { "codigoRed": 9, "red": "AYACUCHO", "tipo": "ASISTENCIAL", "codigoIpress": 104, "ipress": "PM SAN MIGUEL" },
+            { "codigoRed": 9, "red": "AYACUCHO", "tipo": "ASISTENCIAL", "codigoIpress": 109, "ipress": "PM SAN FRANCISCO" },
+            { "codigoRed": 9, "red": "AYACUCHO", "tipo": "ASISTENCIAL", "codigoIpress": 110, "ipress": "PM VILCASHUAMAN" },
+            { "codigoRed": 9, "red": "AYACUCHO", "tipo": "ASISTENCIAL", "codigoIpress": 425, "ipress": "CAP I HUANCASANCOS" },
+            { "codigoRed": 9, "red": "AYACUCHO", "tipo": "ASISTENCIAL", "codigoIpress": 449, "ipress": "CAP III METROPOLITANO" },
+            { "codigoRed": 9, "red": "AYACUCHO", "tipo": "ASISTENCIAL", "codigoIpress": 102, "ipress": "HII HUAMANGA" },
+            { "codigoRed": 9, "red": "AYACUCHO", "tipo": "ASISTENCIAL", "codigoIpress": 105, "ipress": "PM CANGALLO" },
+            { "codigoRed": 9, "red": "AYACUCHO", "tipo": "ASISTENCIAL", "codigoIpress": 423, "ipress": "PM QUEROBAMBA" },
+            { "codigoRed": 9, "red": "AYACUCHO", "tipo": "ASISTENCIAL", "codigoIpress": 428, "ipress": "PM HUANCAPI" },
+            { "codigoRed": 10, "red": "CAJAMARCA", "tipo": "ASISTENCIAL", "codigoIpress": 501, "ipress": "CAP II LOS BAÑOS DEL INCA" },
+            { "codigoRed": 10, "red": "CAJAMARCA", "tipo": "ASISTENCIAL", "codigoIpress": 192, "ipress": "CM CAJABAMBA" },
+            { "codigoRed": 10, "red": "CAJAMARCA", "tipo": "ASISTENCIAL", "codigoIpress": 199, "ipress": "CAP I HUALGAYOC" },
+            { "codigoRed": 10, "red": "CAJAMARCA", "tipo": "ASISTENCIAL", "codigoIpress": 193, "ipress": "CM CELENDIN" },
+            { "codigoRed": 10, "red": "CAJAMARCA", "tipo": "ASISTENCIAL", "codigoIpress": 191, "ipress": "HII CAJAMARCA" },
+            { "codigoRed": 10, "red": "CAJAMARCA", "tipo": "ASISTENCIAL", "codigoIpress": 196, "ipress": "PM BAMBAMARCA" },
+            { "codigoRed": 10, "red": "CAJAMARCA", "tipo": "ASISTENCIAL", "codigoIpress": 201, "ipress": "PM SAN MARCOS" },
+            { "codigoRed": 10, "red": "CAJAMARCA", "tipo": "ASISTENCIAL", "codigoIpress": 202, "ipress": "PM SAN MIGUEL" },
+            { "codigoRed": 10, "red": "CAJAMARCA", "tipo": "ASISTENCIAL", "codigoIpress": 204, "ipress": "PM TEMBLADERA" },
+            { "codigoRed": 10, "red": "CAJAMARCA", "tipo": "ASISTENCIAL", "codigoIpress": 203, "ipress": "PM SAN PABLO" },
+            { "codigoRed": 10, "red": "CAJAMARCA", "tipo": "ASISTENCIAL", "codigoIpress": 198, "ipress": "PM CONTUMAZA" },
+            { "codigoRed": 10, "red": "CAJAMARCA", "tipo": "ASISTENCIAL", "codigoIpress": 216, "ipress": "PM BOLIVAR" },
+            { "codigoRed": 11, "red": "CUSCO", "tipo": "ASISTENCIAL", "codigoIpress": 513, "ipress": "CAP I ECHARATE" },
+            { "codigoRed": 11, "red": "CUSCO", "tipo": "ASISTENCIAL", "codigoIpress": 116, "ipress": "CM ACOMAYO" },
+            { "codigoRed": 11, "red": "CUSCO", "tipo": "ASISTENCIAL", "codigoIpress": 118, "ipress": "CM CALCA" },
+            { "codigoRed": 11, "red": "CUSCO", "tipo": "ASISTENCIAL", "codigoIpress": 121, "ipress": "CM MACHU PICCHU" },
+            { "codigoRed": 11, "red": "CUSCO", "tipo": "ASISTENCIAL", "codigoIpress": 418, "ipress": "CM METROPOLITANO" },
+            { "codigoRed": 11, "red": "CUSCO", "tipo": "ASISTENCIAL", "codigoIpress": 123, "ipress": "CM PAUCARTAMBO" },
+            { "codigoRed": 11, "red": "CUSCO", "tipo": "ASISTENCIAL", "codigoIpress": 373, "ipress": "CM SANTIAGO" },
+            { "codigoRed": 11, "red": "CUSCO", "tipo": "ASISTENCIAL", "codigoIpress": 119, "ipress": "CM URCOS" },
+            { "codigoRed": 11, "red": "CUSCO", "tipo": "ASISTENCIAL", "codigoIpress": 112, "ipress": "HI ESPINAR" },
+            { "codigoRed": 11, "red": "CUSCO", "tipo": "ASISTENCIAL", "codigoIpress": 113, "ipress": "HI QUILLABAMBA" },
+            { "codigoRed": 11, "red": "CUSCO", "tipo": "ASISTENCIAL", "codigoIpress": 115, "ipress": "HI SICUANI" },
+            { "codigoRed": 11, "red": "CUSCO", "tipo": "ASISTENCIAL", "codigoIpress": 114, "ipress": "HI URUBAMBA" },
+            { "codigoRed": 11, "red": "CUSCO", "tipo": "ASISTENCIAL", "codigoIpress": 111, "ipress": "HN ADOLFO GUEVARA VELASCO" },
+            { "codigoRed": 11, "red": "CUSCO", "tipo": "ASISTENCIAL", "codigoIpress": 134, "ipress": "PM SALVACION" },
+            { "codigoRed": 11, "red": "CUSCO", "tipo": "ASISTENCIAL", "codigoIpress": 120, "ipress": "PM HUYRO" },
+            { "codigoRed": 11, "red": "CUSCO", "tipo": "ASISTENCIAL", "codigoIpress": 126, "ipress": "POL SAN SEBASTIAN" },
+            { "codigoRed": 11, "red": "CUSCO", "tipo": "ASISTENCIAL", "codigoIpress": 510, "ipress": "CAP I SANTO TOMAS" },
+            { "codigoRed": 11, "red": "CUSCO", "tipo": "ASISTENCIAL", "codigoIpress": 698, "ipress": "CM PICHARI" },
+            { "codigoRed": 91, "red": "GCGP", "tipo": "GERENCIA", "codigoIpress": 422, "ipress": "CENTRO DE ATENCION RAPIDA - MEDICO DE PERSONAL" },
+            { "codigoRed": 90, "red": "GCSPE", "tipo": "GERENCIA", "codigoIpress": 674, "ipress": "CEVIT CENTRAL" },
+            { "codigoRed": 12, "red": "HUANCAVELICA", "tipo": "ASISTENCIAL", "codigoIpress": 343, "ipress": "PM ACOBAMBA" },
+            { "codigoRed": 12, "red": "HUANCAVELICA", "tipo": "ASISTENCIAL", "codigoIpress": 344, "ipress": "PM CASTROVIRREYNA" },
+            { "codigoRed": 12, "red": "HUANCAVELICA", "tipo": "ASISTENCIAL", "codigoIpress": 345, "ipress": "CAP I CHURCAMPA" },
+            { "codigoRed": 12, "red": "HUANCAVELICA", "tipo": "ASISTENCIAL", "codigoIpress": 346, "ipress": "CAP I HUAYTARA" },
+            { "codigoRed": 12, "red": "HUANCAVELICA", "tipo": "ASISTENCIAL", "codigoIpress": 347, "ipress": "CM LIRCAY" },
+            { "codigoRed": 12, "red": "HUANCAVELICA", "tipo": "ASISTENCIAL", "codigoIpress": 348, "ipress": "CM PAMPAS" },
+            { "codigoRed": 12, "red": "HUANCAVELICA", "tipo": "ASISTENCIAL", "codigoIpress": 342, "ipress": "HII HUANCAVELICA" },
+            { "codigoRed": 13, "red": "HUANUCO", "tipo": "ASISTENCIAL", "codigoIpress": 291, "ipress": "CAP I UCHIZA" },
+            { "codigoRed": 13, "red": "HUANUCO", "tipo": "ASISTENCIAL", "codigoIpress": 475, "ipress": "CAP III METROPOLITANO DE HUANUCO" },
+            { "codigoRed": 13, "red": "HUANUCO", "tipo": "ASISTENCIAL", "codigoIpress": 298, "ipress": "CM LEONCIO PRADO" },
+            { "codigoRed": 13, "red": "HUANUCO", "tipo": "ASISTENCIAL", "codigoIpress": 297, "ipress": "HI TINGO MARIA" },
+            { "codigoRed": 13, "red": "HUANUCO", "tipo": "ASISTENCIAL", "codigoIpress": 296, "ipress": "HII HUANUCO" },
+            { "codigoRed": 13, "red": "HUANUCO", "tipo": "ASISTENCIAL", "codigoIpress": 299, "ipress": "PM AUCAYACU" },
+            { "codigoRed": 13, "red": "HUANUCO", "tipo": "ASISTENCIAL", "codigoIpress": 300, "ipress": "PM BAÑOS" },
+            { "codigoRed": 13, "red": "HUANUCO", "tipo": "ASISTENCIAL", "codigoIpress": 303, "ipress": "PM LA UNION" },
+            { "codigoRed": 13, "red": "HUANUCO", "tipo": "ASISTENCIAL", "codigoIpress": 304, "ipress": "PM LLATA" },
+            { "codigoRed": 13, "red": "HUANUCO", "tipo": "ASISTENCIAL", "codigoIpress": 305, "ipress": "PM PANAO" },
+            { "codigoRed": 13, "red": "HUANUCO", "tipo": "ASISTENCIAL", "codigoIpress": 426, "ipress": "PM SANTA LUCIA" },
+            { "codigoRed": 13, "red": "HUANUCO", "tipo": "ASISTENCIAL", "codigoIpress": 290, "ipress": "PM TOCACHE" },
+            { "codigoRed": 13, "red": "HUANUCO", "tipo": "ASISTENCIAL", "codigoIpress": 302, "ipress": "PM SUNGARO" },
+            { "codigoRed": 13, "red": "HUANUCO", "tipo": "ASISTENCIAL", "codigoIpress": 771, "ipress": "CAP III AMARILIS" },
+            { "codigoRed": 37, "red": "HUARAZ", "tipo": "ASISTENCIAL", "codigoIpress": 181, "ipress": "CAP II POMABAMBA" },
+            { "codigoRed": 37, "red": "HUARAZ", "tipo": "ASISTENCIAL", "codigoIpress": 163, "ipress": "CM CARAZ" },
+            { "codigoRed": 37, "red": "HUARAZ", "tipo": "ASISTENCIAL", "codigoIpress": 164, "ipress": "CM CARHUAZ" },
+            { "codigoRed": 37, "red": "HUARAZ", "tipo": "ASISTENCIAL", "codigoIpress": 168, "ipress": "CM HUARI" },
+            { "codigoRed": 37, "red": "HUARAZ", "tipo": "ASISTENCIAL", "codigoIpress": 162, "ipress": "HII HUARAZ" },
+            { "codigoRed": 37, "red": "HUARAZ", "tipo": "ASISTENCIAL", "codigoIpress": 179, "ipress": "PM PISCOBAMBA" },
+            { "codigoRed": 37, "red": "HUARAZ", "tipo": "ASISTENCIAL", "codigoIpress": 190, "ipress": "PM YUNGAY" },
+            { "codigoRed": 14, "red": "ICA", "tipo": "ASISTENCIAL", "codigoIpress": 50, "ipress": "CAP I CHAVALINA" },
+            { "codigoRed": 14, "red": "ICA", "tipo": "ASISTENCIAL", "codigoIpress": 419, "ipress": "CAP I CORACORA" },
+            { "codigoRed": 14, "red": "ICA", "tipo": "ASISTENCIAL", "codigoIpress": 54, "ipress": "CAP I PALPA" },
+            { "codigoRed": 14, "red": "ICA", "tipo": "ASISTENCIAL", "codigoIpress": 57, "ipress": "CAP I SAN CLEMENTE" },
+            { "codigoRed": 14, "red": "ICA", "tipo": "ASISTENCIAL", "codigoIpress": 59, "ipress": "CAP I TAMBO DE MORA" },
+            { "codigoRed": 14, "red": "ICA", "tipo": "ASISTENCIAL", "codigoIpress": 61, "ipress": "CAP I VILLA TUPAC AMARU" },
+            { "codigoRed": 14, "red": "ICA", "tipo": "ASISTENCIAL", "codigoIpress": 371, "ipress": "CAP II LA TINGUIÑA" },
+            { "codigoRed": 14, "red": "ICA", "tipo": "ASISTENCIAL", "codigoIpress": 52, "ipress": "CAP II MACACONA" },
+            { "codigoRed": 14, "red": "ICA", "tipo": "ASISTENCIAL", "codigoIpress": 53, "ipress": "CAP II NASCA" },
+            { "codigoRed": 14, "red": "ICA", "tipo": "ASISTENCIAL", "codigoIpress": 424, "ipress": "CAP II PUEBLO NUEVO" },
+            { "codigoRed": 14, "red": "ICA", "tipo": "ASISTENCIAL", "codigoIpress": 56, "ipress": "CAP II PUQUIO" },
+            { "codigoRed": 14, "red": "ICA", "tipo": "ASISTENCIAL", "codigoIpress": 58, "ipress": "CAP II SANTA MARGARITA" },
+            { "codigoRed": 14, "red": "ICA", "tipo": "ASISTENCIAL", "codigoIpress": 48, "ipress": "HI ANTONIO SKRABONJA ANTONCICH" },
+            { "codigoRed": 14, "red": "ICA", "tipo": "ASISTENCIAL", "codigoIpress": 45, "ipress": "HI FELIX TORREALVA GUTIERREZ" },
+            { "codigoRed": 14, "red": "ICA", "tipo": "ASISTENCIAL", "codigoIpress": 47, "ipress": "HI MARIA REICHE NEUMAN" },
+            { "codigoRed": 14, "red": "ICA", "tipo": "ASISTENCIAL", "codigoIpress": 46, "ipress": "HII RENE TOCHE GROPPO" },
+            { "codigoRed": 14, "red": "ICA", "tipo": "ASISTENCIAL", "codigoIpress": 506, "ipress": "HIV AUGUSTO HERNANDEZ MENDOZA" },
+            { "codigoRed": 41, "red": "INSTITUTO NACIONAL CARDIOVASCULAR", "tipo": "CENTRO ESPECIALIZADO", "codigoIpress": 392, "ipress": "INCOR" },
+            { "codigoRed": 42, "red": "CENTRO NACIONAL DE SALUD RENAL", "tipo": "CENTRO ESPECIALIZADO", "codigoIpress": 401, "ipress": "CNSR" },
+            { "codigoRed": 38, "red": "JAEN", "tipo": "ASISTENCIAL", "codigoIpress": 256, "ipress": "CAP II SAN IGNACIO" },
+            { "codigoRed": 38, "red": "JAEN", "tipo": "ASISTENCIAL", "codigoIpress": 245, "ipress": "HII JAEN" },
+            { "codigoRed": 38, "red": "JAEN", "tipo": "ASISTENCIAL", "codigoIpress": 255, "ipress": "PM PUCARA" },
+            { "codigoRed": 34, "red": "JULIACA", "tipo": "ASISTENCIAL", "codigoIpress": 490, "ipress": "CAP I ASILLO" },
+            { "codigoRed": 34, "red": "JULIACA", "tipo": "ASISTENCIAL", "codigoIpress": 491, "ipress": "CAP II CABANILLAS" },
+            { "codigoRed": 34, "red": "JULIACA", "tipo": "ASISTENCIAL", "codigoIpress": 519, "ipress": "CAP III ENRIQUE ENCINAS FRANCO" },
+            { "codigoRed": 34, "red": "JULIACA", "tipo": "ASISTENCIAL", "codigoIpress": 142, "ipress": "CM AYAVIRI" },
+            { "codigoRed": 34, "red": "JULIACA", "tipo": "ASISTENCIAL", "codigoIpress": 141, "ipress": "HI LAMPA" },
+            { "codigoRed": 34, "red": "JULIACA", "tipo": "ASISTENCIAL", "codigoIpress": 139, "ipress": "HIII JULIACA" },
+            { "codigoRed": 34, "red": "JULIACA", "tipo": "ASISTENCIAL", "codigoIpress": 144, "ipress": "PM HUANCANE" },
+            { "codigoRed": 34, "red": "JULIACA", "tipo": "ASISTENCIAL", "codigoIpress": 420, "ipress": "PM SAN GABAN" },
+            { "codigoRed": 34, "red": "JULIACA", "tipo": "ASISTENCIAL", "codigoIpress": 146, "ipress": "PM SAN RAFAEL" },
+            { "codigoRed": 34, "red": "JULIACA", "tipo": "ASISTENCIAL", "codigoIpress": 147, "ipress": "PM SANDIA" },
+            { "codigoRed": 34, "red": "JULIACA", "tipo": "ASISTENCIAL", "codigoIpress": 143, "ipress": "POL AZANGARO" },
+            { "codigoRed": 34, "red": "JULIACA", "tipo": "ASISTENCIAL", "codigoIpress": 413, "ipress": "POL JULIACA" },
+            { "codigoRed": 15, "red": "JUNIN", "tipo": "ASISTENCIAL", "codigoIpress": 492, "ipress": "CAP I PICHANAQUI" },
+            { "codigoRed": 15, "red": "JUNIN", "tipo": "ASISTENCIAL", "codigoIpress": 454, "ipress": "CAP II CHILCA" },
+            { "codigoRed": 15, "red": "JUNIN", "tipo": "ASISTENCIAL", "codigoIpress": 504, "ipress": "CAP II CHUPACA" },
+            { "codigoRed": 15, "red": "JUNIN", "tipo": "ASISTENCIAL", "codigoIpress": 317, "ipress": "CAP II JUNIN" },
+            { "codigoRed": 15, "red": "JUNIN", "tipo": "ASISTENCIAL", "codigoIpress": 320, "ipress": "CAP II MOROCOCHA" },
+            { "codigoRed": 15, "red": "JUNIN", "tipo": "ASISTENCIAL", "codigoIpress": 494, "ipress": "CAP III MANTARO" },
+            { "codigoRed": 15, "red": "JUNIN", "tipo": "ASISTENCIAL", "codigoIpress": 312, "ipress": "CM CONCEPCION" },
+            { "codigoRed": 15, "red": "JUNIN", "tipo": "ASISTENCIAL", "codigoIpress": 313, "ipress": "HI DE LA SELVA CENTRAL Y ENF. TROP." },
+            { "codigoRed": 15, "red": "JUNIN", "tipo": "ASISTENCIAL", "codigoIpress": 309, "ipress": "HI RIO NEGRO - SATIPO" },
+            { "codigoRed": 15, "red": "JUNIN", "tipo": "ASISTENCIAL", "codigoIpress": 310, "ipress": "HI TARMA" },
+            { "codigoRed": 15, "red": "JUNIN", "tipo": "ASISTENCIAL", "codigoIpress": 308, "ipress": "HII ALBERTO HURTADO ABADIA" },
+            { "codigoRed": 15, "red": "JUNIN", "tipo": "ASISTENCIAL", "codigoIpress": 307, "ipress": "HN RAMIRO PRIALE PRIALE" },
+            { "codigoRed": 15, "red": "JUNIN", "tipo": "ASISTENCIAL", "codigoIpress": 316, "ipress": "PM CORPACANCHA" },
+            { "codigoRed": 15, "red": "JUNIN", "tipo": "ASISTENCIAL", "codigoIpress": 314, "ipress": "PM ANDAYCHAGUA" },
+            { "codigoRed": 15, "red": "JUNIN", "tipo": "ASISTENCIAL", "codigoIpress": 315, "ipress": "PM COBRIZA" },
+            { "codigoRed": 15, "red": "JUNIN", "tipo": "ASISTENCIAL", "codigoIpress": 318, "ipress": "PM MARH-TUNEL" },
+            { "codigoRed": 15, "red": "JUNIN", "tipo": "ASISTENCIAL", "codigoIpress": 322, "ipress": "PM PACHACAYO" },
+            { "codigoRed": 15, "red": "JUNIN", "tipo": "ASISTENCIAL", "codigoIpress": 323, "ipress": "PM SAN CRISTOBAL" },
+            { "codigoRed": 15, "red": "JUNIN", "tipo": "ASISTENCIAL", "codigoIpress": 372, "ipress": "PM SAN PEDRO DE CAJAS" },
+            { "codigoRed": 15, "red": "JUNIN", "tipo": "ASISTENCIAL", "codigoIpress": 324, "ipress": "PM YAURICOCHA" },
+            { "codigoRed": 15, "red": "JUNIN", "tipo": "ASISTENCIAL", "codigoIpress": 311, "ipress": "POL JAUJA" },
+            { "codigoRed": 15, "red": "JUNIN", "tipo": "ASISTENCIAL", "codigoIpress": 431, "ipress": "POL METROPOLITANO HUANCAYO" },
+            { "codigoRed": 16, "red": "LA LIBERTAD", "tipo": "ASISTENCIAL", "codigoIpress": 220, "ipress": "CAP I CHICAMA" },
+            { "codigoRed": 16, "red": "LA LIBERTAD", "tipo": "ASISTENCIAL", "codigoIpress": 228, "ipress": "CAP I MALABRIGO" },
+            { "codigoRed": 16, "red": "LA LIBERTAD", "tipo": "ASISTENCIAL", "codigoIpress": 231, "ipress": "CAP I SALAVERRY" },
+            { "codigoRed": 16, "red": "LA LIBERTAD", "tipo": "ASISTENCIAL", "codigoIpress": 223, "ipress": "CAP II GUADALUPE" },
+            { "codigoRed": 16, "red": "LA LIBERTAD", "tipo": "ASISTENCIAL", "codigoIpress": 224, "ipress": "CAP II HUAMACHUCO" },
+            { "codigoRed": 16, "red": "LA LIBERTAD", "tipo": "ASISTENCIAL", "codigoIpress": 226, "ipress": "CAP II LAREDO" },
+            { "codigoRed": 16, "red": "LA LIBERTAD", "tipo": "ASISTENCIAL", "codigoIpress": 229, "ipress": "CAP II OTUZCO" },
+            { "codigoRed": 16, "red": "LA LIBERTAD", "tipo": "ASISTENCIAL", "codigoIpress": 239, "ipress": "CAP II SOLEDAD" },
+            { "codigoRed": 16, "red": "LA LIBERTAD", "tipo": "ASISTENCIAL", "codigoIpress": 240, "ipress": "CAP II TAYABAMBA" },
+            { "codigoRed": 16, "red": "LA LIBERTAD", "tipo": "ASISTENCIAL", "codigoIpress": 484, "ipress": "CAP III METROPOLITANO DE TRUJILLO" },
+            { "codigoRed": 16, "red": "LA LIBERTAD", "tipo": "ASISTENCIAL", "codigoIpress": 209, "ipress": "CM ASCOPE" },
+            { "codigoRed": 16, "red": "LA LIBERTAD", "tipo": "ASISTENCIAL", "codigoIpress": 429, "ipress": "CME CASA GRANDE" },
+            { "codigoRed": 16, "red": "LA LIBERTAD", "tipo": "ASISTENCIAL", "codigoIpress": 442, "ipress": "CM HUANCHACO" },
+            { "codigoRed": 16, "red": "LA LIBERTAD", "tipo": "ASISTENCIAL", "codigoIpress": 241, "ipress": "H VICTOR SOLES GARCIA - VIRU" },
+            { "codigoRed": 16, "red": "LA LIBERTAD", "tipo": "ASISTENCIAL", "codigoIpress": 207, "ipress": "HI ALBRECHT" },
+            { "codigoRed": 16, "red": "LA LIBERTAD", "tipo": "ASISTENCIAL", "codigoIpress": 211, "ipress": "HI FLORENCIA DE MORA" },
+            { "codigoRed": 16, "red": "LA LIBERTAD", "tipo": "ASISTENCIAL", "codigoIpress": 212, "ipress": "HI LA ESPERANZA" },
+            { "codigoRed": 16, "red": "LA LIBERTAD", "tipo": "ASISTENCIAL", "codigoIpress": 213, "ipress": "HI MOCHE" },
+            { "codigoRed": 16, "red": "LA LIBERTAD", "tipo": "ASISTENCIAL", "codigoIpress": 219, "ipress": "CAP I CASCAS" },
+            { "codigoRed": 16, "red": "LA LIBERTAD", "tipo": "ASISTENCIAL", "codigoIpress": 208, "ipress": "HI PACASMAYO" },
+            { "codigoRed": 16, "red": "LA LIBERTAD", "tipo": "ASISTENCIAL", "codigoIpress": 206, "ipress": "HII CHOCOPE" },
+            { "codigoRed": 16, "red": "LA LIBERTAD", "tipo": "ASISTENCIAL", "codigoIpress": 205, "ipress": "HIV VICTOR LAZARTE ECHEGARAY" },
+            { "codigoRed": 16, "red": "LA LIBERTAD", "tipo": "ASISTENCIAL", "codigoIpress": 671, "ipress": "HN VIRGEN DE LA PUERTA" },
+            { "codigoRed": 16, "red": "LA LIBERTAD", "tipo": "ASISTENCIAL", "codigoIpress": 444, "ipress": "PM CHAO" },
+            { "codigoRed": 16, "red": "LA LIBERTAD", "tipo": "ASISTENCIAL", "codigoIpress": 227, "ipress": "PM LIMONCARRO" },
+            { "codigoRed": 16, "red": "LA LIBERTAD", "tipo": "ASISTENCIAL", "codigoIpress": 225, "ipress": "PM JEQUETEPEQUE" },
+            { "codigoRed": 16, "red": "LA LIBERTAD", "tipo": "ASISTENCIAL", "codigoIpress": 230, "ipress": "PM QUIRUVILCA" },
+            { "codigoRed": 16, "red": "LA LIBERTAD", "tipo": "ASISTENCIAL", "codigoIpress": 233, "ipress": "PM SAN JOSE" },
+            { "codigoRed": 16, "red": "LA LIBERTAD", "tipo": "ASISTENCIAL", "codigoIpress": 235, "ipress": "CAP I SAN PEDRO DE LLOC" },
+            { "codigoRed": 16, "red": "LA LIBERTAD", "tipo": "ASISTENCIAL", "codigoIpress": 236, "ipress": "PM SANTIAGO DE CHUCO" },
+            { "codigoRed": 16, "red": "LA LIBERTAD", "tipo": "ASISTENCIAL", "codigoIpress": 210, "ipress": "POL EL PORVENIR" },
+            { "codigoRed": 16, "red": "LA LIBERTAD", "tipo": "ASISTENCIAL", "codigoIpress": 237, "ipress": "PM SAUSAL" },
+            { "codigoRed": 16, "red": "LA LIBERTAD", "tipo": "ASISTENCIAL", "codigoIpress": 218, "ipress": "PM CARTAVIO" },
+            { "codigoRed": 16, "red": "LA LIBERTAD", "tipo": "ASISTENCIAL", "codigoIpress": 432, "ipress": "PM PAIJAN" },
+            { "codigoRed": 16, "red": "LA LIBERTAD", "tipo": "ASISTENCIAL", "codigoIpress": 433, "ipress": "PM SANTIAGO DE CAO" },
+            { "codigoRed": 16, "red": "LA LIBERTAD", "tipo": "ASISTENCIAL", "codigoIpress": 443, "ipress": "POL VICTOR LARCO HERRERA" },
+            { "codigoRed": 17, "red": "LAMBAYEQUE", "tipo": "PRESTACIONAL", "codigoIpress": 249, "ipress": "CAP II CHONGOYAPE" },
+            { "codigoRed": 17, "red": "LAMBAYEQUE", "tipo": "PRESTACIONAL", "codigoIpress": 251, "ipress": "CAP II JAYANCA" },
+            { "codigoRed": 17, "red": "LAMBAYEQUE", "tipo": "PRESTACIONAL", "codigoIpress": 252, "ipress": "CAP II MOTUPE" },
+            { "codigoRed": 17, "red": "LAMBAYEQUE", "tipo": "PRESTACIONAL", "codigoIpress": 493, "ipress": "CAP II PATAPO" },
+            { "codigoRed": 17, "red": "LAMBAYEQUE", "tipo": "PRESTACIONAL", "codigoIpress": 383, "ipress": "CAP III CARLOS CASTAÑEDA IPARRAGUIRRE" },
+            { "codigoRed": 17, "red": "LAMBAYEQUE", "tipo": "PRESTACIONAL", "codigoIpress": 248, "ipress": "CAP III MANUEL MANRIQUE NEVADO" },
+            { "codigoRed": 17, "red": "LAMBAYEQUE", "tipo": "PRESTACIONAL", "codigoIpress": 243, "ipress": "CM CAYALTI" },
+            { "codigoRed": 17, "red": "LAMBAYEQUE", "tipo": "PRESTACIONAL", "codigoIpress": 194, "ipress": "CM CHOTA" },
+            { "codigoRed": 17, "red": "LAMBAYEQUE", "tipo": "PRESTACIONAL", "codigoIpress": 195, "ipress": "CM CUTERVO" },
+            { "codigoRed": 17, "red": "LAMBAYEQUE", "tipo": "PRESTACIONAL", "codigoIpress": 250, "ipress": "CM JUAN AITA VALLE" },
+            { "codigoRed": 17, "red": "LAMBAYEQUE", "tipo": "PRESTACIONAL", "codigoIpress": 242, "ipress": "HI AGUSTIN ARBULU NEYRA" },
+            { "codigoRed": 17, "red": "LAMBAYEQUE", "tipo": "PRESTACIONAL", "codigoIpress": 244, "ipress": "HI CHEPEN" },
+            { "codigoRed": 17, "red": "LAMBAYEQUE", "tipo": "PRESTACIONAL", "codigoIpress": 740, "ipress": "HI CLINICO TUMAN" },
+            { "codigoRed": 17, "red": "LAMBAYEQUE", "tipo": "PRESTACIONAL", "codigoIpress": 402, "ipress": "HI NAYLAMP" },
+            { "codigoRed": 17, "red": "LAMBAYEQUE", "tipo": "PRESTACIONAL", "codigoIpress": 496, "ipress": "HII LUIS ENRIQUE HEYSEN INCHAUSTEGUI" },
+            { "codigoRed": 17, "red": "LAMBAYEQUE", "tipo": "PRESTACIONAL", "codigoIpress": 4, "ipress": "HN ALMANZOR AGUINAGA ASENJO" },
+            { "codigoRed": 17, "red": "LAMBAYEQUE", "tipo": "PRESTACIONAL", "codigoIpress": 253, "ipress": "PM OLMOS" },
+            { "codigoRed": 17, "red": "LAMBAYEQUE", "tipo": "PRESTACIONAL", "codigoIpress": 254, "ipress": "PM OYOTUN" },
+            { "codigoRed": 17, "red": "LAMBAYEQUE", "tipo": "PRESTACIONAL", "codigoIpress": 257, "ipress": "PM SANTA CRUZ" },
+            { "codigoRed": 17, "red": "LAMBAYEQUE", "tipo": "PRESTACIONAL", "codigoIpress": 259, "ipress": "PM TUCUME" },
+            { "codigoRed": 17, "red": "LAMBAYEQUE", "tipo": "PRESTACIONAL", "codigoIpress": 260, "ipress": "PM UCUPE" },
+            { "codigoRed": 17, "red": "LAMBAYEQUE", "tipo": "PRESTACIONAL", "codigoIpress": 384, "ipress": "POL AGUSTIN GAVIDIA SALCEDO" },
+            { "codigoRed": 17, "red": "LAMBAYEQUE", "tipo": "PRESTACIONAL", "codigoIpress": 370, "ipress": "POL CHICLAYO OESTE" },
+            { "codigoRed": 19, "red": "LORETO", "tipo": "ASISTENCIAL", "codigoIpress": 64, "ipress": "CAP II CABALLOCOCHA" },
+            { "codigoRed": 19, "red": "LORETO", "tipo": "ASISTENCIAL", "codigoIpress": 65, "ipress": "CAP II NAUTA" },
+            { "codigoRed": 19, "red": "LORETO", "tipo": "ASISTENCIAL", "codigoIpress": 66, "ipress": "CAP II REQUENA" },
+            { "codigoRed": 19, "red": "LORETO", "tipo": "ASISTENCIAL", "codigoIpress": 441, "ipress": "CAP II SAN JUAN BAUTISTA" },
+            { "codigoRed": 19, "red": "LORETO", "tipo": "ASISTENCIAL", "codigoIpress": 439, "ipress": "CAP III IQUITOS" },
+            { "codigoRed": 19, "red": "LORETO", "tipo": "ASISTENCIAL", "codigoIpress": 440, "ipress": "CAP III PUNCHANA" },
+            { "codigoRed": 19, "red": "LORETO", "tipo": "ASISTENCIAL", "codigoIpress": 63, "ipress": "HI YURIMAGUAS" },
+            { "codigoRed": 19, "red": "LORETO", "tipo": "ASISTENCIAL", "codigoIpress": 62, "ipress": "HIII IQUITOS" },
+            { "codigoRed": 19, "red": "LORETO", "tipo": "ASISTENCIAL", "codigoIpress": 518, "ipress": "CAP I SAN ANTONIO DEL ESTRECHO" },
+            { "codigoRed": 20, "red": "MADRE DE DIOS", "tipo": "ASISTENCIAL", "codigoIpress": 127, "ipress": "HI VICTOR ALFREDO LAZO PERALTA" },
+            { "codigoRed": 20, "red": "MADRE DE DIOS", "tipo": "ASISTENCIAL", "codigoIpress": 129, "ipress": "PM IBERIA" },
+            { "codigoRed": 20, "red": "MADRE DE DIOS", "tipo": "ASISTENCIAL", "codigoIpress": 132, "ipress": "PM MAZUKO" },
+            { "codigoRed": 21, "red": "MOQUEGUA", "tipo": "ASISTENCIAL", "codigoIpress": 474, "ipress": "CAP II TORATA" },
+            { "codigoRed": 21, "red": "MOQUEGUA", "tipo": "ASISTENCIAL", "codigoIpress": 681, "ipress": "CM PAMPA INALAMBRICA" },
+            { "codigoRed": 21, "red": "MOQUEGUA", "tipo": "ASISTENCIAL", "codigoIpress": 680, "ipress": "CM SAMEGUA" },
+            { "codigoRed": 21, "red": "MOQUEGUA", "tipo": "ASISTENCIAL", "codigoIpress": 135, "ipress": "HII ILO" },
+            { "codigoRed": 21, "red": "MOQUEGUA", "tipo": "ASISTENCIAL", "codigoIpress": 136, "ipress": "HII MOQUEGUA" },
+            { "codigoRed": 21, "red": "MOQUEGUA", "tipo": "ASISTENCIAL", "codigoIpress": 137, "ipress": "PM OMATE" },
+            { "codigoRed": 35, "red": "MOYOBAMBA", "tipo": "ASISTENCIAL", "codigoIpress": 489, "ipress": "CAP I NUEVA CAJAMARCA" },
+            { "codigoRed": 35, "red": "MOYOBAMBA", "tipo": "ASISTENCIAL", "codigoIpress": 281, "ipress": "HI ALTO MAYO" },
+            { "codigoRed": 35, "red": "MOYOBAMBA", "tipo": "ASISTENCIAL", "codigoIpress": 282, "ipress": "HI RIOJA" },
+            { "codigoRed": 36, "red": "OFERTA FLEXIBLE", "tipo": "GERENCIA", "codigoIpress": 396, "ipress": "PADOMI" },
+            { "codigoRed": 22, "red": "PASCO", "tipo": "ASISTENCIAL", "codigoIpress": 332, "ipress": "CAP II HUAYLLAY" },
+            { "codigoRed": 22, "red": "PASCO", "tipo": "ASISTENCIAL", "codigoIpress": 340, "ipress": "CAP II VILLA RICA" },
+            { "codigoRed": 22, "red": "PASCO", "tipo": "ASISTENCIAL", "codigoIpress": 341, "ipress": "CAP II YANAHUANCA" },
+            { "codigoRed": 22, "red": "PASCO", "tipo": "ASISTENCIAL", "codigoIpress": 338, "ipress": "CM SAN JUAN" },
+            { "codigoRed": 22, "red": "PASCO", "tipo": "ASISTENCIAL", "codigoIpress": 326, "ipress": "HI HUARIACA" },
+            { "codigoRed": 22, "red": "PASCO", "tipo": "ASISTENCIAL", "codigoIpress": 334, "ipress": "HI OXAPAMPA" },
+            { "codigoRed": 22, "red": "PASCO", "tipo": "ASISTENCIAL", "codigoIpress": 325, "ipress": "HII CERRO DE PASCO" },
+            { "codigoRed": 22, "red": "PASCO", "tipo": "ASISTENCIAL", "codigoIpress": 329, "ipress": "PM CHICRIN" },
+            { "codigoRed": 22, "red": "PASCO", "tipo": "ASISTENCIAL", "codigoIpress": 330, "ipress": "PM COLQUIJIRCA" },
+            { "codigoRed": 22, "red": "PASCO", "tipo": "ASISTENCIAL", "codigoIpress": 333, "ipress": "PM MILPO" },
+            { "codigoRed": 22, "red": "PASCO", "tipo": "ASISTENCIAL", "codigoIpress": 335, "ipress": "PM PAUCARTAMBO" },
+            { "codigoRed": 22, "red": "PASCO", "tipo": "ASISTENCIAL", "codigoIpress": 336, "ipress": "PM POZUZO" },
+            { "codigoRed": 22, "red": "PASCO", "tipo": "ASISTENCIAL", "codigoIpress": 337, "ipress": "PM PUERTO BERMUDEZ" },
+            { "codigoRed": 23, "red": "PIURA", "tipo": "ASISTENCIAL", "codigoIpress": 269, "ipress": "CAP II CHULUCANAS" },
+            { "codigoRed": 23, "red": "PIURA", "tipo": "ASISTENCIAL", "codigoIpress": 266, "ipress": "CAP III CASTILLA" },
+            { "codigoRed": 23, "red": "PIURA", "tipo": "ASISTENCIAL", "codigoIpress": 488, "ipress": "CAP III CATACAOS" },
+            { "codigoRed": 23, "red": "PIURA", "tipo": "ASISTENCIAL", "codigoIpress": 517, "ipress": "CAP III METROPOLITANO DE PIURA" },
+            { "codigoRed": 23, "red": "PIURA", "tipo": "ASISTENCIAL", "codigoIpress": 273, "ipress": "CM LEONCIO AMAYA TUME" },
+            { "codigoRed": 23, "red": "PIURA", "tipo": "ASISTENCIAL", "codigoIpress": 278, "ipress": "CM TAMBOGRANDE" },
+            { "codigoRed": 23, "red": "PIURA", "tipo": "ASISTENCIAL", "codigoIpress": 262, "ipress": "HI MIGUEL CRUZADO VERA (PAITA)" },
+            { "codigoRed": 23, "red": "PIURA", "tipo": "ASISTENCIAL", "codigoIpress": 263, "ipress": "HI SULLANA" },
+            { "codigoRed": 23, "red": "PIURA", "tipo": "ASISTENCIAL", "codigoIpress": 265, "ipress": "HII JORGE REATEGUI DELGADO" },
+            { "codigoRed": 23, "red": "PIURA", "tipo": "ASISTENCIAL", "codigoIpress": 264, "ipress": "HII TALARA" },
+            { "codigoRed": 23, "red": "PIURA", "tipo": "ASISTENCIAL", "codigoIpress": 261, "ipress": "HIII CAYETANO HEREDIA" },
+            { "codigoRed": 23, "red": "PIURA", "tipo": "ASISTENCIAL", "codigoIpress": 382, "ipress": "INSTITUTO PERUANO DE OFTALMOLOGIA" },
+            { "codigoRed": 23, "red": "PIURA", "tipo": "ASISTENCIAL", "codigoIpress": 817, "ipress": "IPRESS HOSPITAL PRIVADO PERU" },
+            { "codigoRed": 23, "red": "PIURA", "tipo": "ASISTENCIAL", "codigoIpress": 825, "ipress": "IPRESS HOSPITAL UNIVERSITARIO" },
+            { "codigoRed": 23, "red": "PIURA", "tipo": "ASISTENCIAL", "codigoIpress": 827, "ipress": "IPRESS INMACULADA" },
+            { "codigoRed": 23, "red": "PIURA", "tipo": "ASISTENCIAL", "codigoIpress": 267, "ipress": "PM AYABACA" },
+            { "codigoRed": 23, "red": "PIURA", "tipo": "ASISTENCIAL", "codigoIpress": 268, "ipress": "PM CANCHAQUE" },
+            { "codigoRed": 23, "red": "PIURA", "tipo": "ASISTENCIAL", "codigoIpress": 271, "ipress": "PM HUANCABAMBA" },
+            { "codigoRed": 23, "red": "PIURA", "tipo": "ASISTENCIAL", "codigoIpress": 272, "ipress": "PM IGNACIO ESCUDERO" },
+            { "codigoRed": 23, "red": "PIURA", "tipo": "ASISTENCIAL", "codigoIpress": 274, "ipress": "PM LOS ORGANOS" },
+            { "codigoRed": 23, "red": "PIURA", "tipo": "ASISTENCIAL", "codigoIpress": 275, "ipress": "PM MORROPON" },
+            { "codigoRed": 23, "red": "PIURA", "tipo": "ASISTENCIAL", "codigoIpress": 276, "ipress": "PM NEGRITOS" },
+            { "codigoRed": 23, "red": "PIURA", "tipo": "ASISTENCIAL", "codigoIpress": 380, "ipress": "CM EL ALTO" },
+            { "codigoRed": 23, "red": "PIURA", "tipo": "ASISTENCIAL", "codigoIpress": 277, "ipress": "PM SECHURA" },
+            { "codigoRed": 24, "red": "PUNO", "tipo": "ASISTENCIAL", "codigoIpress": 452, "ipress": "CAP II ACORA" },
+            { "codigoRed": 24, "red": "PUNO", "tipo": "ASISTENCIAL", "codigoIpress": 414, "ipress": "CAP III METROPOLITANO DE PUNO" },
+            { "codigoRed": 24, "red": "PUNO", "tipo": "ASISTENCIAL", "codigoIpress": 421, "ipress": "HI CLINICA UNIVERSITARIA UNA-ESSALUD" },
+            { "codigoRed": 24, "red": "PUNO", "tipo": "ASISTENCIAL", "codigoIpress": 386, "ipress": "POL ILAVE" },
+            { "codigoRed": 24, "red": "PUNO", "tipo": "ASISTENCIAL", "codigoIpress": 145, "ipress": "PM JULI" },
+            { "codigoRed": 24, "red": "PUNO", "tipo": "ASISTENCIAL", "codigoIpress": 148, "ipress": "PM YUNGUYO" },
+            { "codigoRed": 24, "red": "PUNO", "tipo": "ASISTENCIAL", "codigoIpress": 451, "ipress": "CAP I DESAGUADERO" },
+            { "codigoRed": 24, "red": "PUNO", "tipo": "ASISTENCIAL", "codigoIpress": 140, "ipress": "HIII PUNO" },
+            { "codigoRed": 1, "red": "REBAGLIATI", "tipo": "PRESTACIONAL", "codigoIpress": 450, "ipress": "CAP II LURIN" },
+            { "codigoRed": 1, "red": "REBAGLIATI", "tipo": "PRESTACIONAL", "codigoIpress": 476, "ipress": "CAP III SAN ISIDRO" },
+            { "codigoRed": 1, "red": "REBAGLIATI", "tipo": "PRESTACIONAL", "codigoIpress": 500, "ipress": "CAP III SAN JUAN DE MIRAFLORES" },
+            { "codigoRed": 1, "red": "REBAGLIATI", "tipo": "PRESTACIONAL", "codigoIpress": 477, "ipress": "CAP III SURQUILLO" },
+            { "codigoRed": 1, "red": "REBAGLIATI", "tipo": "PRESTACIONAL", "codigoIpress": 498, "ipress": "CEDHI" },
+            { "codigoRed": 1, "red": "REBAGLIATI", "tipo": "PRESTACIONAL", "codigoIpress": 39, "ipress": "CM MALA" },
+            { "codigoRed": 1, "red": "REBAGLIATI", "tipo": "PRESTACIONAL", "codigoIpress": 408, "ipress": "HI CARLOS ALCANTARA BUTERFIELD" },
+            { "codigoRed": 1, "red": "REBAGLIATI", "tipo": "PRESTACIONAL", "codigoIpress": 405, "ipress": "HI ULDARICO ROCCA FERNANDEZ" },
+            { "codigoRed": 1, "red": "REBAGLIATI", "tipo": "PRESTACIONAL", "codigoIpress": 38, "ipress": "HII CAÑETE" },
+            { "codigoRed": 1, "red": "REBAGLIATI", "tipo": "PRESTACIONAL", "codigoIpress": 6, "ipress": "HIII SUAREZ-ANGAMOS" },
+            { "codigoRed": 1, "red": "REBAGLIATI", "tipo": "PRESTACIONAL", "codigoIpress": 1, "ipress": "HN EDGARDO REBAGLIATI MARTINS" },
+            { "codigoRed": 1, "red": "REBAGLIATI", "tipo": "PRESTACIONAL", "codigoIpress": 10, "ipress": "POL CHINCHA" },
+            { "codigoRed": 1, "red": "REBAGLIATI", "tipo": "PRESTACIONAL", "codigoIpress": 407, "ipress": "POL JUAN JOSE RODRIGUEZ LAZO" },
+            { "codigoRed": 1, "red": "REBAGLIATI", "tipo": "PRESTACIONAL", "codigoIpress": 21, "ipress": "POL PABLO BERMUDEZ" },
+            { "codigoRed": 1, "red": "REBAGLIATI", "tipo": "PRESTACIONAL", "codigoIpress": 16, "ipress": "POL PROCERES" },
+            { "codigoRed": 1, "red": "REBAGLIATI", "tipo": "PRESTACIONAL", "codigoIpress": 436, "ipress": "POL SANTA CRUZ" },
+            { "codigoRed": 1, "red": "REBAGLIATI", "tipo": "PRESTACIONAL", "codigoIpress": 527, "ipress": "H ESP GUILLERMO KAELIN" },
+            { "codigoRed": 1, "red": "REBAGLIATI", "tipo": "PRESTACIONAL", "codigoIpress": 525, "ipress": "POL GUILLERMO KAELIN" },
+            { "codigoRed": 1, "red": "REBAGLIATI", "tipo": "PRESTACIONAL", "codigoIpress": 781, "ipress": "HOSPITAL MODULAR DE ESPECIALIDADES QUIRÚRGICAS SAN JUAN DE MIRAFLORES" },
+            { "codigoRed": 3, "red": "SABOGAL", "tipo": "PRESTACIONAL", "codigoIpress": 31, "ipress": "CAP II CHANCAY" },
+            { "codigoRed": 3, "red": "SABOGAL", "tipo": "PRESTACIONAL", "codigoIpress": 30, "ipress": "CAP II PARAMONGA" },
+            { "codigoRed": 3, "red": "SABOGAL", "tipo": "PRESTACIONAL", "codigoIpress": 36, "ipress": "CAP II SAYAN" },
+            { "codigoRed": 3, "red": "SABOGAL", "tipo": "PRESTACIONAL", "codigoIpress": 473, "ipress": "CAP III CARABAYLLO" },
+            { "codigoRed": 3, "red": "SABOGAL", "tipo": "PRESTACIONAL", "codigoIpress": 409, "ipress": "CAP III HNA MARIA DONROSE SUTMOLLER" },
+            { "codigoRed": 3, "red": "SABOGAL", "tipo": "PRESTACIONAL", "codigoIpress": 32, "ipress": "CAP III HUARAL" },
+            { "codigoRed": 3, "red": "SABOGAL", "tipo": "PRESTACIONAL", "codigoIpress": 497, "ipress": "CAP III LUIS NEGREIROS" },
+            { "codigoRed": 3, "red": "SABOGAL", "tipo": "PRESTACIONAL", "codigoIpress": 486, "ipress": "CAP III METROPOLITANO DEL CALLAO" },
+            { "codigoRed": 3, "red": "SABOGAL", "tipo": "PRESTACIONAL", "codigoIpress": 29, "ipress": "CAP III PEDRO REYES BARBOZA" },
+            { "codigoRed": 3, "red": "SABOGAL", "tipo": "PRESTACIONAL", "codigoIpress": 455, "ipress": "CAP III PUENTE PIEDRA" },
+            { "codigoRed": 3, "red": "SABOGAL", "tipo": "PRESTACIONAL", "codigoIpress": 673, "ipress": "CEVIT HUACHO" },
+            { "codigoRed": 3, "red": "SABOGAL", "tipo": "PRESTACIONAL", "codigoIpress": 410, "ipress": "HI MARINO MOLINA SCIPPA" },
+            { "codigoRed": 3, "red": "SABOGAL", "tipo": "PRESTACIONAL", "codigoIpress": 412, "ipress": "HI OCTAVIO MONGRUT MUÑOZ" },
+            { "codigoRed": 3, "red": "SABOGAL", "tipo": "PRESTACIONAL", "codigoIpress": 15, "ipress": "HII LIMA NORTE-CALLAO LUIS NEGREIROS VEGA" },
+            { "codigoRed": 3, "red": "SABOGAL", "tipo": "PRESTACIONAL", "codigoIpress": 5, "ipress": "HN ALBERTO SABOGAL SOLOGUREN" },
+            { "codigoRed": 3, "red": "SABOGAL", "tipo": "PRESTACIONAL", "codigoIpress": 28, "ipress": "HII GUSTAVO LANATTA LUJAN" },
+            { "codigoRed": 3, "red": "SABOGAL", "tipo": "PRESTACIONAL", "codigoIpress": 33, "ipress": "PM HUMAYA" },
+            { "codigoRed": 3, "red": "SABOGAL", "tipo": "PRESTACIONAL", "codigoIpress": 37, "ipress": "PM OYON" },
+            { "codigoRed": 3, "red": "SABOGAL", "tipo": "PRESTACIONAL", "codigoIpress": 13, "ipress": "POL FIORI" },
+            { "codigoRed": 3, "red": "SABOGAL", "tipo": "PRESTACIONAL", "codigoIpress": 679, "ipress": "POL RETABLO-COMAS" },
+            { "codigoRed": 3, "red": "SABOGAL", "tipo": "PRESTACIONAL", "codigoIpress": 528, "ipress": "H ESP ALBERTO LEOPOLDO BARTON" },
+            { "codigoRed": 3, "red": "SABOGAL", "tipo": "PRESTACIONAL", "codigoIpress": 526, "ipress": "POL ALBERTO LEOPOLDO BARTON" },
+            { "codigoRed": 3, "red": "SABOGAL", "tipo": "PRESTACIONAL", "codigoIpress": 802, "ipress": "IPRESS PROLIMA" },
+            { "codigoRed": 3, "red": "SABOGAL", "tipo": "PRESTACIONAL", "codigoIpress": 818, "ipress": "IPRESS VILLASOL" },
+            { "codigoRed": 3, "red": "SABOGAL", "tipo": "PRESTACIONAL", "codigoIpress": 819, "ipress": "IPRESS EL TREBOL" },
+            { "codigoRed": 3, "red": "SABOGAL", "tipo": "PRESTACIONAL", "codigoIpress": 852, "ipress": "IPRESS HOSPITAL MUNICIPAL LOS OLIVOS" },
+            { "codigoRed": 26, "red": "TACNA", "tipo": "ASISTENCIAL", "codigoIpress": 435, "ipress": "CAP I ILABAYA" },
+            { "codigoRed": 26, "red": "TACNA", "tipo": "ASISTENCIAL", "codigoIpress": 434, "ipress": "CAP I ITE" },
+            { "codigoRed": 26, "red": "TACNA", "tipo": "ASISTENCIAL", "codigoIpress": 152, "ipress": "CAP I TARATA" },
+            { "codigoRed": 26, "red": "TACNA", "tipo": "ASISTENCIAL", "codigoIpress": 150, "ipress": "CAP II LUIS PALZA LEVANO" },
+            { "codigoRed": 26, "red": "TACNA", "tipo": "ASISTENCIAL", "codigoIpress": 448, "ipress": "CAP II OSCAR FERNANDEZ DAVILA VELEZ" },
+            { "codigoRed": 26, "red": "TACNA", "tipo": "ASISTENCIAL", "codigoIpress": 430, "ipress": "CAP III METROPOLITANO DE TACNA" },
+            { "codigoRed": 26, "red": "TACNA", "tipo": "ASISTENCIAL", "codigoIpress": 149, "ipress": "HIII DANIEL ALCIDES CARRION" },
+            { "codigoRed": 26, "red": "TACNA", "tipo": "ASISTENCIAL", "codigoIpress": 151, "ipress": "PM LOCUMBA" },
+            { "codigoRed": 25, "red": "TARAPOTO", "tipo": "ASISTENCIAL", "codigoIpress": 280, "ipress": "HI JUANJUI" },
+            { "codigoRed": 25, "red": "TARAPOTO", "tipo": "ASISTENCIAL", "codigoIpress": 279, "ipress": "HII TARAPOTO" },
+            { "codigoRed": 25, "red": "TARAPOTO", "tipo": "ASISTENCIAL", "codigoIpress": 285, "ipress": "PM BELLAVISTA" },
+            { "codigoRed": 25, "red": "TARAPOTO", "tipo": "ASISTENCIAL", "codigoIpress": 286, "ipress": "PM LAMAS" },
+            { "codigoRed": 25, "red": "TARAPOTO", "tipo": "ASISTENCIAL", "codigoIpress": 289, "ipress": "PM SAPOSOA" },
+            { "codigoRed": 25, "red": "TARAPOTO", "tipo": "ASISTENCIAL", "codigoIpress": 709, "ipress": "CM METROPOLITANO" },
+            { "codigoRed": 27, "red": "TUMBES", "tipo": "ASISTENCIAL", "codigoIpress": 292, "ipress": "HI CARLOS ALBERTO CORTEZ JIMENEZ" },
+            { "codigoRed": 27, "red": "TUMBES", "tipo": "ASISTENCIAL", "codigoIpress": 293, "ipress": "PM LA CRUZ" },
+            { "codigoRed": 27, "red": "TUMBES", "tipo": "ASISTENCIAL", "codigoIpress": 381, "ipress": "PM ZARUMILLA" },
+            { "codigoRed": 27, "red": "TUMBES", "tipo": "ASISTENCIAL", "codigoIpress": 294, "ipress": "PM ZORRITOS" },
+            { "codigoRed": 28, "red": "UCAYALI", "tipo": "ASISTENCIAL", "codigoIpress": 349, "ipress": "HII PUCALLPA" },
+            { "codigoRed": 28, "red": "UCAYALI", "tipo": "ASISTENCIAL", "codigoIpress": 350, "ipress": "PM AGUAYTIA" },
+            { "codigoRed": 28, "red": "UCAYALI", "tipo": "ASISTENCIAL", "codigoIpress": 351, "ipress": "PM ALAMEDA" },
+            { "codigoRed": 28, "red": "UCAYALI", "tipo": "ASISTENCIAL", "codigoIpress": 352, "ipress": "PM ATALAYA" },
+            { "codigoRed": 28, "red": "UCAYALI", "tipo": "ASISTENCIAL", "codigoIpress": 355, "ipress": "PM CONTAMANA" },
+            { "codigoRed": 28, "red": "UCAYALI", "tipo": "ASISTENCIAL", "codigoIpress": 503, "ipress": "CAP I CAMPOVERDE" },
+            { "codigoRed": 28, "red": "UCAYALI", "tipo": "ASISTENCIAL", "codigoIpress": 515, "ipress": "CAP I MANANTAY" }
+
+            // ... Agrega las 400+ filas de tu Excel aquí
+        ];
+
+        // --- LÓGICA DEL FORMULARIO (NO MODIFICAR) ---
+        
+        document.addEventListener('DOMContentLoaded', function() {
+            // Cargar redes únicas
+            const redSelect = document.getElementById('red');
+            const redesUnicas = [...new Set(datosExcel.map(item => item.red))].sort();
+            redesUnicas.forEach(red => {
+                redSelect.add(new Option(red, red));
+            });
+            // Asignar auditor por defecto
+            asignarAuditor();
+        });
+
+        function actualizarIpress() {
+            const redSeleccionada = document.getElementById('red').value;
+            const ipressSelect = document.getElementById('ipress');
+            ipressSelect.innerHTML = '<option value="">Seleccione una IPRESS</option>'; // Limpiar y poner opción por defecto
+            
+            if (redSeleccionada) {
+                const ipressFiltradas = datosExcel.filter(item => item.red === redSeleccionada);
+                const ipressUnicas = [...new Set(ipressFiltradas.map(item => item.ipress))].sort();
+                ipressUnicas.forEach(ipress => {
+                    ipressSelect.add(new Option(ipress, ipress));
+                });
+            }
+            // Limpiar campos dependientes
+            document.getElementById('tipo').value = '';
+            document.getElementById('codigoIpress').value = '';
+        }
+
+        function asignarCodigoIpress() {
+            const ipressSeleccionada = document.getElementById('ipress').value;
+            const redSeleccionada = document.getElementById('red').value;
+            const item = datosExcel.find(d => d.red === redSeleccionada && d.ipress === ipressSeleccionada);
+            
+            document.getElementById('tipo').value = item ? item.tipo : '';
+            document.getElementById('codigoIpress').value = item ? item.codigoIpress : '';
+        }
+
+        function padearDocumento(input) {
+            const tipo = document.getElementById('tipoDoc').value;
+            const longitud = tipo === 'DNI' ? 8 : 9;
+            let valor = input.value.replace(/\D/g, ''); // Solo números
+            if (valor) {
+                input.value = valor.padStart(longitud, '0');
+            }
+        }
+        
+        function padearConCeros(input, longitud) {
+            let valor = input.value.replace(/\D/g, '');
+            if (valor) {
+                input.value = valor.padStart(longitud, '0');
+            }
+        }
+        
+        function togglePlanilla(checkbox) {
+            const inputPlanilla = document.getElementById('codigoPlanilla');
+            if (checkbox.checked) {
+                inputPlanilla.value = 'PERSONAL DE IPRESS EXTERNA';
+                inputPlanilla.readOnly = true;
+            } else {
+                inputPlanilla.value = '';
+                inputPlanilla.readOnly = false;
+            }
+        }
+
+        function validarFechas() {
+            const emision = document.getElementById('fechaEmision').value;
+            const termino = document.getElementById('fechaTermino').value;
+            if (emision && termino && new Date(termino) < new Date(emision)) {
+                alert('La fecha de término de vigencia no puede ser anterior a la fecha de emisión.');
+                document.getElementById('fechaTermino').value = '';
+            }
+        }
+
+        // --- LÓGICA DEL FORMULARIO (SECCIÓN MODIFICADA) ---
+
+        // Nuevo objeto para mapear redes a auditores según la imagen
+        const auditoresPorRed = {
+            'maria.delgadom@essalud.gob.pe': ['CAJAMARCA', 'GCSPE', 'CUSCO', 'ICA', 'SABOGAL', 'TARAPOTO'],
+            'monica.echarry@essalud.gob.pe': ['AMAZONAS', 'AYACUCHO', 'HUANUCO', 'LAMBAYEQUE', 'REBAGLIATI', 'TUMBES'],
+            'kathia.vega@essalud.gob.pe': ['AREQUIPA'],
+            'jeannette.motta@essalud.gob.pe': ['ANCASH', 'JUNIN', 'PASCO', 'PIURA'],
+            'yohny.torres@essalud.gob.pe': ['APURIMAC', 'OFERTA FLEXIBLE', 'LORETO', 'MOQUEGUA', 'PUNO', 'UCAYALI'],
+            'ruben.pena@essalud.gob.pe': ['INSTITUTO NACIONAL CARDIOVASCULAR', 'MADRE DE DIOS', 'MOYOBAMBA'],
+            'david.romero@essalud.gob.pe': ['ALMENARA', 'HUANCAVELICA', 'JULIACA', 'LA LIBERTAD', 'TACNA', 'JAEN', 'HUARAZ']
+        };
+
+        // Nueva función que busca el auditor basado en la red seleccionada
+        function asignarAuditorPorRed(redSeleccionada) {
+            let auditorAsignado = '';
+            for (const auditor in auditoresPorRed) {
+                if (auditoresPorRed[auditor].includes(redSeleccionada)) {
+                    auditorAsignado = auditor;
+                    break;
+                }
+            }
+            document.getElementById('auditor').value = auditorAsignado;
+        }
+
+
+        // **MODIFICACIÓN** en la función actualizarIpress()
+        // Llama a la nueva función para asignar el auditor.
+        function actualizarIpress() {
+            const redSeleccionada = document.getElementById('red').value;
+            const ipressSelect = document.getElementById('ipress');
+            ipressSelect.innerHTML = '<option value="">Seleccione una IPRESS</option>';
+            
+            if (redSeleccionada) {
+                const ipressFiltradas = datosExcel.filter(item => item.red === redSeleccionada);
+                const ipressUnicas = [...new Set(ipressFiltradas.map(item => item.ipress))].sort();
+                ipressUnicas.forEach(ipress => {
+                    ipressSelect.add(new Option(ipress, ipress));
+                });
+                
+                // --- LÍNEA AÑADIDA ---
+                asignarAuditorPorRed(redSeleccionada); // Asigna el auditor aquí
+            } else {
+                // Limpiar campos si no hay red seleccionada
+                asignarAuditorPorRed(''); 
+            }
+            
+            document.getElementById('tipo').value = '';
+            document.getElementById('codigoIpress').value = '';
+        }
+
+
+        function limpiarFormulario() {
+            document.getElementById('formulario').reset();
+            actualizarIpress(); // Resetea también el combo de IPRESS
+            asignarAuditor(); // Reasigna el auditor por defecto
+        }
+
+        function guardarDatos() {
+            // --- VALIDACIONES CON ALERTAS ---
+            const form = document.getElementById('formulario');
+            if (!form.checkValidity()) {
+                alert('Por favor, complete todos los campos requeridos (*).');
+                // Forzar la validación visual del navegador
+                form.reportValidity();
+                return;
+            }
+            
+            const telefono = document.getElementById('telefono').value;
+            if (!/^9\d{8}$/.test(telefono)) {
+                alert('Error en TELÉFONO PERSONAL: Debe empezar con 9 y tener 9 dígitos.');
+                return;
+            }
+
+            const correoInstitucional = document.getElementById('correoInstitucional').value;
+            if (!/.+@essalud\.gob\.pe$/.test(correoInstitucional)) {
+                alert('Error en CORREO INSTITUCIONAL: El formato es incorrecto. Debe terminar en @essalud.gob.pe');
+                return;
+            }
+            
+            const correoParticular = document.getElementById('correoParticular').value;
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailRegex.test(correoParticular)) {
+                alert('Error en CORREO PARTICULAR: El formato del correo no es válido.');
+                return;
+            }
+
+            // --- FIN DE VALIDACIONES ---
+
+            alert('Procesando... no cierre esta ventana.');
+
+            const formData = {
+                // Aquí recolectas todos los datos del formulario
+                red: document.getElementById('red').value,
+                ipress: document.getElementById('ipress').value,
+                codigoIpress: document.getElementById('codigoIpress').value,
+                // ... completa con todos los demás campos
+                fechaSolicitud: new Date().toLocaleDateString('es-PE') // Formato DD/MM/AAAA
+            };
+            
+            const file = document.getElementById('archivo').files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    formData.archivoBase64 = e.target.result.split(',')[1];
+                    formData.archivoMime = file.type;
+                    formData.archivoNombre = file.name;
+                    enviarAGoogle(formData);
+                };
+                reader.readAsDataURL(file);
+            } else {
+                enviarAGoogle(formData);
+            }
+        }
+
+        function enviarAGoogle(data) {
+            // URL de tu Web App de Google Apps Script
+            const url = 'https://script.google.com/macros/s/AKfycbz7AIwVcgaBh7jAfsvdkXWFc9vSY1reGwVwCL1R9LpiyjgbU4LPcmXmcB39TAFtY-C4VA/exec'; 
+            
+            fetch(url, {
+                method: 'POST',
+                mode: 'no-cors', // Importante para evitar errores de CORS con Apps Script
+                cache: 'no-cache',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(data)
+            })
+            .then(() => {
+                alert('¡Registro grabado satisfactoriamente! Se ha enviado una copia a los correos registrados.');
+                limpiarFormulario();
+            })
+            .catch(error => alert('Error al guardar el registro: ' + error));
+        }
+    </script>
+</body>
+</html>
