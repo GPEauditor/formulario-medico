@@ -8,146 +8,144 @@
         body { font-family: Arial, sans-serif; max-width: 800px; margin: auto; padding: 20px; background-color: #f4f7f6; }
         h1, h2 { color: #005662; }
         form { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; background: #fff; padding: 20px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
-        label { font-weight: bold; margin-bottom: 5px; }
+        label { font-weight: bold; margin-bottom: 5px; display: block; }
         input, select { width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; }
-        input[readonly] { background-color: #e9ecef; }
+        input[readonly] { background-color: #e9ecef; cursor: not-allowed; }
         .full-width { grid-column: 1 / -1; }
-        .button-container { grid-column: 1 / -1; display: flex; justify-content: center; gap: 20px; }
-        button { padding: 10px 20px; border: none; border-radius: 5px; color: #fff; font-size: 16px; cursor: pointer; }
+        .button-container { grid-column: 1 / -1; display: flex; justify-content: center; gap: 20px; margin-top: 10px; }
+        button { padding: 10px 20px; border: none; border-radius: 5px; color: #fff; font-size: 16px; cursor: pointer; transition: background-color 0.3s; }
+        button:disabled { background-color: #aaa; cursor: not-allowed; }
         #btn-guardar { background-color: #007bff; }
+        #btn-guardar:hover:not(:disabled) { background-color: #0056b3; }
         #btn-limpiar { background-color: #6c757d; }
+        #btn-limpiar:hover { background-color: #5a6268; }
         .section { margin-bottom: 20px; background: #fff; padding: 15px; border-radius: 8px; }
-        /* Estilo para vista móvil */
-        @media (max-width: 600px) {
-            form { grid-template-columns: 1fr; }
-        }
+        @media (max-width: 600px) { form { grid-template-columns: 1fr; } }
     </style>
 </head>
 <body>
     <h1>Formulario de Ingreso de Datos</h1>
     
     <div class="section">
-        <h2>Recursos y Capacitaciones</h2>
+        <h2>Recursos y Contacto</h2>
         <ul>
-            <li><a href="https://www.youtube.com/live/lJyopRFUAag?si=5E35Icv-C9htTxAE" target="_blank">Actividades del Médico de Control (CENATE)</a></li>
-            <li><a href="https://youtu.be/h0X7MqMWCp0" target="_blank">Análisis de la ITP y Derivación a COMECI</a></li>
-            <!-- Agrega aquí más enlaces de capacitación, YouTube, etc. -->
+            <li><a href="https://www.youtube.com/live/lJyopRFUAag?si=5E35Icv-C9htTxAE" target="_blank">Capacitación: Actividades del Médico de Control</a></li>
+            <li><a href="https://youtu.be/h0X7MqMWCp0" target="_blank">Capacitación: Análisis de ITP y Derivación a COMECI</a></li>
         </ul>
-        <h2>Contacto</h2>
         <p><strong>Soporte Técnico:</strong> Dr. Peña/Romero | Cel: 921013657 / 950622495</p>
         <p><strong>Consultas Generales:</strong> <a href="mailto:medicodecontrol@essalud.gob.pe">medicodecontrol@essalud.gob.pe</a></p>
     </div>
     
     <form id="formulario" novalidate>
         <!-- Fila 1 -->
-        <div class="form-group">
+        <div>
             <label for="red">RED:</label>
             <select id="red" required onchange="actualizarIpress()"><option value="">Seleccione una Red</option></select>
         </div>
-        <div class="form-group">
+        <div>
             <label for="ipress">IPRESS:</label>
-            <select id="ipress" required onchange="asignarCodigoIpress()"><option value="">Seleccione una IPRESS</option></select>
+            <select id="ipress" required onchange="asignarDatosIpress()"><option value="">Seleccione una IPRESS</option></select>
         </div>
 
         <!-- Fila 2 -->
-        <div class="form-group">
+        <div>
             <label for="tipo">TIPO:</label>
             <input id="tipo" readonly>
         </div>
-        <div class="form-group">
+        <div>
             <label for="codigoIpress">CÓDIGO DE IPRESS:</label>
             <input id="codigoIpress" readonly>
         </div>
 
         <!-- Fila 3 -->
-        <div class="form-group">
+        <div>
             <label for="apellidos">APELLIDOS:</label>
             <input id="apellidos" required pattern="[A-Za-zñÑ\s]+" oninput="this.value = this.value.toUpperCase().replace(/[^A-ZÑ\s]/g, '')">
         </div>
-        <div class="form-group">
+        <div>
             <label for="nombres">NOMBRES:</label>
             <input id="nombres" required pattern="[A-Za-zñÑ\s]+" oninput="this.value = this.value.toUpperCase().replace(/[^A-ZÑ\s]/g, '')">
         </div>
 
         <!-- Fila 4 -->
-        <div class="form-group">
+        <div>
             <label for="tipoDoc">TIPO DE DOCUMENTO:</label>
             <select id="tipoDoc" required><option value="DNI">DNI</option><option value="CE">CARNE DE EXTRANJERIA</option></select>
         </div>
-        <div class="form-group">
+        <div>
             <label for="numeroDoc">NÚMERO DE DOCUMENTO:</label>
-            <input id="numeroDoc" type="text" required onblur="padearDocumento(this)">
+            <input id="numeroDoc" type="text" required>
         </div>
 
         <!-- Fila 5 -->
-        <div class="form-group">
+        <div>
             <label for="cargo">CARGO:</label>
             <select id="cargo" required><option value="Médico de Control">Médico de Control</option><option value="OGIT">OGIT</option><option value="COMAI">COMAI</option><option value="COMECI">COMECI</option></select>
         </div>
-        <div class="form-group">
+        <div>
             <label for="profesional">PROFESIONAL:</label>
             <select id="profesional" required><option value="Médico">Médico</option><option value="Obstetra">Obstetra</option><option value="Ingeniero">Ingeniero</option><option value="Odontólogo">Odontólogo</option><option value="Otros">Otros profesionales de salud</option></select>
         </div>
 
         <!-- Fila 6 -->
-        <div class="form-group">
+        <div>
             <label for="codigoPlanilla">CÓDIGO DE PLANILLA:</label>
             <input id="codigoPlanilla" placeholder="8 dígitos o marque externa">
             <input type="checkbox" id="esExterna" onclick="togglePlanilla(this)"> Personal de IPRESS Externa
         </div>
-        <div class="form-group">
+        <div>
             <label for="colegiatura">COLEGIATURA (CMP):</label>
-            <input id="colegiatura" type="text" onblur="padearConCeros(this, 6)" placeholder="6 dígitos">
+            <input id="colegiatura" type="text" placeholder="6 dígitos">
         </div>
 
         <!-- Fila 7 -->
-        <div class="form-group full-width">
+        <div class="full-width">
             <label for="numResolucion">NÚMERO DE RESOLUCIÓN:</label>
             <input id="numResolucion" required oninput="this.value = this.value.toUpperCase()">
         </div>
         
         <!-- Fila 8 -->
-        <div class="form-group">
+        <div>
             <label for="fechaEmision">FECHA DE EMISIÓN DE RESOLUCIÓN:</label>
-            <input id="fechaEmision" type="date" required onchange="validarFechas()">
+            <input id="fechaEmision" type="date" required>
         </div>
-        <div class="form-group">
+        <div>
             <label for="fechaTermino">FECHA DE TÉRMINO DE VIGENCIA:</label>
-            <input id="fechaTermino" type="date" required onchange="validarFechas()">
+            <input id="fechaTermino" type="date" required>
         </div>
 
         <!-- Fila 9 -->
-        <div class="form-group full-width">
+        <div class="full-width">
             <label for="archivo">CARGAR RESOLUCIÓN (PDF o Imagen):</label>
             <input id="archivo" type="file" accept="image/*,.pdf">
         </div>
         
         <!-- Fila 10 -->
-        <div class="form-group">
+        <div>
             <label for="telefono">TELÉFONO PERSONAL:</label>
             <input id="telefono" type="tel" required placeholder="Debe empezar con 9">
         </div>
-        <div class="form-group">
+        <div>
             <label for="telefonoIpress">TELÉFONO IPRESS:</label>
             <input id="telefonoIpress" type="tel">
         </div>
 
         <!-- Fila 11 -->
-        <div class="form-group">
+        <div>
             <label for="correoInstitucional">CORREO INSTITUCIONAL:</label>
             <input id="correoInstitucional" type="email" required placeholder="usuario@essalud.gob.pe">
         </div>
-        <div class="form-group">
+        <div>
             <label for="correoParticular">CORREO PARTICULAR:</label>
             <input id="correoParticular" type="email" required>
         </div>
         
         <!-- Fila 12 -->
-        <div class="form-group">
+        <div>
             <label for="solicitud">TIPO DE SOLICITUD:</label>
             <select id="solicitud" required><option value="ACCESO SIGI">ACCESO SIGI</option><option value="CAPACITACION">CAPACITACIÓN</option><option value="RENOVACIÓN DE CONTRASEÑA">RENOVACIÓN DE CONTRASEÑA</option></select>
         </div>
-        <div class="form-group">
+        <div>
             <label for="auditor">MÉDICO AUDITOR GPE:</label>
             <input id="auditor" readonly>
         </div>
@@ -641,155 +639,159 @@
         // --- LÓGICA DEL FORMULARIO (SECCIÓN MODIFICADA) ---
 
         // Nuevo objeto para mapear redes a auditores según la imagen
-        const auditoresPorRed = {
-            'maria.delgadom@essalud.gob.pe': ['CAJAMARCA', 'GCSPE', 'CUSCO', 'ICA', 'SABOGAL', 'TARAPOTO'],
-            'monica.echarry@essalud.gob.pe': ['AMAZONAS', 'AYACUCHO', 'HUANUCO', 'LAMBAYEQUE', 'REBAGLIATI', 'TUMBES'],
-            'kathia.vega@essalud.gob.pe': ['AREQUIPA'],
-            'jeannette.motta@essalud.gob.pe': ['ANCASH', 'JUNIN', 'PASCO', 'PIURA'],
-            'yohny.torres@essalud.gob.pe': ['APURIMAC', 'OFERTA FLEXIBLE', 'LORETO', 'MOQUEGUA', 'PUNO', 'UCAYALI'],
-            'ruben.pena@essalud.gob.pe': ['INSTITUTO NACIONAL CARDIOVASCULAR', 'MADRE DE DIOS', 'MOYOBAMBA'],
-            'david.romero@essalud.gob.pe': ['ALMENARA', 'HUANCAVELICA', 'JULIACA', 'LA LIBERTAD', 'TACNA', 'JAEN', 'HUARAZ']
-        };
+    const asignacionAuditores = {
+        'maria.delgadom@essalud.gob.pe': ['CAJAMARCA', 'GCSPE', 'CUSCO', 'ICA', 'SABOGAL', 'TARAPOTO'],
+        'monica.echarry@essalud.gob.pe': ['AMAZONAS', 'AYACUCHO', 'HUANUCO', 'LAMBAYEQUE', 'REBAGLIATI', 'TUMBES'],
+        'kathia.vega@essalud.gob.pe': ['AREQUIPA'],
+        'jeannette.motta@essalud.gob.pe': ['ANCASH', 'JUNIN', 'PASCO', 'PIURA'],
+        'yohny.torres@essalud.gob.pe': ['APURIMAC', 'OFERTA FLEXIBLE', 'LORETO', 'MOQUEGUA', 'PUNO', 'UCAYALI'],
+        'ruben.pena@essalud.gob.pe': ['INSTITUTO NACIONAL CARDIOVASCULAR', 'MADRE DE DIOS', 'MOYOBAMBA'],
+        'david.romero@essalud.gob.pe': ['ALMENARA', 'HUANCAVELICA', 'JULIACA', 'LA LIBERTAD', 'TACNA', 'JAEN', 'HUARAZ']
+    };
 
-        // ### FUNCIONES DEL FORMULARIO - NO MODIFICAR ###
-        document.addEventListener('DOMContentLoaded', () => {
-            // Cargar redes al iniciar
-            const redSelect = document.getElementById('red');
-            const redesUnicas = [...new Set(datosExcel.map(item => item.red))].sort();
-            redesUnicas.forEach(red => {
-                redSelect.add(new Option(red, red));
-            });
-            asignarAuditorPorRed(''); // Limpia el auditor al inicio
+    // ### PASO 2: LÓGICA DEL FORMULARIO (NO MODIFICAR) ###
+
+    document.addEventListener('DOMContentLoaded', () => {
+        const redSelect = document.getElementById('red');
+        const redesUnicas = [...new Set(datosExcel.map(item => item.red))].sort();
+        redesUnicas.forEach(red => {
+            redSelect.add(new Option(red, red));
         });
-    
-        function asignarAuditorPorRed(redSeleccionada) {
-            const auditorInput = document.getElementById('auditor');
-            auditorInput.value = ''; // Limpiar por defecto
-            if (redSeleccionada) {
-                for (const auditor in asignacionAuditores) {
-                    if (asignacionAuditores[auditor].includes(redSeleccionada)) {
-                        auditorInput.value = auditor;
-                        break;
-                    }
-                }
+        actualizarIpress();
+    });
+
+    function asignarAuditorPorRed(redSeleccionada) {
+        const auditorInput = document.getElementById('auditor');
+        auditorInput.value = '';
+        for (const auditor in asignacionAuditores) {
+            if (asignacionAuditores[auditor].includes(redSeleccionada)) {
+                auditorInput.value = auditor;
+                break;
             }
         }
-    
-        function actualizarIpress() {
-            const redSeleccionada = document.getElementById('red').value;
-            const ipressSelect = document.getElementById('ipress');
-            ipressSelect.innerHTML = '<option value="">Seleccione una IPRESS</option>';
-            document.getElementById('tipo').value = '';
-            document.getElementById('codigoIpress').value = '';
-            
-            asignarAuditorPorRed(redSeleccionada);
-    
-            if (redSeleccionada) {
-                const ipressFiltradas = datosExcel.filter(item => item.red === redSeleccionada);
-                const ipressUnicas = [...new Set(ipressFiltradas.map(item => item.ipress))].sort();
-                ipressUnicas.forEach(ipress => {
-                    ipressSelect.add(new Option(ipress, ipress));
-                });
-            }
-        }
-    
-        function asignarCodigoIpress() {
-            const ipressSeleccionada = document.getElementById('ipress').value;
-            const tipoInput = document.getElementById('tipo');
-            const codigoInput = document.getElementById('codigoIpress');
-            if (ipressSeleccionada) {
-                const dato = datosExcel.find(item => item.ipress === ipressSeleccionada);
-                tipoInput.value = dato.tipo;
-                codigoInput.value = dato.codigoIpress;
-            } else {
-                tipoInput.value = '';
-                codigoInput.value = '';
-            }
-        }
-    
-        function limpiarFormulario() {
-            document.getElementById('formulario').reset();
-            actualizarIpress();
+    }
+
+    function actualizarIpress() {
+        const redSeleccionada = document.getElementById('red').value;
+        const ipressSelect = document.getElementById('ipress');
+        
+        ipressSelect.innerHTML = '<option value="">Seleccione una IPRESS</option>';
+        
+        if (redSeleccionada) {
+            const ipressFiltradas = datosExcel.filter(item => item.red === redSeleccionada);
+            const ipressUnicas = [...new Set(ipressFiltradas.map(item => item.ipress))].sort();
+            ipressUnicas.forEach(ipress => {
+                ipressSelect.add(new Option(ipress, ipress));
+            });
         }
         
-        function guardarDatos() {
-            const form = document.getElementById('formulario');
-            if (!form.checkValidity()) {
-                alert('Por favor, complete todos los campos requeridos (*).');
-                form.reportValidity();
-                return;
-            }
-    
-            // Recolectar todos los datos en un objeto
-            const formData = {
-                red: document.getElementById('red').value,
-                ipress: document.getElementById('ipress').value,
-                tipo: document.getElementById('tipo').value,
-                codigoIpress: document.getElementById('codigoIpress').value,
-                apellidos: document.getElementById('apellidos').value,
-                nombres: document.getElementById('nombres').value,
-                tipoDoc: document.getElementById('tipoDoc').value,
-                numeroDoc: document.getElementById('numeroDoc').value,
-                cargo: document.getElementById('cargo').value,
-                profesional: document.getElementById('profesional').value,
-                codigoPlanilla: document.getElementById('codigoPlanilla').value,
-                colegiatura: document.getElementById('colegiatura').value,
-                numResolucion: document.getElementById('numResolucion').value,
-                fechaEmision: document.getElementById('fechaEmision').value,
-                fechaTermino: document.getElementById('fechaTermino').value,
-                telefono: document.getElementById('telefono').value,
-                telefonoIpress: document.getElementById('telefonoIpress').value,
-                correoInstitucional: document.getElementById('correoInstitucional').value,
-                correoParticular: document.getElementById('correoParticular').value,
-                solicitud: document.getElementById('solicitud').value,
-                auditor: document.getElementById('auditor').value
-            };
-    
-            const botonGuardar = document.getElementById('btn-guardar');
-            botonGuardar.disabled = true;
-            botonGuardar.textContent = 'Procesando...';
-    
-            const file = document.getElementById('archivo').files[0];
-            if (file) {
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    formData.archivoBase64 = e.target.result.split(',')[1];
-                    formData.archivoMime = file.type;
-                    formData.archivoNombre = file.name;
-                    enviarAGoogle(formData, botonGuardar);
-                };
-                reader.readAsDataURL(file);
-            } else {
+        asignarAuditorPorRed(redSeleccionada);
+        asignarDatosIpress(); // Limpia los campos de tipo y código
+    }
+
+    function asignarDatosIpress() {
+        const ipressSeleccionada = document.getElementById('ipress').value;
+        const redSeleccionada = document.getElementById('red').value;
+        const item = datosExcel.find(d => d.red === redSeleccionada && d.ipress === ipressSeleccionada);
+        
+        document.getElementById('tipo').value = item ? item.tipo : '';
+        document.getElementById('codigoIpress').value = item ? item.codigoIpress : '';
+    }
+
+    function limpiarFormulario() {
+        document.getElementById('formulario').reset();
+        actualizarIpress(); // Esta función ya resetea las IPRESS y el auditor
+    }
+
+    function guardarDatos() {
+        const form = document.getElementById('formulario');
+        if (!form.checkValidity()) {
+            alert('Por favor, complete todos los campos requeridos.');
+            form.reportValidity();
+            return;
+        }
+
+        const botonGuardar = document.getElementById('btn-guardar');
+        botonGuardar.disabled = true;
+        botonGuardar.textContent = 'Procesando...';
+
+        const formData = {
+            red: document.getElementById('red').value,
+            ipress: document.getElementById('ipress').value,
+            tipo: document.getElementById('tipo').value,
+            codigoIpress: document.getElementById('codigoIpress').value,
+            apellidos: document.getElementById('apellidos').value,
+            nombres: document.getElementById('nombres').value,
+            tipoDoc: document.getElementById('tipoDoc').value,
+            numeroDoc: document.getElementById('numeroDoc').value,
+            cargo: document.getElementById('cargo').value,
+            profesional: document.getElementById('profesional').value,
+            codigoPlanilla: document.getElementById('codigoPlanilla').value,
+            colegiatura: document.getElementById('colegiatura').value,
+            numResolucion: document.getElementById('numResolucion').value,
+            fechaEmision: document.getElementById('fechaEmision').value,
+            fechaTermino: document.getElementById('fechaTermino').value,
+            telefono: document.getElementById('telefono').value,
+            correoInstitucional: document.getElementById('correoInstitucional').value,
+            correoParticular: document.getElementById('correoParticular').value,
+            solicitud: document.getElementById('solicitud').value,
+            auditor: document.getElementById('auditor').value,
+            fechaRegistro: new Date().toISOString()
+        };
+
+        const file = document.getElementById('archivo').files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                formData.archivoBase64 = e.target.result.split(',')[1];
+                formData.archivoMime = file.type;
+                formData.archivoNombre = file.name;
                 enviarAGoogle(formData, botonGuardar);
-            }
+            };
+            reader.readAsDataURL(file);
+        } else {
+            enviarAGoogle(formData, botonGuardar);
         }
-    
-        function enviarAGoogle(data, boton) {
-            const url = 'https://script.google.com/macros/s/AKfycbyfE9a5WjB49t0K5OqJv-t8k5T3X9pG6F_nZcV7jA_sY9h8wD_bL4iVwQ/exec'; // URL de tu Web App
-    
-            fetch(url, {
-                method: 'POST',
-                mode: 'no-cors',
-                body: JSON.stringify(data)
-            })
-            .then(() => {
-                alert('¡Registro grabado satisfactoriamente! Se ha enviado una copia a los correos registrados.');
-                limpiarFormulario();
-            })
-            .catch(error => {
-                alert('Error al guardar el registro: ' + error);
-            })
-            .finally(() => {
-                boton.disabled = false;
-                boton.textContent = 'Guardar';
-            });
+    }
+
+    function enviarAGoogle(data, boton) {
+        // IMPORTANTE: Reemplaza esta URL con la URL de tu propia Web App de Google Apps Script
+        const url = 'https://script.google.com/macros/s/AKfyc.../exec'; 
+
+        fetch(url, {
+            method: 'POST',
+            mode: 'no-cors',
+            cache: 'no-cache',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(data)
+        })
+        .then(() => {
+            alert('¡Registro grabado satisfactoriamente! Se ha enviado una copia a los correos registrados.');
+            limpiarFormulario();
+        })
+        .catch(error => {
+            alert('Error al guardar el registro. Revise la consola (F12) para más detalles.');
+            console.error('Error en fetch:', error);
+        })
+        .finally(() => {
+            boton.disabled = false;
+            boton.textContent = 'Guardar';
+        });
+    }
+
+    function togglePlanilla(checkbox) {
+        const inputPlanilla = document.getElementById('codigoPlanilla');
+        inputPlanilla.readOnly = checkbox.checked;
+        if (checkbox.checked) {
+            inputPlanilla.value = 'PERSONAL DE IPRESS EXTERNA';
+        } else {
+            inputPlanilla.value = '';
         }
-    
-        // Otras funciones auxiliares que ya tienes (validaciones, etc.)
-        // ...
+    }
     </script>
 
 </body>
 </html>
+
 
 
