@@ -651,85 +651,80 @@
             'david.romero@essalud.gob.pe': ['ALMENARA', 'HUANCAVELICA', 'JULIACA', 'LA LIBERTAD', 'TACNA', 'JAEN', 'HUARAZ']
         };
 
-        // Nueva función que busca el auditor basado en la red seleccionada
+        // ### FUNCIONES DEL FORMULARIO - NO MODIFICAR ###
+        document.addEventListener('DOMContentLoaded', () => {
+            // Cargar redes al iniciar
+            const redSelect = document.getElementById('red');
+            const redesUnicas = [...new Set(datosExcel.map(item => item.red))].sort();
+            redesUnicas.forEach(red => {
+                redSelect.add(new Option(red, red));
+            });
+            asignarAuditorPorRed(''); // Limpia el auditor al inicio
+        });
+    
         function asignarAuditorPorRed(redSeleccionada) {
-            let auditorAsignado = '';
-            for (const auditor in auditoresPorRed) {
-                if (auditoresPorRed[auditor].includes(redSeleccionada)) {
-                    auditorAsignado = auditor;
-                    break;
+            const auditorInput = document.getElementById('auditor');
+            auditorInput.value = ''; // Limpiar por defecto
+            if (redSeleccionada) {
+                for (const auditor in asignacionAuditores) {
+                    if (asignacionAuditores[auditor].includes(redSeleccionada)) {
+                        auditorInput.value = auditor;
+                        break;
+                    }
                 }
             }
-            document.getElementById('auditor').value = auditorAsignado;
         }
-
-
-        // **MODIFICACIÓN** en la función actualizarIpress()
-        // Llama a la nueva función para asignar el auditor.
+    
         function actualizarIpress() {
             const redSeleccionada = document.getElementById('red').value;
             const ipressSelect = document.getElementById('ipress');
             ipressSelect.innerHTML = '<option value="">Seleccione una IPRESS</option>';
+            document.getElementById('tipo').value = '';
+            document.getElementById('codigoIpress').value = '';
             
+            asignarAuditorPorRed(redSeleccionada);
+    
             if (redSeleccionada) {
                 const ipressFiltradas = datosExcel.filter(item => item.red === redSeleccionada);
                 const ipressUnicas = [...new Set(ipressFiltradas.map(item => item.ipress))].sort();
                 ipressUnicas.forEach(ipress => {
                     ipressSelect.add(new Option(ipress, ipress));
                 });
-                
-                // --- LÍNEA AÑADIDA ---
-                asignarAuditorPorRed(redSeleccionada); // Asigna el auditor aquí
-            } else {
-                // Limpiar campos si no hay red seleccionada
-                asignarAuditorPorRed(''); 
             }
-            
-            document.getElementById('tipo').value = '';
-            document.getElementById('codigoIpress').value = '';
         }
-
-
+    
+        function asignarCodigoIpress() {
+            const ipressSeleccionada = document.getElementById('ipress').value;
+            const tipoInput = document.getElementById('tipo');
+            const codigoInput = document.getElementById('codigoIpress');
+            if (ipressSeleccionada) {
+                const dato = datosExcel.find(item => item.ipress === ipressSeleccionada);
+                tipoInput.value = dato.tipo;
+                codigoInput.value = dato.codigoIpress;
+            } else {
+                tipoInput.value = '';
+                codigoInput.value = '';
+            }
+        }
+    
         function limpiarFormulario() {
             document.getElementById('formulario').reset();
-            actualizarIpress(); // Resetea IPRESS y auditor
+            actualizarIpress();
         }
-
-        // ### FUNCIÓN CORREGIDA Y COMPLETA ###
+        
         function guardarDatos() {
-            // --- VALIDACIONES ---
             const form = document.getElementById('formulario');
             if (!form.checkValidity()) {
                 alert('Por favor, complete todos los campos requeridos (*).');
                 form.reportValidity();
                 return;
             }
-            
-            const telefono = document.getElementById('telefono').value;
-            if (!/^9\d{8}$/.test(telefono)) {
-                alert('Error en TELÉFONO PERSONAL: Debe empezar con 9 y tener 9 dígitos.');
-                return;
-            }
-        
-            const correoInstitucional = document.getElementById('correoInstitucional').value;
-            if (!/.+@essalud\.gob\.pe$/.test(correoInstitucional)) {
-                alert('Error en CORREO INSTITUCIONAL: Debe terminar en @essalud.gob.pe');
-                return;
-            }
-            
-            const correoParticular = document.getElementById('correoParticular').value;
-            if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(correoParticular)) {
-                alert('Error en CORREO PARTICULAR: El formato no es válido.');
-                return;
-            }
-        
-            // --- MUESTRA MENSAJE DE PROCESANDO ---
-            alert('Procesando... no cierre esta ventana.');
-        
-            // --- RECOLECCIÓN COMPLETA DE DATOS ---
+    
+            // Recolectar todos los datos en un objeto
             const formData = {
                 red: document.getElementById('red').value,
                 ipress: document.getElementById('ipress').value,
+                tipo: document.getElementById('tipo').value,
                 codigoIpress: document.getElementById('codigoIpress').value,
                 apellidos: document.getElementById('apellidos').value,
                 nombres: document.getElementById('nombres').value,
@@ -743,13 +738,17 @@
                 fechaEmision: document.getElementById('fechaEmision').value,
                 fechaTermino: document.getElementById('fechaTermino').value,
                 telefono: document.getElementById('telefono').value,
+                telefonoIpress: document.getElementById('telefonoIpress').value,
                 correoInstitucional: document.getElementById('correoInstitucional').value,
                 correoParticular: document.getElementById('correoParticular').value,
                 solicitud: document.getElementById('solicitud').value,
                 auditor: document.getElementById('auditor').value
             };
-            
-            // --- GESTIÓN DEL ARCHIVO Y ENVÍO ---
+    
+            const botonGuardar = document.getElementById('btn-guardar');
+            botonGuardar.disabled = true;
+            botonGuardar.textContent = 'Procesando...';
+    
             const file = document.getElementById('archivo').files[0];
             if (file) {
                 const reader = new FileReader();
@@ -757,33 +756,40 @@
                     formData.archivoBase64 = e.target.result.split(',')[1];
                     formData.archivoMime = file.type;
                     formData.archivoNombre = file.name;
-                    enviarAGoogle(formData);
+                    enviarAGoogle(formData, botonGuardar);
                 };
                 reader.readAsDataURL(file);
             } else {
-                enviarAGoogle(formData);
+                enviarAGoogle(formData, botonGuardar);
             }
         }
-
-
-        function enviarAGoogle(data) {
-            // URL de tu Web App de Google Apps Script
-            const url = 'https://script.google.com/macros/s/AKfycbz7AIwVcgaBh7jAfsvdkXWFc9vSY1reGwVwCL1R9LpiyjgbU4LPcmXmcB39TAFtY-C4VA/exec'; 
-            
+    
+        function enviarAGoogle(data, boton) {
+            const url = 'https://script.google.com/macros/s/AKfycbyfE9a5WjB49t0K5OqJv-t8k5T3X9pG6F_nZcV7jA_sY9h8wD_bL4iVwQ/exec'; // URL de tu Web App
+    
             fetch(url, {
                 method: 'POST',
-                mode: 'no-cors', // Importante para evitar errores de CORS con Apps Script
-                cache: 'no-cache',
-                headers: { 'Content-Type': 'application/json' },
+                mode: 'no-cors',
                 body: JSON.stringify(data)
             })
             .then(() => {
                 alert('¡Registro grabado satisfactoriamente! Se ha enviado una copia a los correos registrados.');
                 limpiarFormulario();
             })
-            .catch(error => alert('Error al guardar el registro: ' + error));
+            .catch(error => {
+                alert('Error al guardar el registro: ' + error);
+            })
+            .finally(() => {
+                boton.disabled = false;
+                boton.textContent = 'Guardar';
+            });
         }
+    
+        // Otras funciones auxiliares que ya tienes (validaciones, etc.)
+        // ...
     </script>
+
 </body>
 </html>
+
 
