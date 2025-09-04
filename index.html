@@ -692,16 +692,15 @@
 
         function limpiarFormulario() {
             document.getElementById('formulario').reset();
-            actualizarIpress(); // Resetea también el combo de IPRESS
-            asignarAuditor(); // Reasigna el auditor por defecto
+            actualizarIpress(); // Resetea IPRESS y auditor
         }
 
+        // ### FUNCIÓN CORREGIDA Y COMPLETA ###
         function guardarDatos() {
-            // --- VALIDACIONES CON ALERTAS ---
+            // --- VALIDACIONES ---
             const form = document.getElementById('formulario');
             if (!form.checkValidity()) {
                 alert('Por favor, complete todos los campos requeridos (*).');
-                // Forzar la validación visual del navegador
                 form.reportValidity();
                 return;
             }
@@ -711,33 +710,46 @@
                 alert('Error en TELÉFONO PERSONAL: Debe empezar con 9 y tener 9 dígitos.');
                 return;
             }
-
+        
             const correoInstitucional = document.getElementById('correoInstitucional').value;
             if (!/.+@essalud\.gob\.pe$/.test(correoInstitucional)) {
-                alert('Error en CORREO INSTITUCIONAL: El formato es incorrecto. Debe terminar en @essalud.gob.pe');
+                alert('Error en CORREO INSTITUCIONAL: Debe terminar en @essalud.gob.pe');
                 return;
             }
             
             const correoParticular = document.getElementById('correoParticular').value;
-            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-            if (!emailRegex.test(correoParticular)) {
-                alert('Error en CORREO PARTICULAR: El formato del correo no es válido.');
+            if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(correoParticular)) {
+                alert('Error en CORREO PARTICULAR: El formato no es válido.');
                 return;
             }
-
-            // --- FIN DE VALIDACIONES ---
-
+        
+            // --- MUESTRA MENSAJE DE PROCESANDO ---
             alert('Procesando... no cierre esta ventana.');
-
+        
+            // --- RECOLECCIÓN COMPLETA DE DATOS ---
             const formData = {
-                // Aquí recolectas todos los datos del formulario
                 red: document.getElementById('red').value,
                 ipress: document.getElementById('ipress').value,
                 codigoIpress: document.getElementById('codigoIpress').value,
-                // ... completa con todos los demás campos
-                fechaSolicitud: new Date().toLocaleDateString('es-PE') // Formato DD/MM/AAAA
+                apellidos: document.getElementById('apellidos').value,
+                nombres: document.getElementById('nombres').value,
+                tipoDoc: document.getElementById('tipoDoc').value,
+                numeroDoc: document.getElementById('numeroDoc').value,
+                cargo: document.getElementById('cargo').value,
+                profesional: document.getElementById('profesional').value,
+                codigoPlanilla: document.getElementById('codigoPlanilla').value,
+                colegiatura: document.getElementById('colegiatura').value,
+                numResolucion: document.getElementById('numResolucion').value,
+                fechaEmision: document.getElementById('fechaEmision').value,
+                fechaTermino: document.getElementById('fechaTermino').value,
+                telefono: document.getElementById('telefono').value,
+                correoInstitucional: document.getElementById('correoInstitucional').value,
+                correoParticular: document.getElementById('correoParticular').value,
+                solicitud: document.getElementById('solicitud').value,
+                auditor: document.getElementById('auditor').value
             };
             
+            // --- GESTIÓN DEL ARCHIVO Y ENVÍO ---
             const file = document.getElementById('archivo').files[0];
             if (file) {
                 const reader = new FileReader();
@@ -752,6 +764,7 @@
                 enviarAGoogle(formData);
             }
         }
+
 
         function enviarAGoogle(data) {
             // URL de tu Web App de Google Apps Script
@@ -773,3 +786,4 @@
     </script>
 </body>
 </html>
+
