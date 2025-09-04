@@ -726,16 +726,14 @@
             document.getElementById('codigoIpress').value = '';
         }
 
-
     
+        // ### FUNCIÓN CORREGIDA ###
         function limpiarFormulario() {
             document.getElementById('formulario').reset();
             actualizarIpress(); // Resetea IPRESS y auditor
-            actualizarIpress();
         }
-
-        // ### FUNCIÓN CORREGIDA Y COMPLETA ###
         
+        // ### FUNCIÓN CORREGIDA Y COMPLETA ###
         function guardarDatos() {
             // --- VALIDACIONES ---
             const form = document.getElementById('formulario');
@@ -767,12 +765,9 @@
             alert('Procesando... no cierre esta ventana.');
         
             // --- RECOLECCIÓN COMPLETA DE DATOS ---
-    
-            // Recolectar todos los datos en un objeto
             const formData = {
                 red: document.getElementById('red').value,
                 ipress: document.getElementById('ipress').value,
-                tipo: document.getElementById('tipo').value,
                 codigoIpress: document.getElementById('codigoIpress').value,
                 apellidos: document.getElementById('apellidos').value,
                 nombres: document.getElementById('nombres').value,
@@ -786,7 +781,6 @@
                 fechaEmision: document.getElementById('fechaEmision').value,
                 fechaTermino: document.getElementById('fechaTermino').value,
                 telefono: document.getElementById('telefono').value,
-                telefonoIpress: document.getElementById('telefonoIpress').value,
                 correoInstitucional: document.getElementById('correoInstitucional').value,
                 correoParticular: document.getElementById('correoParticular').value,
                 solicitud: document.getElementById('solicitud').value,
@@ -794,11 +788,6 @@
             };
             
             // --- GESTIÓN DEL ARCHIVO Y ENVÍO ---
-    
-            const botonGuardar = document.getElementById('btn-guardar');
-            botonGuardar.disabled = true;
-            botonGuardar.textContent = 'Procesando...';
-    
             const file = document.getElementById('archivo').files[0];
             if (file) {
                 const reader = new FileReader();
@@ -807,12 +796,10 @@
                     formData.archivoMime = file.type;
                     formData.archivoNombre = file.name;
                     enviarAGoogle(formData);
-                    enviarAGoogle(formData, botonGuardar);
                 };
                 reader.readAsDataURL(file);
             } else {
                 enviarAGoogle(formData);
-                enviarAGoogle(formData, botonGuardar);
             }
         }
 
@@ -853,4 +840,5 @@
 
 </body>
 </html>
+
 
