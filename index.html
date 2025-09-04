@@ -25,7 +25,7 @@
 </head>
 <body>
     <h1>Formulario de Ingreso de Datos</h1>
-
+    
     <div class="section">
         <h2>Recursos y Capacitaciones</h2>
         <ul>
@@ -37,7 +37,7 @@
         <p><strong>Soporte Técnico:</strong> Dr. Peña/Romero | Cel: 921013657 / 950622495</p>
         <p><strong>Consultas Generales:</strong> <a href="mailto:medicodecontrol@essalud.gob.pe">medicodecontrol@essalud.gob.pe</a></p>
     </div>
-
+    
     <form id="formulario" novalidate>
         <!-- Fila 1 -->
         <div class="form-group">
@@ -105,7 +105,7 @@
             <label for="numResolucion">NÚMERO DE RESOLUCIÓN:</label>
             <input id="numResolucion" required oninput="this.value = this.value.toUpperCase()">
         </div>
-
+        
         <!-- Fila 8 -->
         <div class="form-group">
             <label for="fechaEmision">FECHA DE EMISIÓN DE RESOLUCIÓN:</label>
@@ -121,7 +121,7 @@
             <label for="archivo">CARGAR RESOLUCIÓN (PDF o Imagen):</label>
             <input id="archivo" type="file" accept="image/*,.pdf">
         </div>
-
+        
         <!-- Fila 10 -->
         <div class="form-group">
             <label for="telefono">TELÉFONO PERSONAL:</label>
@@ -141,7 +141,7 @@
             <label for="correoParticular">CORREO PARTICULAR:</label>
             <input id="correoParticular" type="email" required>
         </div>
-
+        
         <!-- Fila 12 -->
         <div class="form-group">
             <label for="solicitud">TIPO DE SOLICITUD:</label>
@@ -151,7 +151,7 @@
             <label for="auditor">MÉDICO AUDITOR GPE:</label>
             <input id="auditor" readonly>
         </div>
-
+        
         <!-- Botones -->
         <div class="button-container">
             <button id="btn-limpiar" type="button" onclick="limpiarFormulario()">Limpiar</button>
@@ -564,7 +564,7 @@
         ];
 
         // --- LÓGICA DEL FORMULARIO (NO MODIFICAR) ---
-
+        
         document.addEventListener('DOMContentLoaded', function() {
             // Cargar redes únicas
             const redSelect = document.getElementById('red');
@@ -580,7 +580,7 @@
             const redSeleccionada = document.getElementById('red').value;
             const ipressSelect = document.getElementById('ipress');
             ipressSelect.innerHTML = '<option value="">Seleccione una IPRESS</option>'; // Limpiar y poner opción por defecto
-
+            
             if (redSeleccionada) {
                 const ipressFiltradas = datosExcel.filter(item => item.red === redSeleccionada);
                 const ipressUnicas = [...new Set(ipressFiltradas.map(item => item.ipress))].sort();
@@ -597,7 +597,7 @@
             const ipressSeleccionada = document.getElementById('ipress').value;
             const redSeleccionada = document.getElementById('red').value;
             const item = datosExcel.find(d => d.red === redSeleccionada && d.ipress === ipressSeleccionada);
-
+            
             document.getElementById('tipo').value = item ? item.tipo : '';
             document.getElementById('codigoIpress').value = item ? item.codigoIpress : '';
         }
@@ -610,14 +610,14 @@
                 input.value = valor.padStart(longitud, '0');
             }
         }
-
+        
         function padearConCeros(input, longitud) {
             let valor = input.value.replace(/\D/g, '');
             if (valor) {
                 input.value = valor.padStart(longitud, '0');
             }
         }
-
+        
         function togglePlanilla(checkbox) {
             const inputPlanilla = document.getElementById('codigoPlanilla');
             if (checkbox.checked) {
@@ -652,31 +652,12 @@
         };
 
         // Nueva función que busca el auditor basado en la red seleccionada
-        // ### FUNCIONES DEL FORMULARIO - NO MODIFICAR ###
-        document.addEventListener('DOMContentLoaded', () => {
-            // Cargar redes al iniciar
-            const redSelect = document.getElementById('red');
-            const redesUnicas = [...new Set(datosExcel.map(item => item.red))].sort();
-            redesUnicas.forEach(red => {
-                redSelect.add(new Option(red, red));
-            });
-            asignarAuditorPorRed(''); // Limpia el auditor al inicio
-        });
-    
         function asignarAuditorPorRed(redSeleccionada) {
             let auditorAsignado = '';
             for (const auditor in auditoresPorRed) {
                 if (auditoresPorRed[auditor].includes(redSeleccionada)) {
                     auditorAsignado = auditor;
                     break;
-            const auditorInput = document.getElementById('auditor');
-            auditorInput.value = ''; // Limpiar por defecto
-            if (redSeleccionada) {
-                for (const auditor in asignacionAuditores) {
-                    if (asignacionAuditores[auditor].includes(redSeleccionada)) {
-                        auditorInput.value = auditor;
-                        break;
-                    }
                 }
             }
             document.getElementById('auditor').value = auditorAsignado;
@@ -685,16 +666,11 @@
 
         // **MODIFICACIÓN** en la función actualizarIpress()
         // Llama a la nueva función para asignar el auditor.
-    
         function actualizarIpress() {
             const redSeleccionada = document.getElementById('red').value;
             const ipressSelect = document.getElementById('ipress');
             ipressSelect.innerHTML = '<option value="">Seleccione una IPRESS</option>';
-            document.getElementById('tipo').value = '';
-            document.getElementById('codigoIpress').value = '';
-
-            asignarAuditorPorRed(redSeleccionada);
-    
+            
             if (redSeleccionada) {
                 const ipressFiltradas = datosExcel.filter(item => item.red === redSeleccionada);
                 const ipressUnicas = [...new Set(ipressFiltradas.map(item => item.ipress))].sort();
@@ -704,41 +680,28 @@
                 
                 // --- LÍNEA AÑADIDA ---
                 asignarAuditorPorRed(redSeleccionada); // Asigna el auditor aquí
-            }
-        }
-    
-        function asignarCodigoIpress() {
-            const ipressSeleccionada = document.getElementById('ipress').value;
-            const tipoInput = document.getElementById('tipo');
-            const codigoInput = document.getElementById('codigoIpress');
-            if (ipressSeleccionada) {
-                const dato = datosExcel.find(item => item.ipress === ipressSeleccionada);
-                tipoInput.value = dato.tipo;
-                codigoInput.value = dato.codigoIpress;
             } else {
                 // Limpiar campos si no hay red seleccionada
                 asignarAuditorPorRed(''); 
-                tipoInput.value = '';
-                codigoInput.value = '';
             }
             
             document.getElementById('tipo').value = '';
             document.getElementById('codigoIpress').value = '';
         }
 
-    
-        // ### FUNCIÓN CORREGIDA ###
+
         function limpiarFormulario() {
             document.getElementById('formulario').reset();
-            actualizarIpress(); // Resetea IPRESS y auditor
+            actualizarIpress(); // Resetea también el combo de IPRESS
+            asignarAuditor(); // Reasigna el auditor por defecto
         }
-        
-        // ### FUNCIÓN CORREGIDA Y COMPLETA ###
+
         function guardarDatos() {
-            // --- VALIDACIONES ---
+            // --- VALIDACIONES CON ALERTAS ---
             const form = document.getElementById('formulario');
             if (!form.checkValidity()) {
                 alert('Por favor, complete todos los campos requeridos (*).');
+                // Forzar la validación visual del navegador
                 form.reportValidity();
                 return;
             }
@@ -748,46 +711,33 @@
                 alert('Error en TELÉFONO PERSONAL: Debe empezar con 9 y tener 9 dígitos.');
                 return;
             }
-        
+
             const correoInstitucional = document.getElementById('correoInstitucional').value;
             if (!/.+@essalud\.gob\.pe$/.test(correoInstitucional)) {
-                alert('Error en CORREO INSTITUCIONAL: Debe terminar en @essalud.gob.pe');
+                alert('Error en CORREO INSTITUCIONAL: El formato es incorrecto. Debe terminar en @essalud.gob.pe');
                 return;
             }
             
             const correoParticular = document.getElementById('correoParticular').value;
-            if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(correoParticular)) {
-                alert('Error en CORREO PARTICULAR: El formato no es válido.');
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailRegex.test(correoParticular)) {
+                alert('Error en CORREO PARTICULAR: El formato del correo no es válido.');
                 return;
             }
-        
-            // --- MUESTRA MENSAJE DE PROCESANDO ---
+
+            // --- FIN DE VALIDACIONES ---
+
             alert('Procesando... no cierre esta ventana.');
-        
-            // --- RECOLECCIÓN COMPLETA DE DATOS ---
+
             const formData = {
+                // Aquí recolectas todos los datos del formulario
                 red: document.getElementById('red').value,
                 ipress: document.getElementById('ipress').value,
                 codigoIpress: document.getElementById('codigoIpress').value,
-                apellidos: document.getElementById('apellidos').value,
-                nombres: document.getElementById('nombres').value,
-                tipoDoc: document.getElementById('tipoDoc').value,
-                numeroDoc: document.getElementById('numeroDoc').value,
-                cargo: document.getElementById('cargo').value,
-                profesional: document.getElementById('profesional').value,
-                codigoPlanilla: document.getElementById('codigoPlanilla').value,
-                colegiatura: document.getElementById('colegiatura').value,
-                numResolucion: document.getElementById('numResolucion').value,
-                fechaEmision: document.getElementById('fechaEmision').value,
-                fechaTermino: document.getElementById('fechaTermino').value,
-                telefono: document.getElementById('telefono').value,
-                correoInstitucional: document.getElementById('correoInstitucional').value,
-                correoParticular: document.getElementById('correoParticular').value,
-                solicitud: document.getElementById('solicitud').value,
-                auditor: document.getElementById('auditor').value
+                // ... completa con todos los demás campos
+                fechaSolicitud: new Date().toLocaleDateString('es-PE') // Formato DD/MM/AAAA
             };
             
-            // --- GESTIÓN DEL ARCHIVO Y ENVÍO ---
             const file = document.getElementById('archivo').files[0];
             if (file) {
                 const reader = new FileReader();
@@ -803,21 +753,15 @@
             }
         }
 
-
         function enviarAGoogle(data) {
             // URL de tu Web App de Google Apps Script
             const url = 'https://script.google.com/macros/s/AKfycbz7AIwVcgaBh7jAfsvdkXWFc9vSY1reGwVwCL1R9LpiyjgbU4LPcmXmcB39TAFtY-C4VA/exec'; 
             
-    
-        function enviarAGoogle(data, boton) {
-            const url = 'https://script.google.com/macros/s/AKfycbyfE9a5WjB49t0K5OqJv-t8k5T3X9pG6F_nZcV7jA_sY9h8wD_bL4iVwQ/exec'; // URL de tu Web App
-    
             fetch(url, {
                 method: 'POST',
                 mode: 'no-cors', // Importante para evitar errores de CORS con Apps Script
                 cache: 'no-cache',
                 headers: { 'Content-Type': 'application/json' },
-                mode: 'no-cors',
                 body: JSON.stringify(data)
             })
             .then(() => {
@@ -825,19 +769,8 @@
                 limpiarFormulario();
             })
             .catch(error => alert('Error al guardar el registro: ' + error));
-            .catch(error => {
-                alert('Error al guardar el registro: ' + error);
-            })
-            .finally(() => {
-                boton.disabled = false;
-                boton.textContent = 'Guardar';
-            });
         }
-    
-        // Otras funciones auxiliares que ya tienes (validaciones, etc.)
-        // ...
     </script>
-
 </body>
 </html>
 
