@@ -914,7 +914,6 @@
                 codigoPlanillaInput.addEventListener('blur', () => {
                     if (!esExternaCheckbox.checked && codigoPlanillaInput.value && !/^1\d{7}$/.test(codigoPlanillaInput.value)) {
                         alert('El CÓDIGO DE PLANILLA para personal de Essalud debe ser de 8 dígitos y empezar con 1.');
-                        codigoPlanillaInput.focus();
                     }
                 });
             }
@@ -940,6 +939,7 @@
     </script>
 </body>
 </html>
+
 
 
 
