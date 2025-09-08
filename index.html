@@ -155,6 +155,28 @@
         .section-footer a:hover {
             text-decoration: underline;
         }
+
+        /* --- Estilos para la tabla de auditores --- */
+        .auditor-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+            font-size: 14px;
+        }
+        .auditor-table th,
+        .auditor-table td {
+            border: 1px solid var(--border-color);
+            padding: 10px 12px;
+            text-align: left;
+        }
+        .auditor-table th {
+            background-color: var(--primary-color);
+            color: #fff;
+            font-weight: 500;
+        }
+        .auditor-table tbody tr:nth-child(even) {
+            background-color: var(--light-gray);
+        }
     </style>
 </head>
 <body>
@@ -196,11 +218,25 @@
             </div>
             <div class="form-group">
                 <label for="cargo">CARGO:</label>
-                <select id="cargo" required><option value="Médico de Control">Médico de Control</option><option value="OGIT">OGIT</option><option value="COMAI">COMAI</option><option value="COMECI">COMECI</option></select>
+                <select id="cargo" required>
+                    <option value="Médico de Control">Médico de Control</option>
+                    <option value="OGIT">OGIT</option>
+                    <option value="COMAI">COMAI</option>
+                    <option value="COMECI">COMECI</option>
+                    <option value="JEFE">JEFE</option>
+                </select>
             </div>
             <div class="form-group">
                 <label for="profesional">PROFESIONAL:</label>
-                <select id="profesional" required><option value="Médico">Médico</option><option value="Obstetra">Obstetra</option><option value="Ingeniero">Ingeniero</option><option value="Odontólogo">Odontólogo</option><option value="Otros">Otros profesionales de salud</option></select>
+                <select id="profesional" required>
+                    <option value="Médico">Médico</option>
+                    <option value="Obstetra">Obstetra</option>
+                    <option value="Ingeniero">Ingeniero</option>
+                    <option value="Odontólogo">Odontólogo</option>
+                    <option value="Administrador">Administrador</option>
+                    <option value="Licenciado">Licenciado</option>
+                    <option value="Otros">Otros profesionales de salud</option>
+                </select>
             </div>
             <div class="form-group">
                 <label for="codigoPlanilla">CÓDIGO DE PLANILLA:</label>
@@ -282,13 +318,50 @@
         </div>
         
         <div class="section-footer">
-            <h2>Contacto</h2>
-            <p><strong>Soporte Técnico:</strong> Dr. Peña/Romero | Cel: 921013657 / 950622495</p>
-            <p><strong>Consultas Generales:</strong> <a href="mailto:medicodecontrol@essalud.gob.pe">medicodecontrol@essalud.gob.pe</a></p>
+            <h2>Médicos Auditores por Red</h2>
+            <table class="auditor-table">
+                <thead>
+                    <tr>
+                        <th>AUDITOR</th>
+                        <th>REDES</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>maria.delgadom@essalud.gob.pe</td>
+                        <td>CAJAMARCA, GCSPE, CUSCO, ICA, SABOGAL, TARAPOTO</td>
+                    </tr>
+                    <tr>
+                        <td>monica.echarry@essalud.gob.pe</td>
+                        <td>AMAZONAS, AYACUCHO, HUANUCO, LAMBAYEQUE, REBAGLIATI, TUMBES</td>
+                    </tr>
+                    <tr>
+                        <td>kathia.vega@essalud.gob.pe</td>
+                        <td>AREQUIPA</td>
+                    </tr>
+                    <tr>
+                        <td>jeannette.motta@essalud.gob.pe</td>
+                        <td>ANCASH, JUNIN, PASCO, PIURA</td>
+                    </tr>
+                    <tr>
+                        <td>yohny.torres@essalud.gob.pe</td>
+                        <td>APURIMAC, OFERTA FLEXIBLE, LORETO, MOQUEGUA, PUNO, UCAYALI</td>
+                    </tr>
+                    <tr>
+                        <td>ruben.pena@essalud.gob.pe</td>
+                        <td>INSTITUTO NACIONAL CARDIOVASCULAR, MADRE DE DIOS, MOYOBAMBA</td>
+                    </tr>
+                    <tr>
+                        <td>david.romero@essalud.gob.pe</td>
+                        <td>ALMENARA, HUANCAVELICA, JULIACA, LA LIBERTAD, TACNA, JAÉN, HUARAZ</td>
+                    </tr>
+                </tbody>
+            </table>
         </div>
     </div>
 
     <script>
+        // RED /IPRESS-OSPE
         const datosExcel = [
             { "codigoRed": 2, "red": "ALMENARA", "tipo": "PRESTACIONAL", "codigoIpress": 478, "ipress": "CAP III ALFREDO PIAZZA ROBERTS" },
             { "codigoRed": 2, "red": "ALMENARA", "tipo": "PRESTACIONAL", "codigoIpress": 446, "ipress": "CAP III EL AGUSTINO" },
@@ -406,6 +479,40 @@
             { "codigoRed": 11, "red": "CUSCO", "tipo": "ASISTENCIAL", "codigoIpress": 698, "ipress": "CM PICHARI" },
             { "codigoRed": 91, "red": "GCGP", "tipo": "GERENCIA", "codigoIpress": 422, "ipress": "CENTRO DE ATENCION RAPIDA - MEDICO DE PERSONAL" },
             { "codigoRed": 90, "red": "GCSPE", "tipo": "GERENCIA", "codigoIpress": 674, "ipress": "CEVIT CENTRAL" },
+            { "codigoRed": 90, "red": "GCSPE", "tipo": "GERENCIA", "codigoIpress": 10, "ipress": "OSPE TUMBES" },
+            { "codigoRed": 90, "red": "GCSPE", "tipo": "GERENCIA", "codigoIpress": 20, "ipress": "OSPE PIURA" },
+            { "codigoRed": 90, "red": "GCSPE", "tipo": "GERENCIA", "codigoIpress": 30, "ipress": "OSPE LAMBAYEQUE" },
+            { "codigoRed": 90, "red": "GCSPE", "tipo": "GERENCIA", "codigoIpress": 50, "ipress": "OSPE AMAZONAS" },
+            { "codigoRed": 90, "red": "GCSPE", "tipo": "GERENCIA", "codigoIpress": 60, "ipress": "OSPE LORETO" },
+            { "codigoRed": 90, "red": "GCSPE", "tipo": "GERENCIA", "codigoIpress": 70, "ipress": "OSPE LA LIBERTAD" },
+            { "codigoRed": 90, "red": "GCSPE", "tipo": "GERENCIA", "codigoIpress": 80, "ipress": "OSPE MOYOBAMBA" },
+            { "codigoRed": 90, "red": "GCSPE", "tipo": "GERENCIA", "codigoIpress": 81, "ipress": "OSPE TARAPOTO" },
+            { "codigoRed": 90, "red": "GCSPE", "tipo": "GERENCIA", "codigoIpress": 90, "ipress": "OSPE ANCASH" },
+            { "codigoRed": 90, "red": "GCSPE", "tipo": "GERENCIA", "codigoIpress": 100, "ipress": "OSPE HUANUCO" },
+            { "codigoRed": 90, "red": "GCSPE", "tipo": "GERENCIA", "codigoIpress": 109, "ipress": "OSPE SALAMANCA" },
+            { "codigoRed": 90, "red": "GCSPE", "tipo": "GERENCIA", "codigoIpress": 111, "ipress": "OSPE SAN ISIDRO" },
+            { "codigoRed": 90, "red": "GCSPE", "tipo": "GERENCIA", "codigoIpress": 112, "ipress": "OSPE CORPORATIVA" },
+            { "codigoRed": 90, "red": "GCSPE", "tipo": "GERENCIA", "codigoIpress": 113, "ipress": "OSPE JESUS MARIA" },
+            { "codigoRed": 90, "red": "GCSPE", "tipo": "GERENCIA", "codigoIpress": 114, "ipress": "OSPE SAN MIGUEL" },
+            { "codigoRed": 90, "red": "GCSPE", "tipo": "GERENCIA", "codigoIpress": 116, "ipress": "OSPE SJLURIGANCHO" },
+            { "codigoRed": 90, "red": "GCSPE", "tipo": "GERENCIA", "codigoIpress": 117, "ipress": "OSPE SMPORRAS" },
+            { "codigoRed": 90, "red": "GCSPE", "tipo": "GERENCIA", "codigoIpress": 118, "ipress": "OSPE COMAS" },
+            { "codigoRed": 90, "red": "GCSPE", "tipo": "GERENCIA", "codigoIpress": 120, "ipress": "OSPE HUACHO" },
+            { "codigoRed": 90, "red": "GCSPE", "tipo": "GERENCIA", "codigoIpress": 130, "ipress": "OSPE PASCO" },
+            { "codigoRed": 90, "red": "GCSPE", "tipo": "GERENCIA", "codigoIpress": 140, "ipress": "OSPE JUNIN" },
+            { "codigoRed": 90, "red": "GCSPE", "tipo": "GERENCIA", "codigoIpress": 150, "ipress": "OSPE ICA" },
+            { "codigoRed": 90, "red": "GCSPE", "tipo": "GERENCIA", "codigoIpress": 160, "ipress": "OSPE HUANCAVELICA" },
+            { "codigoRed": 90, "red": "GCSPE", "tipo": "GERENCIA", "codigoIpress": 170, "ipress": "OSPE AYACUCHO" },
+            { "codigoRed": 90, "red": "GCSPE", "tipo": "GERENCIA", "codigoIpress": 180, "ipress": "OSPE APURIMAC" },
+            { "codigoRed": 90, "red": "GCSPE", "tipo": "GERENCIA", "codigoIpress": 190, "ipress": "OSPE CUSCO" },
+            { "codigoRed": 90, "red": "GCSPE", "tipo": "GERENCIA", "codigoIpress": 200, "ipress": "OSPE MADRE DE DIOS" },
+            { "codigoRed": 90, "red": "GCSPE", "tipo": "GERENCIA", "codigoIpress": 210, "ipress": "OSPE AREQUIPA" },
+            { "codigoRed": 90, "red": "GCSPE", "tipo": "GERENCIA", "codigoIpress": 220, "ipress": "OSPE PUNO" },
+            { "codigoRed": 90, "red": "GCSPE", "tipo": "GERENCIA", "codigoIpress": 221, "ipress": "OSPE JULIACA" },
+            { "codigoRed": 90, "red": "GCSPE", "tipo": "GERENCIA", "codigoIpress": 230, "ipress": "OSPE MOQUEGUA" },
+            { "codigoRed": 90, "red": "GCSPE", "tipo": "GERENCIA", "codigoIpress": 240, "ipress": "OSPE TACNA" },
+            { "codigoRed": 90, "red": "GCSPE", "tipo": "GERENCIA", "codigoIpress": 250, "ipress": "OSPE UCAYALI" },
+            { "codigoRed": 90, "red": "GCSPE", "tipo": "GERENCIA", "codigoIpress": 260, "ipress": "OSPE CAÑETE" },
             { "codigoRed": 12, "red": "HUANCAVELICA", "tipo": "ASISTENCIAL", "codigoIpress": 343, "ipress": "PM ACOBAMBA" },
             { "codigoRed": 12, "red": "HUANCAVELICA", "tipo": "ASISTENCIAL", "codigoIpress": 344, "ipress": "PM CASTROVIRREYNA" },
             { "codigoRed": 12, "red": "HUANCAVELICA", "tipo": "ASISTENCIAL", "codigoIpress": 345, "ipress": "CAP I CHURCAMPA" },
@@ -699,22 +806,41 @@
             'david.romero@essalud.gob.pe': ['ALMENARA', 'HUANCAVELICA', 'JULIACA', 'LA LIBERTAD', 'TACNA', 'JAEN', 'HUARAZ']
         };
 
-        // --- SECCIÓN DE FUNCIONES PRINCIPALES ---
+                // --- Función para enviar el código de verificación
+        function enviarCodigoDeVerificacion() {
+            const correoInput = document.getElementById('correoParticular');
+            const correo = correoInput.value;
+            const regexCorreo = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+            if (!regexCorreo.test(correo)) {
+                alert('Por favor, ingrese un correo particular válido antes de enviar el código.');
+                return;
+            }
+
+            // Genera un código aleatorio de 6 dígitos
+            codigoGenerado = Math.floor(100000 + Math.random() * 900000);
+            
+            // Simula el envío del correo con una alerta
+            alert(`Se ha enviado un código de verificación a ${correo}.\n\nPara fines de prueba, su código es: ${codigoGenerado}`);
+            
+            document.getElementById('codigoVerificacion').focus();
+        }
 
         function actualizarIpress() {
             const redSeleccionada = document.getElementById('red').value;
             const ipressSelect = document.getElementById('ipress');
             ipressSelect.innerHTML = '<option value="">Seleccione una IPRESS</option>';
+            
             if (redSeleccionada) {
                 const ipressFiltradas = datosExcel.filter(item => item.red === redSeleccionada);
                 const ipressUnicas = [...new Set(ipressFiltradas.map(item => item.ipress))].sort();
                 ipressUnicas.forEach(ipress => ipressSelect.add(new Option(ipress, ipress)));
-                asignarAuditorPorRed(redSeleccionada);
-            } else {
-                asignarAuditorPorRed('');
             }
+            
             document.getElementById('tipo').value = '';
             document.getElementById('codigoIpress').value = '';
+            // --- MODIFICADO --- Se llama a la nueva función centralizada de auditoría
+            actualizarAuditor();
         }
 
         function asignarCodigoIpress() {
@@ -723,6 +849,29 @@
             const item = datosExcel.find(d => d.red === redSeleccionada && d.ipress === ipressSeleccionada);
             document.getElementById('tipo').value = item ? item.tipo : '';
             document.getElementById('codigoIpress').value = item ? item.codigoIpress : '';
+            // --- MODIFICADO --- Se llama a la nueva función para re-evaluar al auditor
+            actualizarAuditor();
+        }
+
+        // --- MODIFICADO --- Nueva función para manejar la lógica condicional del auditor
+        function actualizarAuditor() {
+            const redSeleccionada = document.getElementById('red').value;
+            const ipressSeleccionada = document.getElementById('ipress').value;
+            const auditorInput = document.getElementById('auditor');
+
+            if (redSeleccionada === 'GCSPE') {
+                if (ipressSeleccionada === 'CEVIT CENTRAL') {
+                    auditorInput.value = 'maria.delgadom@essalud.gob.pe';
+                } else if (ipressSeleccionada) { // Si hay una IPRESS seleccionada (cualquier OSPE)
+                    auditorInput.value = 'william.arana@essalud.gob.pe';
+                } else {
+                    // Si solo se ha seleccionado GCSPE pero no la IPRESS, se mantiene el auditor por defecto para esa red
+                    auditorInput.value = 'maria.delgadom@essalud.gob.pe';
+                }
+            } else {
+                // Para cualquier otra RED, se usa la lógica original
+                asignarAuditorPorRed(redSeleccionada);
+            }
         }
 
         function asignarAuditorPorRed(redSeleccionada) {
@@ -933,6 +1082,14 @@
                     if (valor && !valor.includes('@')) {
                         this.value = valor + '@essalud.gob.pe';
                     }
+                });
+            }
+            
+            // MODIFICADO: Correo Particular a minúsculas
+            const correoPartInput = document.getElementById('correoParticular');
+            if (correoPartInput) {
+                correoPartInput.addEventListener('blur', function() {
+                    this.value = this.value.trim().toLowerCase();
                 });
             }
         });
