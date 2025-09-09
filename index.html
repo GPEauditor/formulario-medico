@@ -16,7 +16,6 @@
             --text-color: #333;
             --border-color: #ccc;
         }
-
         body {
             font-family: 'Roboto', Arial, sans-serif;
             margin: 0;
@@ -24,7 +23,6 @@
             background-color: var(--light-gray);
             color: var(--text-color);
         }
-
         .container {
             max-width: 800px;
             margin: auto;
@@ -33,40 +31,28 @@
             border-radius: 8px;
             box-shadow: 0 4px 10px rgba(0,0,0,0.1);
         }
-
         h1, h2 {
             color: var(--primary-color);
             border-bottom: 2px solid var(--light-gray);
             padding-bottom: 10px;
         }
-
         form {
             display: grid;
-            grid-template-columns: 1fr; /* Por defecto una columna para móviles */
+            grid-template-columns: 1fr;
             gap: 20px;
         }
-
-        /* Dos columnas para pantallas más grandes */
         @media (min-width: 768px) {
-            form {
-                grid-template-columns: 1fr 1fr;
-            }
+            form { grid-template-columns: 1fr 1fr; }
         }
-
         .form-group {
             display: flex;
             flex-direction: column;
         }
-
-        .full-width {
-            grid-column: 1 / -1;
-        }
-
+        .full-width { grid-column: 1 / -1; }
         label {
             font-weight: 500;
             margin-bottom: 8px;
         }
-
         input, select {
             width: 100%;
             padding: 12px;
@@ -75,17 +61,30 @@
             box-sizing: border-box;
             transition: border-color 0.3s, box-shadow 0.3s;
         }
-
         input:focus, select:focus {
             outline: none;
             border-color: var(--secondary-color);
             box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.25);
         }
-
-        input[readonly] {
-            background-color: #e9ecef;
+        input[readonly] { background-color: #e9ecef; }
+        fieldset {
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 20px;
+            grid-column: 1 / -1;
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 20px;
         }
-
+         @media (min-width: 768px) {
+            fieldset { grid-template-columns: 1fr 1fr; }
+        }
+        legend {
+            font-weight: 700;
+            color: var(--primary-color);
+            padding: 0 10px;
+            margin-left: 10px;
+        }
         .button-container {
             grid-column: 1 / -1;
             display: flex;
@@ -93,7 +92,6 @@
             gap: 20px;
             padding-top: 10px;
         }
-
         button {
             padding: 12px 25px;
             border: none;
@@ -104,79 +102,26 @@
             cursor: pointer;
             transition: background-color 0.3s, transform 0.2s;
         }
-
-        #btn-guardar {
-            background-color: var(--secondary-color);
-        }
-        #btn-guardar:hover {
-            background-color: #0056b3;
-            transform: translateY(-2px);
-        }
-
-        #btn-limpiar {
-            background-color: #6c757d;
-        }
-        #btn-limpiar:hover {
-            background-color: #5a6268;
-            transform: translateY(-2px);
-        }
-
-        .checkbox-container {
-            display: flex;
-            align-items: center;
-            margin-top: 8px;
-        }
-        .checkbox-container input {
-            width: auto;
-            margin-right: 8px;
-        }
-        .checkbox-container label {
-            margin: 0;
-            font-weight: normal;
-        }
-
+        #btn-guardar { background-color: var(--secondary-color); }
+        #btn-guardar:hover { background-color: #0056b3; transform: translateY(-2px); }
+        #btn-limpiar { background-color: #6c757d; }
+        #btn-limpiar:hover { background-color: #5a6268; transform: translateY(-2px); }
+        .checkbox-container { display: flex; align-items: center; margin-top: 8px; }
+        .checkbox-container input { width: auto; margin-right: 8px; }
+        .checkbox-container label { margin: 0; font-weight: normal; }
         .section-footer {
             margin-top: 30px;
             padding-top: 20px;
             border-top: 2px solid var(--light-gray);
         }
-        
-        .section-footer ul {
-            list-style: none;
-            padding-left: 0;
-        }
-        .section-footer li {
-            margin-bottom: 10px;
-        }
-        .section-footer a {
-            color: var(--secondary-color);
-            text-decoration: none;
-        }
-        .section-footer a:hover {
-            text-decoration: underline;
-        }
-
-        /* --- Estilos para la tabla de auditores --- */
-        .auditor-table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 15px;
-            font-size: 14px;
-        }
-        .auditor-table th,
-        .auditor-table td {
-            border: 1px solid var(--border-color);
-            padding: 10px 12px;
-            text-align: left;
-        }
-        .auditor-table th {
-            background-color: var(--primary-color);
-            color: #fff;
-            font-weight: 500;
-        }
-        .auditor-table tbody tr:nth-child(even) {
-            background-color: var(--light-gray);
-        }
+        .section-footer ul { list-style: none; padding-left: 0; }
+        .section-footer li { margin-bottom: 10px; }
+        .section-footer a { color: var(--secondary-color); text-decoration: none; }
+        .section-footer a:hover { text-decoration: underline; }
+        .auditor-table { width: 100%; border-collapse: collapse; margin-top: 15px; font-size: 14px; }
+        .auditor-table th, .auditor-table td { border: 1px solid var(--border-color); padding: 10px 12px; text-align: left; }
+        .auditor-table th { background-color: var(--primary-color); color: #fff; font-weight: 500; }
+        .auditor-table tbody tr:nth-child(even) { background-color: var(--light-gray); }
     </style>
 </head>
 <body>
@@ -184,112 +129,131 @@
         <h1>Formulario de Ingreso de Datos</h1>
         
         <form id="formulario" novalidate>
-            <div class="form-group">
-                <label for="red">RED:</label>
-                <select id="red" required onchange="actualizarIpress()"><option value="">Seleccione una Red</option></select>
-            </div>
-            <div class="form-group">
-                <label for="ipress">IPRESS:</label>
-                <select id="ipress" required onchange="asignarCodigoIpress()"><option value="">Seleccione una IPRESS</option></select>
-            </div>
-            <div class="form-group">
-                <label for="tipo">TIPO:</label>
-                <input id="tipo" readonly>
-            </div>
-            <div class="form-group">
-                <label for="codigoIpress">CÓDIGO DE IPRESS:</label>
-                <input id="codigoIpress" readonly>
-            </div>
-            <div class="form-group">
-                <label for="apellidos">APELLIDOS:</label>
-                <input id="apellidos" required pattern="[A-Za-zñÑ\s]+" oninput="this.value = this.value.toUpperCase().replace(/[^A-ZÑ\s]/g, '')">
-            </div>
-            <div class="form-group">
-                <label for="nombres">NOMBRES:</label>
-                <input id="nombres" required pattern="[A-Za-zñÑ\s]+" oninput="this.value = this.value.toUpperCase().replace(/[^A-ZÑ\s]/g, '')">
-            </div>
-            <div class="form-group">
-                <label for="tipoDoc">TIPO DE DOCUMENTO:</label>
-                <select id="tipoDoc" required><option value="DNI">DNI</option><option value="CE">CARNE DE EXTRANJERIA</option></select>
-            </div>
-            <div class="form-group">
-                <label for="numeroDoc">NÚMERO DE DOCUMENTO:</label>
-                <input id="numeroDoc" type="text" required onblur="padearDocumento(this)">
-            </div>
-            <div class="form-group">
-                <label for="cargo">CARGO:</label>
-                <select id="cargo" required>
-                    <option value="Médico de Control">Médico de Control</option>
-                    <option value="OGIT">OGIT</option>
-                    <option value="COMAI">COMAI</option>
-                    <option value="COMECI">COMECI</option>
-                    <option value="JEFE">JEFE</option>
-                </select>
-            </div>
-            <div class="form-group">
-                <label for="profesional">PROFESIONAL:</label>
-                <select id="profesional" required>
-                    <option value="Médico">Médico</option>
-                    <option value="Obstetra">Obstetra</option>
-                    <option value="Ingeniero">Ingeniero</option>
-                    <option value="Odontólogo">Odontólogo</option>
-                    <option value="Administrador">Administrador</option>
-                    <option value="Licenciado">Licenciado</option>
-                    <option value="Otros">Otros profesionales de salud</option>
-                </select>
-            </div>
-            <div class="form-group">
-                <label for="codigoPlanilla">CÓDIGO DE PLANILLA:</label>
-                <input id="codigoPlanilla" placeholder="8 dígitos o marque externa">
-                <div class="checkbox-container">
-                    <input type="checkbox" id="esExterna" onclick="togglePlanilla(this)">
-                    <label for="esExterna">IPRESS Externa</label>
+            
+            <fieldset>
+                <legend>Identificación de la IPRESS</legend>
+                <div class="form-group">
+                    <label for="red">RED:</label>
+                    <select id="red" required onchange="actualizarIpress()"><option value="">Seleccione una Red</option></select>
                 </div>
-            </div>
-            <div class="form-group">
-                <label for="colegiatura">COLEGIATURA (CMP):</label>
-                <input id="colegiatura" type="text" onblur="padearConCeros(this, 6)" placeholder="6 dígitos">
-            </div>
-            <div class="form-group full-width">
-                <label for="numResolucion">NÚMERO DE RESOLUCIÓN:</label>
-                <input id="numResolucion" required oninput="this.value = this.value.toUpperCase()" placeholder="Por ejemplo: RESOLUCION DIRECTORAL Nº20-HIII SA-RPR-ESSALUD-2025">
-            </div>
-            <div class="form-group">
-                <label for="fechaEmision">FECHA DE EMISIÓN DE RESOLUCIÓN:</label>
-                <input id="fechaEmision" type="date" required onchange="validarFechas()">
-            </div>
-            <div class="form-group">
-                <label for="fechaTermino">FECHA DE TÉRMINO DE VIGENCIA:</label>
-                <input id="fechaTermino" type="date" required onchange="validarFechas()">
-            </div>
-            <div class="form-group full-width">
-                <label for="archivo">CARGAR RESOLUCIÓN (PDF o Imagen):</label>
-                <input id="archivo" type="file" accept="image/*,.pdf">
-            </div>
-            <div class="form-group">
-                <label for="telefono">TELÉFONO PERSONAL:</label>
-                <input id="telefono" type="tel" required placeholder="Debe empezar con 9">
-            </div>
-            <div class="form-group">
-                <label for="telefonoIpress">TELÉFONO IPRESS:</label>
-                <input id="telefonoIpress" type="tel">
-            </div>
-            <div class="form-group">
-                <label for="correoInstitucional">CORREO INSTITUCIONAL:</label>
-                <input id="correoInstitucional" type="email" required placeholder="usuario@essalud.gob.pe">
-            </div>
-            <div class="form-group">
-                <label for="correoParticular">CORREO PARTICULAR:</label>
-                <input id="correoParticular" type="email" required>
-            </div>
-            <div class="form-group">
-                <label for="solicitud">TIPO DE SOLICITUD:</label>
-                <select id="solicitud" required><option value="ACCESO SIGI">ACCESO SIGI</option><option value="CAPACITACION">CAPACITACIÓN</option><option value="RENOVACIÓN DE CONTRASEÑA">RENOVACIÓN DE CONTRASEÑA</option></select>
-            </div>
-            <div class="form-group">
-                <label for="auditor">MÉDICO AUDITOR GPE:</label>
-                <input id="auditor" readonly>
-            </div>
+                <div class="form-group">
+                    <label for="ipress">IPRESS:</label>
+                    <select id="ipress" required onchange="asignarCodigoIpress()"><option value="">Seleccione una IPRESS</option></select>
+                </div>
+                <div class="form-group">
+                    <label for="tipo">TIPO:</label>
+                    <input id="tipo" readonly>
+                </div>
+                <div class="form-group">
+                    <label for="codigoIpress">CÓDIGO DE IPRESS:</label>
+                    <input id="codigoIpress" readonly>
+                </div>
+            </fieldset>
+
+            <fieldset>
+                <legend>Datos del Profesional</legend>
+                <div class="form-group">
+                    <label for="apellidos">APELLIDOS:</label>
+                    <input id="apellidos" required pattern="[A-Za-zñÑ\s]+" oninput="this.value = this.value.toUpperCase().replace(/[^A-ZÑ\s]/g, '')">
+                </div>
+                <div class="form-group">
+                    <label for="nombres">NOMBRES:</label>
+                    <input id="nombres" required pattern="[A-Za-zñÑ\s]+" oninput="this.value = this.value.toUpperCase().replace(/[^A-ZÑ\s]/g, '')">
+                </div>
+                <div class="form-group">
+                    <label for="tipoDoc">TIPO DE DOCUMENTO:</label>
+                    <select id="tipoDoc" required><option value="DNI">DNI</option><option value="CE">CARNE DE EXTRANJERIA</option></select>
+                </div>
+                <div class="form-group">
+                    <label for="numeroDoc">NÚMERO DE DOCUMENTO:</label>
+                    <input id="numeroDoc" type="text" required onblur="padearDocumento(this)">
+                </div>
+                <div class="form-group">
+                    <label for="cargo">CARGO:</label>
+                    <select id="cargo" required>
+                        <option value="MEDICO DE CONTROL">MÉDICO DE CONTROL</option>
+                        <option value="OGIT">OGIT</option>
+                        <option value="COMAI">COMAI</option>
+                        <option value="COMECI">COMECI</option>
+                        <option value="JEFE">JEFE OSPE</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="profesional">PROFESIONAL:</label>
+                    <select id="profesional" required>
+                        <option value="MEDICO">MÉDICO</option>
+                        <option value="OBSTETRA">OBSTETRA</option>
+                        <option value="INGENIERO">INGENIERO</option>
+                        <option value="ODONTOLOGO">ODONTOLOGO</option>
+                        <option value="ADMINISTRADOR">ADMINISTRADOR</option>
+                        <option value="ABOGADO">ABOGADO</option>
+                        <option value="CONTADOR">CONTADOR</option>
+                        <option value="LICENCIADO">LICENCIADO</option>
+                        <option value="OTROS">OTROS PROFESIONALES</option>
+                    </select>
+                </div>
+            </fieldset>
+
+            <fieldset>
+                <legend>Detalles de la Designación</legend>
+                <div class="form-group">
+                    <label for="codigoPlanilla">CÓDIGO DE PLANILLA:</label>
+                    <input id="codigoPlanilla" placeholder="8 dígitos o marque externa">
+                    <div class="checkbox-container">
+                        <input type="checkbox" id="esExterna" onclick="togglePlanilla(this)">
+                        <label for="esExterna">IPRESS Externa</label>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="colegiatura">COLEGIATURA (CMP):</label>
+                    <input id="colegiatura" type="text" onblur="padearConCeros(this, 6)" placeholder="6 dígitos">
+                </div>
+                <div class="form-group full-width">
+                    <label for="numResolucion">NÚMERO DE RESOLUCIÓN:</label>
+                    <input id="numResolucion" required oninput="this.value = this.value.toUpperCase()" placeholder="Ej: RESOLUCION DIRECTORAL Nº20-HIII SA-RPR-ESSALUD-2025">
+                </div>
+                <div class="form-group">
+                    <label for="fechaEmision">FECHA DE EMISIÓN DE RESOLUCIÓN:</label>
+                    <input id="fechaEmision" type="date" required onchange="validarFechas()">
+                </div>
+                <div class="form-group">
+                    <label for="fechaTermino">FECHA DE TÉRMINO DE VIGENCIA:</label>
+                    <input id="fechaTermino" type="date" required onchange="validarFechas()">
+                </div>
+                <div class="form-group full-width">
+                    <label for="archivo">CARGAR RESOLUCIÓN (PDF o Imagen):</label>
+                    <input id="archivo" type="file" accept="image/*,.pdf">
+                </div>
+            </fieldset>
+            
+            <fieldset>
+                 <legend>Información de Contacto y Solicitud</legend>
+                 <div class="form-group">
+                    <label for="telefono">TELÉFONO PERSONAL:</label>
+                    <input id="telefono" type="tel" required placeholder="Debe empezar con 9">
+                </div>
+                <div class="form-group">
+                    <label for="telefonoIpress">TELÉFONO IPRESS:</label>
+                    <input id="telefonoIpress" type="tel">
+                </div>
+                <div class="form-group">
+                    <label for="correoInstitucional">CORREO INSTITUCIONAL:</label>
+                    <input id="correoInstitucional" type="email" required placeholder="usuario@essalud.gob.pe">
+                </div>
+                <div class="form-group">
+                    <label for="correoParticular">CORREO PARTICULAR:</label>
+                    <input id="correoParticular" type="email" required>
+                </div>
+                <div class="form-group">
+                    <label for="solicitud">TIPO DE SOLICITUD:</label>
+                    <select id="solicitud" required><option value="ACCESO SIGI">ACCESO SIGI</option><option value="CAPACITACION">CAPACITACIÓN</option><option value="RENOVACIÓN DE CONTRASEÑA">RENOVACIÓN DE CONTRASEÑA</option></select>
+                </div>
+                <div class="form-group">
+                    <label for="auditor">MÉDICO AUDITOR GPE:</label>
+                    <input id="auditor" readonly>
+                </div>
+            </fieldset>
+
             <div class="button-container">
                 <button id="btn-limpiar" type="button" onclick="limpiarFormulario()">Limpiar</button>
                 <button id="btn-guardar" type="button" onclick="guardarDatos()">Guardar</button>
@@ -298,9 +262,9 @@
 
         <div class="section-footer">
             <h2>Recursos y Capacitaciones</h2>
-            
             <h3>VIDEOS DE CAPACITACIÓN:</h3>
             <ul>
+                <li><a href="https://www.youtube.com/live/tsfhZianvGU?si=iw_YaVnNQ5hHlmQF" target="_blank">CENATE 20.08.2025 (Uso de aplicativos informáticos relacionados a certificación médica)</a></li>
                 <li><a href="https://www.youtube.com/live/lJyopRFUAag?si=5E35Icv-C9htTxAE" target="_blank">CENATE 20.07.2025 (Actividades del Médico de Control)</a></li>
                 <li><a href="https://www.youtube.com/live/9V1TZwRH0Xw?si=9dRQePwtBjC82iH4" target="_blank">CENATE 20.06.2025 (Pase a la COMECI - Ley Nº26790)</a></li>
                 <li><a href="https://www.youtube.com/live/JxMMLKFnI2A" target="_blank">CENATE 14.05.2025 (RESUMEN: Normativa, Actividades, Evaluación ITP)</a></li>
@@ -309,16 +273,15 @@
                 <li><a href="https://youtu.be/o-cQVxfB-ww" target="_blank">TERCERA SESIÓN (Metodología y actividades del cargo)</a></li>
                 <li><a href="https://youtu.be/h0X7MqMWCp0" target="_blank">CUARTA SESIÓN (Análisis de la ITP, Anexo N°04 y Derivación a COMECI)</a></li>
             </ul>
-
             <h3>DOCUMENTOS:</h3>
             <ul>
-                <li><a href="https://drive.google.com/drive/folders/19HOU_ju25L7zdnh7cHV8Rp2V5__t4gLz" target="_blank">DOCUMENTOS DE REFERENCIA</a></li>
-                <li><a href="https://docs.google.com/document/d/1OHAuyvJut1kySilT3YEExKEJUKSTuU4ZTtGHYh9FrNw/edit?usp=sharing" target="_blank">MÉDICO AUDITOR ASIGNADO</a></li>
+                <li><a href="https://drive.google.com/drive/folders/19HOU_ju25L7zdnh7cHV8Rp2V5__t4gLz" target="_blank">NORMAS Y DOCUMENTOS DE REFERENCIA</a></li>
+                <li><a href="https://docs.google.com/document/d/1OHAuyvJut1kySilT3YEExKEJUKSTuU4ZTtGHYh9FrNw/edit?usp=sharing" target="_blank">AUDITOR ASIGNADO</a></li>
             </ul>
         </div>
         
         <div class="section-footer">
-            <h2>Médicos Auditores por Red</h2>
+            <h2>Auditores por Red</h2>
             <table class="auditor-table">
                 <thead>
                     <tr>
@@ -353,7 +316,11 @@
                     </tr>
                     <tr>
                         <td>david.romero@essalud.gob.pe</td>
-                        <td>ALMENARA, HUANCAVELICA, JULIACA, LA LIBERTAD, TACNA, JAÉN, HUARAZ</td>
+                        <td>ALMENARA, HUANCAVELICA, JULIACA, LA LIBERTAD, TACNA, JAEN, HUARAZ</td>
+                    </tr>
+                    <tr>
+                        <td>william.arana@essalud.gob.pe</td>
+                        <td>COORDINADOR GPE DE LAS OSPE</td>
                     </tr>
                 </tbody>
             </table>
@@ -796,50 +763,17 @@
         ];
 
 
-        const auditoresPorRed = {
-            'maria.delgadom@essalud.gob.pe': ['CAJAMARCA', 'GCSPE', 'CUSCO', 'ICA', 'SABOGAL', 'TARAPOTO'],
-            'monica.echarry@essalud.gob.pe': ['AMAZONAS', 'AYACUCHO', 'HUANUCO', 'LAMBAYEQUE', 'REBAGLIATI', 'TUMBES'],
-            'kathia.vega@essalud.gob.pe': ['AREQUIPA'],
-            'jeannette.motta@essalud.gob.pe': ['ANCASH', 'JUNIN', 'PASCO', 'PIURA'],
-            'yohny.torres@essalud.gob.pe': ['APURIMAC', 'OFERTA FLEXIBLE', 'LORETO', 'MOQUEGUA', 'PUNO', 'UCAYALI'],
-            'ruben.pena@essalud.gob.pe': ['INSTITUTO NACIONAL CARDIOVASCULAR', 'MADRE DE DIOS', 'MOYOBAMBA'],
-            'david.romero@essalud.gob.pe': ['ALMENARA', 'HUANCAVELICA', 'JULIACA', 'LA LIBERTAD', 'TACNA', 'JAEN', 'HUARAZ']
-        };
-
-                // --- Función para enviar el código de verificación
-        function enviarCodigoDeVerificacion() {
-            const correoInput = document.getElementById('correoParticular');
-            const correo = correoInput.value;
-            const regexCorreo = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-
-            if (!regexCorreo.test(correo)) {
-                alert('Por favor, ingrese un correo particular válido antes de enviar el código.');
-                return;
-            }
-
-            // Genera un código aleatorio de 6 dígitos
-            codigoGenerado = Math.floor(100000 + Math.random() * 900000);
-            
-            // Simula el envío del correo con una alerta
-            alert(`Se ha enviado un código de verificación a ${correo}.\n\nPara fines de prueba, su código es: ${codigoGenerado}`);
-            
-            document.getElementById('codigoVerificacion').focus();
-        }
-
         function actualizarIpress() {
             const redSeleccionada = document.getElementById('red').value;
             const ipressSelect = document.getElementById('ipress');
             ipressSelect.innerHTML = '<option value="">Seleccione una IPRESS</option>';
-            
             if (redSeleccionada) {
                 const ipressFiltradas = datosExcel.filter(item => item.red === redSeleccionada);
                 const ipressUnicas = [...new Set(ipressFiltradas.map(item => item.ipress))].sort();
                 ipressUnicas.forEach(ipress => ipressSelect.add(new Option(ipress, ipress)));
             }
-            
             document.getElementById('tipo').value = '';
             document.getElementById('codigoIpress').value = '';
-            // --- MODIFICADO --- Se llama a la nueva función centralizada de auditoría
             actualizarAuditor();
         }
 
@@ -849,27 +783,22 @@
             const item = datosExcel.find(d => d.red === redSeleccionada && d.ipress === ipressSeleccionada);
             document.getElementById('tipo').value = item ? item.tipo : '';
             document.getElementById('codigoIpress').value = item ? item.codigoIpress : '';
-            // --- MODIFICADO --- Se llama a la nueva función para re-evaluar al auditor
             actualizarAuditor();
         }
 
-        // --- MODIFICADO --- Nueva función para manejar la lógica condicional del auditor
         function actualizarAuditor() {
             const redSeleccionada = document.getElementById('red').value;
             const ipressSeleccionada = document.getElementById('ipress').value;
             const auditorInput = document.getElementById('auditor');
-
             if (redSeleccionada === 'GCSPE') {
                 if (ipressSeleccionada === 'CEVIT CENTRAL') {
                     auditorInput.value = 'maria.delgadom@essalud.gob.pe';
-                } else if (ipressSeleccionada) { // Si hay una IPRESS seleccionada (cualquier OSPE)
+                } else if (ipressSeleccionada) {
                     auditorInput.value = 'william.arana@essalud.gob.pe';
                 } else {
-                    // Si solo se ha seleccionado GCSPE pero no la IPRESS, se mantiene el auditor por defecto para esa red
                     auditorInput.value = 'maria.delgadom@essalud.gob.pe';
                 }
             } else {
-                // Para cualquier otra RED, se usa la lógica original
                 asignarAuditorPorRed(redSeleccionada);
             }
         }
@@ -884,8 +813,6 @@
             }
             document.getElementById('auditor').value = auditorAsignado;
         }
-
-        // --- SECCIÓN DE FUNCIONES UTILITARIAS Y DE FORMATO ---
 
         function padearDocumento(input) {
             const tipo = document.getElementById('tipoDoc').value;
@@ -930,20 +857,14 @@
             document.getElementById('tipo').value = '';
             document.getElementById('codigoIpress').value = '';
             document.getElementById('auditor').value = '';
-            document.getElementById('tipoDoc').dispatchEvent(new Event('change')); // Actualiza el placeholder
+            document.getElementById('tipoDoc').dispatchEvent(new Event('change'));
         }
-
-        // --- SECCIÓN DE VALIDACIÓN Y ENVÍO ---
-
-        /**
-         * Función centralizada para validar todos los campos antes de enviar.
-         * Devuelve true si todo es válido, de lo contrario, muestra una alerta y devuelve false.
-         */
+        
         function validarFormulario() {
             const form = document.getElementById('formulario');
             if (!form.checkValidity()) {
                 alert('Por favor, complete todos los campos requeridos.');
-                form.reportValidity(); // Muestra visualmente qué campos faltan
+                form.reportValidity();
                 return false;
             }
             const telefono = document.getElementById('telefono').value;
@@ -961,19 +882,12 @@
                 alert('Error en CORREO PARTICULAR: El formato no es válido.');
                 return false;
             }
-            
-            // Si todas las validaciones pasan
             return true;
         }
 
         function guardarDatos() {
-            // Primero, se valida el formulario. Si no es válido, la función se detiene.
-            if (!validarFormulario()) {
-                return;
-            }
-
+            if (!validarFormulario()) { return; }
             alert('Procesando... no cierre esta ventana.');
-
             const formData = {
                 red: document.getElementById('red').value,
                 ipress: document.getElementById('ipress').value,
@@ -995,7 +909,6 @@
                 solicitud: document.getElementById('solicitud').value,
                 auditor: document.getElementById('auditor').value
             };
-
             const file = document.getElementById('archivo').files[0];
             if (file) {
                 const reader = new FileReader();
@@ -1012,7 +925,7 @@
         }
 
         function enviarAGoogle(data) {
-            const url = 'https://script.google.com/macros/s/AKfycbzLnyFsHLQcLtO5_QnfTP7jUuQHjOUSUQi6Vi_F7J9Il6lQEGSddxqGSmT4CFv2qxLI/exec';
+            const url = 'https://script.google.com/macros/s/AKfycbzLnyFsHLQcLtO5_QnfTP7jUuQHjOUSUQi6Vi_F7J9Il6lQEGSddxqGSmT4CFv2qxLI/exec'; // Reemplaza con tu URL
             fetch(url, {
                     method: 'POST',
                     mode: 'no-cors',
@@ -1027,31 +940,19 @@
                 .catch(error => alert('Error al guardar el registro: ' + error));
         }
 
-
-        // --- CÓDIGO DE INICIALIZACIÓN (UNIFICADO) ---
-        // Se ejecuta una vez que todo el HTML ha sido cargado.
         document.addEventListener('DOMContentLoaded', function() {
-
-            // 1. Carga las redes en el select principal
             const redSelect = document.getElementById('red');
             const redesUnicas = [...new Set(datosExcel.map(item => item.red))].sort();
             redesUnicas.forEach(red => redSelect.add(new Option(red, red)));
 
-            // 2. Configura el placeholder condicional del documento
             function actualizarPlaceholderDoc() {
                 const tipoDocSelect = document.getElementById('tipoDoc');
                 const numeroDocInput = document.getElementById('numeroDoc');
-                if (tipoDocSelect.value === 'DNI') {
-                    numeroDocInput.placeholder = '8 dígitos';
-                } else { // 'CE'
-                    numeroDocInput.placeholder = '9 dígitos, incluye 0 a la izquierda';
-                }
+                numeroDocInput.placeholder = (tipoDocSelect.value === 'DNI') ? '8 dígitos' : '9 dígitos, incluye 0 a la izquierda';
             }
             document.getElementById('tipoDoc').addEventListener('change', actualizarPlaceholderDoc);
-            actualizarPlaceholderDoc(); // Llamada inicial
+            actualizarPlaceholderDoc();
 
-            // 3. Configura validaciones de campos en tiempo real
-            // Código de Planilla (solo números si no es externo)
             const codigoPlanillaInput = document.getElementById('codigoPlanilla');
             const esExternaCheckbox = document.getElementById('esExterna');
             if (codigoPlanillaInput) {
@@ -1067,35 +968,28 @@
                 });
             }
 
-            // Campos que solo aceptan números
             ['numeroDoc', 'telefono', 'telefonoIpress', 'colegiatura'].forEach(id => {
-                document.getElementById(id).addEventListener('input', function() {
-                    this.value = this.value.replace(/\D/g, '');
-                });
+                document.getElementById(id).addEventListener('input', function() { this.value = this.value.replace(/\D/g, ''); });
             });
 
-            // Correo Institucional con autocompletado
             const correoInstInput = document.getElementById('correoInstitucional');
             if (correoInstInput) {
                 correoInstInput.addEventListener('blur', function() {
                     let valor = this.value.trim().toLowerCase();
-                    if (valor && !valor.includes('@')) {
-                        this.value = valor + '@essalud.gob.pe';
-                    }
+                    if (valor && !valor.includes('@')) { this.value = valor + '@essalud.gob.pe'; }
                 });
             }
             
-            // MODIFICADO: Correo Particular a minúsculas
             const correoPartInput = document.getElementById('correoParticular');
             if (correoPartInput) {
-                correoPartInput.addEventListener('blur', function() {
-                    this.value = this.value.trim().toLowerCase();
-                });
+                correoPartInput.addEventListener('blur', function() { this.value = this.value.trim().toLowerCase(); });
             }
         });
     </script>
 </body>
 </html>
+
+
 
 
 
