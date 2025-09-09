@@ -220,6 +220,7 @@
                     <label for="fechaTermino">FECHA DE TÉRMINO DE VIGENCIA:</label>
                     <input id="fechaTermino" type="date" required onchange="validarFechas()">
                 </div>
+                <div class="full-width" id="duracionVigencia" style="font-style: italic; color: #555; height: 12px;"></div>
                 <div class="form-group full-width">
                     <label for="archivo">CARGAR RESOLUCIÓN (PDF o Imagen):</label>
                     <input id="archivo" type="file" accept="image/*,.pdf">
@@ -859,7 +860,59 @@
                 document.getElementById('fechaTermino').value = '';
             }
         }
+        function calcularDuracion(fechaInicio, fechaFin) {
+                    let inicio = new Date(fechaInicio);
+                    let fin = new Date(fechaFin);
 
+                    // Aseguramos que las fechas estén en la zona horaria local para evitar problemas de un día de diferencia
+                    inicio.setMinutes(inicio.getMinutes() + inicio.getTimezoneOffset());
+                    fin.setMinutes(fin.getMinutes() + fin.getTimezoneOffset());
+
+                    let anios = fin.getFullYear() - inicio.getFullYear();
+                    let meses = fin.getMonth() - inicio.getMonth();
+                    let dias = fin.getDate() - inicio.getDate();
+
+                    // Ajuste si los días son negativos
+                    if (dias < 0) {
+                        meses--;
+                        // Obtenemos el último día del mes anterior a la fecha final
+                        dias += new Date(fin.getFullYear(), fin.getMonth(), 0).getDate();
+                    }
+
+                    // Ajuste si los meses son negativos
+                    if (meses < 0) {
+                        anios--;
+                        meses += 12;
+                    }
+
+                    return { anios, meses, dias };
+                }
+        function validarFechas() {
+            const emisionInput = document.getElementById('fechaEmision');
+            const terminoInput = document.getElementById('fechaTermino');
+            const duracionDiv = document.getElementById('duracionVigencia');
+
+            const emision = emisionInput.value;
+            const termino = terminoInput.value;
+
+            // Limpiar duración si alguna fecha está vacía
+            duracionDiv.textContent = '';
+
+            if (emision && termino) {
+                if (new Date(termino) < new Date(emision)) {
+                    alert('La fecha de término de vigencia no puede ser anterior a la fecha de emisión.');
+                    terminoInput.value = '';
+                } else {
+                    // Si las fechas son válidas, calcula y muestra la duración
+                    const duracion = calcularDuracion(emision, termino);
+                    let textoDuracion = 'Duración de la vigencia: ';
+                    if (duracion.anios > 0) textoDuracion += `${duracion.anios} año(s) `;
+                    if (duracion.meses > 0) textoDuracion += `${duracion.meses} mes(es) `;
+                    if (duracion.dias >= 0) textoDuracion += `${duracion.dias} día(s)`;
+                    duracionDiv.textContent = textoDuracion.trim();
+                }
+            }
+        }
         function limpiarFormulario() {
             document.getElementById('formulario').reset();
             const ipressSelect = document.getElementById('ipress');
@@ -867,6 +920,7 @@
             document.getElementById('tipo').value = '';
             document.getElementById('codigoIpress').value = '';
             document.getElementById('auditor').value = '';
+            document.getElementById('duracionVigencia').textContent = ''; // <-- Línea añadida
             document.getElementById('tipoDoc').dispatchEvent(new Event('change'));
         }
         
@@ -998,6 +1052,7 @@
     </script>
 </body>
 </html>
+
 
 
 
