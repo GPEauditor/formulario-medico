@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Formulario de Registro - Médico de Control</title>
+    <title>Formulario de Registro - GIT</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
@@ -31,7 +31,7 @@
             border-radius: 8px;
             box-shadow: 0 4px 10px rgba(0,0,0,0.1);
         }
-        h1, h2 {
+        h1, h2, h3, h4 {
             color: var(--primary-color);
             border-bottom: 2px solid var(--light-gray);
             padding-bottom: 10px;
@@ -127,7 +127,7 @@
 <body>
     <div class="container">
         <h1>Formulario de Ingreso de Datos</h1>
-        
+        <h3>ACCESO SIGI: MEDICO DE CONTROL, COMAI, COMECI, OGIT, JEFE OSPE</h3>
         <form id="formulario" novalidate>
             
             <fieldset>
@@ -763,6 +763,16 @@
         ];
 
 
+        const auditoresPorRed = {
+            'maria.delgadom@essalud.gob.pe': ['CAJAMARCA', 'GCSPE', 'CUSCO', 'ICA', 'SABOGAL', 'TARAPOTO'],
+            'monica.echarry@essalud.gob.pe': ['AMAZONAS', 'AYACUCHO', 'HUANUCO', 'LAMBAYEQUE', 'REBAGLIATI', 'TUMBES'],
+            'kathia.vega@essalud.gob.pe': ['AREQUIPA'],
+            'jeannette.motta@essalud.gob.pe': ['ANCASH', 'JUNIN', 'PASCO', 'PIURA'],
+            'yohny.torres@essalud.gob.pe': ['APURIMAC', 'OFERTA FLEXIBLE', 'LORETO', 'MOQUEGUA', 'PUNO', 'UCAYALI'],
+            'ruben.pena@essalud.gob.pe': ['INSTITUTO NACIONAL CARDIOVASCULAR', 'MADRE DE DIOS', 'MOYOBAMBA'],
+            'david.romero@essalud.gob.pe': ['ALMENARA', 'HUANCAVELICA', 'JULIACA', 'LA LIBERTAD', 'TACNA', 'JAEN', 'HUARAZ']
+        };
+
         function actualizarIpress() {
             const redSeleccionada = document.getElementById('red').value;
             const ipressSelect = document.getElementById('ipress');
@@ -988,6 +998,7 @@
     </script>
 </body>
 </html>
+
 
 
 
