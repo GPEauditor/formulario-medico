@@ -990,20 +990,32 @@
         }
 
         function enviarAGoogle(data) {
-            const url = 'https://script.google.com/macros/s/AKfycbx78VHM17wHa1dDho7Zn-j-sXpC_oHyc--4MAuBJF6i3SuPWjpeno4AY_VsArdrnyeQXg/exec'; // Reemplaza con tu URL
+            // URL de tu Web App de Google Apps Script
+            const url = 'https://script.google.com/macros/s/AKfycbx78VHM17wHa1dDho7Zn-j-sXpC_oHyc--4MAuBJF6i3SuPWjpeno4AY_VsArdrnyeQXg/exec'; 
+
+            // ¡Hemos eliminado 'mode: 'no-cors',' de aquí!
             fetch(url, {
-                    method: 'POST',
-                    mode: 'no-cors',
-                    cache: 'no-cache',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(data)
-                })
-                .then(() => {
-                    alert('¡Registro grabado satisfactoriamente! Se ha enviado una copia a los correos registrados.');
-                    limpiarFormulario();
-                })
-                .catch(error => alert('Error al guardar el registro: ' + error));
+                method: 'POST',
+                // mode: 'no-cors',  <-- LÍNEA ELIMINADA
+                cache: 'no-cache',
+                redirect: 'follow',
+                headers: {
+                    'Content-Type': 'text/plain;charset=utf-8', // Cambiado para mayor compatibilidad
+                },
+                body: JSON.stringify(data) 
+            })
+            .then(res => res.json()) // Procesamos la respuesta del script
+            .then(response => {
+                console.log('Success:', response);
+                alert('¡Registro grabado satisfactoriamente! Se ha enviado una copia a los correos registrados.');
+                limpiarFormulario();
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Error al guardar el registro. Revise la consola para más detalles.');
+            });
         }
+        
 
         document.addEventListener('DOMContentLoaded', function() {
             const redSelect = document.getElementById('red');
@@ -1053,6 +1065,7 @@
     </script>
 </body>
 </html>
+
 
 
 
