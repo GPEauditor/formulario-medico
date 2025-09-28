@@ -3,133 +3,228 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Formulario de Registro - GIT</title>
+    <title>Formulario de Registro - GPE</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css">
     
     <style>
         :root {
-            --primary-color: #005662;
-            --secondary-color: #007bff;
+            --primary-color: #0d47a1; 
+            --secondary-color: #1565c0;
+            --title-color: #2980b9; /* Color unificado para títulos */
+            --light-blue-bg: #e3f2fd;
             --light-gray: #f4f7f6;
             --text-color: #333;
             --border-color: #ccc;
+            --success-color: #28a745;
+            --error-color: #dc3545;
         }
         body {
-            font-family: 'Roboto', Arial, sans-serif;
+            font-family: 'Poppins', Arial, sans-serif;
             margin: 0;
-            padding: 20px;
-            background-color: var(--light-gray);
+            padding: 0;
+            background: linear-gradient(to right bottom, #f0f4f8, #ffffff);
             color: var(--text-color);
         }
+        
+        /* --- AJUSTE DE CABECERA --- */
+        .header-banner {
+            background-color: var(--primary-color);
+            padding: 15px 20px;
+            display: flex;
+            justify-content: center; /* Centra el contenido de la cabecera */
+            align-items: center;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        .header-content {
+            display: flex;
+            align-items: center;
+            gap: 20px; /* Espacio entre el logo y el título */
+            flex-wrap: wrap; /* Permite que el texto se ajuste en pantallas pequeñas */
+            justify-content: center; /* Centra en caso de ajuste de línea */
+        }
+        .header-banner img {
+            max-height: 110px;
+        }
+        .header-banner h1 {
+            color: #ffffff; 
+            font-size: 1.8em;
+            margin: 0; /* Resetea el margen para un mejor alineamiento */
+            border: none;
+            padding: 0;
+            text-align: center;
+        }
+        @media (max-width: 600px) {
+            .header-banner h1 {
+                font-size: 1.4em;
+            }
+        }
+        /* --- FIN DE AJUSTE DE CABECERA --- */
+
         .container {
             max-width: 800px;
-            margin: auto;
+            margin: 25px auto;
             background: #fff;
             padding: 20px;
             border-radius: 8px;
             box-shadow: 0 4px 10px rgba(0,0,0,0.1);
         }
-        h1, h2, h3, h4 {
+        .container > h2, #capacitaciones-title, #auditores-title {
+            text-align: center;
+            border-bottom: none;
+            margin-bottom: 5px;
+            font-size: 1.8em;
+            color: var(--title-color); 
+        }
+        .form-description {
+            font-size: 0.9em;
+            text-align: center;
+            background-color: var(--light-blue-bg);
+            padding: 12px;
+            border-radius: 6px;
+            margin: 10px auto 25px;
+            border-left: 4px solid var(--secondary-color);
+            color: var(--primary-color);
+            max-width: 95%;
+            line-height: 1.5;
+        }
+        h2, h3, h4 {
             color: var(--primary-color);
             border-bottom: 2px solid var(--light-gray);
             padding-bottom: 10px;
         }
-        form {
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: 20px;
+        hr.section-divider {
+            border: 0;
+            height: 1px;
+            background-image: linear-gradient(to right, rgba(0, 0, 0, 0), var(--secondary-color), rgba(0, 0, 0, 0));
+            margin: 30px 0;
         }
-        @media (min-width: 768px) {
-            form { grid-template-columns: 1fr 1fr; }
+        form { display: grid; grid-template-columns: 1fr; gap: 20px; }
+        @media (min-width: 768px) { form { grid-template-columns: 1fr 1fr; } }
+        .form-group { display: flex; flex-direction: column; position: relative; }
+        
+        .form-group:not(.no-indicator)::after {
+            content: '*'; position: absolute; right: 15px; top: 39px; font-size: 0.9em; font-weight: bold;
+            color: var(--error-color); pointer-events: none; transition: opacity 0.3s ease, content 0.3s ease;
         }
-        .form-group {
-            display: flex;
-            flex-direction: column;
+        .form-group:not(.no-indicator):has(input:required:valid),
+        .form-group:not(.no-indicator):has(select:required:valid:not([value=""])) {
+             border-left-color: var(--success-color);
         }
+        .form-group:not(.no-indicator):has(input:required:valid)::after,
+        .form-group:not(.no-indicator):has(select:required:valid:not([value=""]))::after,
+        .form-group:has(input#esExterna:checked)::after {
+            content: '✓'; color: var(--success-color);
+        }
+        .form-group.is-valid-optional::after {
+            content: '✓'; color: var(--success-color); position: absolute; right: 15px; top: 39px; font-weight: bold;
+        }
+        input:required:valid, select:required:valid:not([value=""]) { border-left-color: var(--success-color) !important; }
+        input:required:invalid:not(:placeholder-shown), select:required:invalid:not([value=""]) { border-left-color: var(--error-color) !important; }
+
         .full-width { grid-column: 1 / -1; }
-        label {
-            font-weight: 500;
-            margin-bottom: 8px;
-        }
+        label { font-weight: 500; margin-bottom: 8px; }
         input, select {
-            width: 100%;
-            padding: 12px;
-            border: 1px solid var(--border-color);
-            border-radius: 6px;
-            box-sizing: border-box;
-            transition: border-color 0.3s, box-shadow 0.3s;
+            width: 100%; padding: 12px; padding-right: 35px; border: 1px solid var(--border-color);
+            border-left: 4px solid var(--border-color); border-radius: 6px; box-sizing: border-box;
+            transition: border-color 0.3s, box-shadow 0.3s, border-left-color 0.3s;
         }
         input:focus, select:focus {
-            outline: none;
-            border-color: var(--secondary-color);
-            box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.25);
+            outline: none; border-color: var(--secondary-color); box-shadow: 0 0 0 3px rgba(0, 90, 156, 0.25);
         }
-        input[readonly] { background-color: #e9ecef; }
+        input[readonly] { background-color: #e9ecef; border-left-color: var(--border-color) !important; color: #555; }
         fieldset {
-            border: 1px solid var(--border-color);
-            border-radius: 8px;
-            padding: 20px;
-            grid-column: 1 / -1;
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: 20px;
+            border: 1px solid var(--border-color); border-top: 3px solid var(--secondary-color); border-radius: 8px;
+            padding: 20px; grid-column: 1 / -1; display: grid; grid-template-columns: 1fr; gap: 20px;
         }
-         @media (min-width: 768px) {
-            fieldset { grid-template-columns: 1fr 1fr; }
-        }
-        legend {
-            font-weight: 700;
-            color: var(--primary-color);
-            padding: 0 10px;
-            margin-left: 10px;
-        }
+        @media (min-width: 768px) { fieldset { grid-template-columns: 1fr 1fr; } }
+        legend { font-weight: 700; color: var(--primary-color); padding: 0 10px; margin-left: 10px; }
         .button-container {
-            grid-column: 1 / -1;
-            display: flex;
-            justify-content: center;
-            gap: 20px;
-            padding-top: 10px;
+            grid-column: 1 / -1; display: flex; justify-content: center; gap: 20px; padding-top: 10px;
         }
         button {
-            padding: 12px 25px;
-            border: none;
-            border-radius: 6px;
-            color: #fff;
-            font-size: 16px;
-            font-weight: 500;
-            cursor: pointer;
-            transition: background-color 0.3s, transform 0.2s;
+            padding: 12px 25px; border: none; border-radius: 6px; color: #fff; font-size: 16px; font-weight: 500;
+            cursor: pointer; transition: background-color 0.3s, transform 0.2s;
         }
         #btn-guardar { background-color: var(--secondary-color); }
-        #btn-guardar:hover { background-color: #0056b3; transform: translateY(-2px); }
+        #btn-guardar:hover { background-color: var(--primary-color); transform: translateY(-2px); }
         #btn-limpiar { background-color: #6c757d; }
         #btn-limpiar:hover { background-color: #5a6268; transform: translateY(-2px); }
         .checkbox-container { display: flex; align-items: center; margin-top: 8px; }
-        .checkbox-container input { width: auto; margin-right: 8px; }
+        .checkbox-container input { width: auto; margin-right: 8px; padding-right: 0; }
         .checkbox-container label { margin: 0; font-weight: normal; }
-        .section-footer {
-            margin-top: 30px;
-            padding-top: 20px;
-            border-top: 2px solid var(--light-gray);
+        .section-footer { margin-top: 10px; padding-top: 20px; }
+        .recursos-grid {
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 20px; margin-top: 15px;
         }
-        .section-footer ul { list-style: none; padding-left: 0; }
-        .section-footer li { margin-bottom: 10px; }
-        .section-footer a { color: var(--secondary-color); text-decoration: none; }
-        .section-footer a:hover { text-decoration: underline; }
-        .auditor-table { width: 100%; border-collapse: collapse; margin-top: 15px; font-size: 14px; }
-        .auditor-table th, .auditor-table td { border: 1px solid var(--border-color); padding: 10px 12px; text-align: left; }
-        .auditor-table th { background-color: var(--primary-color); color: #fff; font-weight: 500; }
+        .recurso-card {
+            background-color: #fff; border: 1px solid #ddd; border-radius: 8px; padding: 20px;
+            text-align: center; transition: transform 0.3s, box-shadow 0.3s;
+            display: flex; flex-direction: column; align-items: center; cursor: pointer;
+        }
+        .recurso-card:hover { transform: translateY(-5px); box-shadow: 0 8px 15px rgba(0,0,0,0.1); }
+        .recurso-card .icon { font-size: 2.5em; color: var(--secondary-color); margin-bottom: 15px; }
+        .recurso-card h4 {
+            font-size: 1.1em; color: var(--primary-color); margin: 0 0 10px 0; border: none; padding: 0;
+        }
+        .recurso-card a { text-decoration: none; color: var(--text-color); font-weight: 500; }
+        .recurso-card:hover h4 { color: var(--secondary-color); }
+        
+        .auditor-table-container {
+            border-radius: 8px; overflow: hidden; box-shadow: 0 4px 10px rgba(0,0,0,0.05); border: 1px solid var(--border-color);
+        }
+        .auditor-table { width: 100%; border-collapse: collapse; font-size: 14px; }
+        .auditor-table th, .auditor-table td { border-bottom: 1px solid var(--border-color); padding: 12px 15px; }
+        .auditor-table th { background-color: var(--primary-color); color: #fff; font-weight: 500; text-align: center; }
+        .auditor-table td { text-align: left; font-weight: 500; }
         .auditor-table tbody tr:nth-child(even) { background-color: var(--light-gray); }
+        .auditor-table tbody tr:last-child td { border-bottom: none; }
+        .auditor-table tbody tr:hover { background-color: var(--light-blue-bg); }
+        .auditor-table a { color: var(--secondary-color); text-decoration: none; font-weight: 500; }
+        .auditor-table a:hover { text-decoration: underline; }
+
+        .modal-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.6); display: none; justify-content: center; align-items: center; z-index: 1000;
+        }
+        .modal-container {
+            background: #fff; padding: 30px; border-radius: 8px;
+            width: 90%; max-width: 600px; box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            position: relative;
+            max-height: 80vh; /* Límite de altura */
+            overflow-y: auto; /* Scroll si el contenido es muy largo */
+        }
+        .modal-close {
+            position: absolute; top: 10px; right: 15px; font-size: 24px;
+            font-weight: bold; cursor: pointer; color: #888;
+        }
+        .modal-close:hover { color: #000; }
+        .modal-container h3 {
+            margin-top: 0; border-bottom: 1px solid #eee; padding-bottom: 15px;
+        }
+        .modal-container ul { list-style: none; padding: 0; }
+        .modal-container li { margin-bottom: 10px; }
+        .modal-container a { color: var(--secondary-color); text-decoration: none; font-weight: 500; }
+        .modal-container a:hover { text-decoration: underline; }
     </style>
 </head>
 <body>
+    <header class="header-banner">
+        <div class="header-content">
+            <img src="https://res.cloudinary.com/dveuk1nve/image/upload/v1759086382/logo_2_GPE-remove_evrvxr.png" alt="Logo EsSalud">
+            <h1>GERENCIA DE PRESTACIONES ECONÓMICAS</h1>
+        </div>
+    </header>
+
     <div class="container">
-        <h1>Formulario de Ingreso de Datos</h1>
-        <h3>ACCESO SIGI: MEDICO DE CONTROL, COMAI, COMECI, OGIT, JEFE OSPE</h3>
+        <h2>FORMULARIO DE INGRESO DE DATOS</h2>
+        <p class="form-description">
+            Acceso al SIGI: MÉDICO DE CONTROL, COMAI, COMECI, OGIT, JEFE OSPE
+        </p>
+
         <form id="formulario" novalidate>
-            
             <fieldset>
                 <legend>Identificación de la IPRESS</legend>
                 <div class="form-group">
@@ -140,11 +235,11 @@
                     <label for="ipress">IPRESS:</label>
                     <select id="ipress" required onchange="asignarCodigoIpress()"><option value="">Seleccione una IPRESS</option></select>
                 </div>
-                <div class="form-group">
+                <div class="form-group no-indicator">
                     <label for="tipo">TIPO:</label>
                     <input id="tipo" readonly>
                 </div>
-                <div class="form-group">
+                <div class="form-group no-indicator">
                     <label for="codigoIpress">CÓDIGO DE IPRESS:</label>
                     <input id="codigoIpress" readonly>
                 </div>
@@ -171,6 +266,7 @@
                 <div class="form-group">
                     <label for="cargo">CARGO:</label>
                     <select id="cargo" required>
+                        <option value="">Seleccione un Cargo</option>
                         <option value="MEDICO DE CONTROL">MÉDICO DE CONTROL</option>
                         <option value="OGIT">OGIT</option>
                         <option value="COMAI">COMAI</option>
@@ -181,6 +277,7 @@
                 <div class="form-group">
                     <label for="profesional">PROFESIONAL:</label>
                     <select id="profesional" required>
+                        <option value="">Seleccione una Profesión</option>
                         <option value="MEDICO">MÉDICO</option>
                         <option value="OBSTETRA">OBSTETRA</option>
                         <option value="INGENIERO">INGENIERO</option>
@@ -198,7 +295,7 @@
                 <legend>Detalles de la Designación</legend>
                 <div class="form-group">
                     <label for="codigoPlanilla">CÓDIGO DE PLANILLA:</label>
-                    <input id="codigoPlanilla" placeholder="8 dígitos o marque externa">
+                    <input id="codigoPlanilla" placeholder="8 dígitos o marque externa" required>
                     <div class="checkbox-container">
                         <input type="checkbox" id="esExterna" onclick="togglePlanilla(this)">
                         <label for="esExterna">IPRESS Externa</label>
@@ -206,7 +303,7 @@
                 </div>
                 <div class="form-group">
                     <label for="colegiatura">COLEGIATURA (CMP):</label>
-                    <input id="colegiatura" type="text" onblur="padearConCeros(this, 6)" placeholder="6 dígitos">
+                    <input id="colegiatura" type="text" onblur="padearConCeros(this, 6)" placeholder="6 dígitos" required>
                 </div>
                 <div class="form-group full-width">
                     <label for="numResolucion">NÚMERO DE RESOLUCIÓN:</label>
@@ -223,7 +320,7 @@
                 <div class="full-width" id="duracionVigencia" style="font-style: italic; color: #555; height: 12px;"></div>
                 <div class="form-group full-width">
                     <label for="archivo">CARGAR RESOLUCIÓN (PDF o Imagen):</label>
-                    <input id="archivo" type="file" accept="image/*,.pdf">
+                    <input id="archivo" type="file" accept="image/*,.pdf" required>
                 </div>
             </fieldset>
             
@@ -233,23 +330,36 @@
                     <label for="telefono">TELÉFONO PERSONAL:</label>
                     <input id="telefono" type="tel" required placeholder="Debe empezar con 9">
                 </div>
-                <div class="form-group">
+                <div class="form-group no-indicator">
                     <label for="telefonoIpress">TELÉFONO IPRESS:</label>
                     <input id="telefonoIpress" type="tel">
                 </div>
                 <div class="form-group">
                     <label for="correoInstitucional">CORREO INSTITUCIONAL:</label>
-                    <input id="correoInstitucional" type="email" required placeholder="usuario@essalud.gob.pe">
+                    <input id="correoInstitucional" type="email" required placeholder="usuario@essalud.gob.pe" list="institutional-domains" oninput="updateEmailDatalist(this, 'institutional-domains')">
+                    <datalist id="institutional-domains">
+                        <option value="@essalud.gob.pe"></option>
+                    </datalist>
                 </div>
                 <div class="form-group">
                     <label for="correoParticular">CORREO PARTICULAR:</label>
-                    <input id="correoParticular" type="email" required>
+                    <input id="correoParticular" type="email" required list="personal-domains" oninput="updateEmailDatalist(this, 'personal-domains')">
+                    <datalist id="personal-domains">
+                        <option value="@gmail.com"></option>
+                        <option value="@hotmail.com"></option>
+                        <option value="@outlook.com"></option>
+                        <option value="@yahoo.es"></option>
+                    </datalist>
                 </div>
                 <div class="form-group">
                     <label for="solicitud">TIPO DE SOLICITUD:</label>
-                    <select id="solicitud" required><option value="ACCESO SIGI">ACCESO SIGI</option><option value="CAPACITACION">CAPACITACIÓN</option><option value="RENOVACIÓN DE CONTRASEÑA">RENOVACIÓN DE CONTRASEÑA</option></select>
+                    <select id="solicitud" required>
+                        <option value="ACCESO SIGI" selected>ACCESO SIGI</option>
+                        <option value="CAPACITACION">CAPACITACIÓN</option>
+                        <option value="RENOVACIÓN DE CONTRASEÑA">RENOVACIÓN DE CONTRASEÑA</option>
+                    </select>
                 </div>
-                <div class="form-group">
+                <div class="form-group no-indicator">
                     <label for="auditor">MÉDICO AUDITOR GPE:</label>
                     <input id="auditor" readonly>
                 </div>
@@ -261,75 +371,95 @@
             </div>
         </form>
 
+        <hr class="section-divider">
+
         <div class="section-footer">
-            <h2>Recursos y Capacitaciones</h2>
-            <h3>VIDEOS DE CAPACITACIÓN:</h3>
-            <ul>
-                <li><a href="https://www.youtube.com/live/tsfhZianvGU" target="_blank">CENATE 20.08.2025 (Uso de aplicativos informáticos relacionados a certificación médica)</a></li>
-                <li><a href="https://www.youtube.com/live/lJyopRFUAag?si=5E35Icv-C9htTxAE" target="_blank">CENATE 20.07.2025 (Actividades del Médico de Control)</a></li>
-                <li><a href="https://www.youtube.com/live/9V1TZwRH0Xw?si=9dRQePwtBjC82iH4" target="_blank">CENATE 20.06.2025 (Pase a la COMECI - Ley Nº26790)</a></li>
-                <li><a href="https://www.youtube.com/live/JxMMLKFnI2A" target="_blank">CENATE 14.05.2025 (RESUMEN: Normativa, Actividades, Evaluación ITP)</a></li>
-                <li><a href="https://youtu.be/R3tkxfIi7cY" target="_blank">PRIMERA SESIÓN (Definición del Proceso y Normativa Vigente)</a></li>
-                <li><a href="https://youtu.be/9gcG5xsQ7n8" target="_blank">SEGUNDA SESIÓN (Procesos relacionados a la Emisión del CITT)</a></li>
-                <li><a href="https://youtu.be/o-cQVxfB-ww" target="_blank">TERCERA SESIÓN (Metodología y actividades del cargo)</a></li>
-                <li><a href="https://youtu.be/h0X7MqMWCp0" target="_blank">CUARTA SESIÓN (Análisis de la ITP, Anexo N°04 y Derivación a COMECI)</a></li>
-            </ul>
-            <h3>DOCUMENTOS:</h3>
-            <ul>
-                <li><a href="https://drive.google.com/drive/folders/19HOU_ju25L7zdnh7cHV8Rp2V5__t4gLz" target="_blank">NORMAS Y DOCUMENTOS DE REFERENCIA</a></li>
-                <li><a href="https://docs.google.com/document/d/1OHAuyvJut1kySilT3YEExKEJUKSTuU4ZTtGHYh9FrNw/edit?usp=sharing" target="_blank">AUDITOR ASIGNADO</a></li>
-            </ul>
+            <h2 id="capacitaciones-title">CAPACITACIONES Y RECURSOS</h2>
+            <div class="recursos-grid">
+                <div id="open-video-modal" class="recurso-card">
+                    <div class="icon"><i class="fa-solid fa-video"></i></div>
+                    <h4>Videos de Capacitación</h4>
+                </div>
+                <a href="https://drive.google.com/drive/folders/19HOU_ju25L7zdnh7cHV8Rp2V5__t4gLz" target="_blank" class="recurso-card">
+                    <div class="icon"><i class="fa-solid fa-file-pdf"></i></div>
+                    <h4>Normas y Documentos</h4>
+                </a>
+                <a href="https://docs.google.com/document/d/1OHAuyvJut1kySilT3YEExKEJUKSTuU4ZTtGHYh9FrNw/edit?usp=sharing" target="_blank" class="recurso-card">
+                    <div class="icon"><i class="fa-solid fa-user-check"></i></div>
+                    <h4>Auditor Asignado</h4>
+                </a>
+            </div>
         </div>
         
+        <hr class="section-divider">
+
         <div class="section-footer">
-            <h2>Auditores por Red</h2>
-            <table class="auditor-table">
-                <thead>
-                    <tr>
-                        <th>AUDITOR</th>
-                        <th>REDES</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>maria.delgadom@essalud.gob.pe</td>
-                        <td>CAJAMARCA, GCSPE, CUSCO, ICA, SABOGAL, TARAPOTO</td>
-                    </tr>
-                    <tr>
-                        <td>monica.echarry@essalud.gob.pe</td>
-                        <td>AMAZONAS, AYACUCHO, HUANUCO, LAMBAYEQUE, REBAGLIATI, TUMBES</td>
-                    </tr>
-                    <tr>
-                        <td>kathia.vega@essalud.gob.pe</td>
-                        <td>AREQUIPA</td>
-                    </tr>
-                    <tr>
-                        <td>jeannette.motta@essalud.gob.pe</td>
-                        <td>ANCASH, JUNIN, PASCO, PIURA</td>
-                    </tr>
-                    <tr>
-                        <td>yohny.torres@essalud.gob.pe</td>
-                        <td>APURIMAC, OFERTA FLEXIBLE, LORETO, MOQUEGUA, PUNO, UCAYALI</td>
-                    </tr>
-                    <tr>
-                        <td>ruben.pena@essalud.gob.pe</td>
-                        <td>INSTITUTO NACIONAL CARDIOVASCULAR, MADRE DE DIOS, MOYOBAMBA</td>
-                    </tr>
-                    <tr>
-                        <td>david.romero@essalud.gob.pe</td>
-                        <td>ALMENARA, HUANCAVELICA, JULIACA, LA LIBERTAD, TACNA, JAEN, HUARAZ</td>
-                    </tr>
-                    <tr>
-                        <td>william.arana@essalud.gob.pe</td>
-                        <td>COORDINADOR GPE DE LAS OSPE</td>
-                    </tr>
-                </tbody>
-            </table>
+            <h2 id="auditores-title">AUDITORES POR RED</h2>
+            <div class="auditor-table-container">
+                <table class="auditor-table">
+                    <thead>
+                        <tr>
+                            <th>AUDITOR</th>
+                            <th>REDES ASIGNADAS</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><a href="mailto:maria.delgadom@essalud.gob.pe">maria.delgadom@essalud.gob.pe</a></td>
+                            <td>CAJAMARCA, GCSPE, CUSCO, ICA, SABOGAL, TARAPOTO</td>
+                        </tr>
+                        <tr>
+                            <td><a href="mailto:monica.echarry@essalud.gob.pe">monica.echarry@essalud.gob.pe</a></td>
+                            <td>AMAZONAS, AYACUCHO, HUANUCO, LAMBAYEQUE, REBAGLIATI, TUMBES</td>
+                        </tr>
+                        <tr>
+                            <td><a href="mailto:kathia.vega@essalud.gob.pe">kathia.vega@essalud.gob.pe</a></td>
+                            <td>AREQUIPA</td>
+                        </tr>
+                        <tr>
+                            <td><a href="mailto:jeannette.motta@essalud.gob.pe">jeannette.motta@essalud.gob.pe</a></td>
+                            <td>ANCASH, JUNIN, PASCO, PIURA</td>
+                        </tr>
+                        <tr>
+                            <td><a href="mailto:yohny.torres@essalud.gob.pe">yohny.torres@essalud.gob.pe</a></td>
+                            <td>APURIMAC, OFERTA FLEXIBLE, LORETO, MOQUEGUA, PUNO, UCAYALI</td>
+                        </tr>
+                        <tr>
+                            <td><a href="mailto:ruben.pena@essalud.gob.pe">ruben.pena@essalud.gob.pe</a></td>
+                            <td>INSTITUTO NACIONAL CARDIOVASCULAR, MADRE DE DIOS, MOYOBAMBA</td>
+                        </tr>
+                        <tr>
+                            <td><a href="mailto:david.romero@essalud.gob.pe">david.romero@essalud.gob.pe</a></td>
+                            <td>ALMENARA, HUANCAVELICA, JULIACA, LA LIBERTAD, TACNA, JAEN, HUARAZ</td>
+                        </tr>
+                        <tr>
+                            <td><a href="mailto:william.arana@essalud.gob.pe">william.arana@essalud.gob.pe</a></td>
+                            <td>COORDINADOR GPE DE LAS OSPE</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <div id="video-modal" class="modal-overlay">
+        <div class="modal-container">
+            <span id="close-modal-button" class="modal-close">&times;</span>
+            <h3>Videos de Capacitación</h3>
+            <ul>
+                <li><a href="https://www.youtube.com/live/tsfhZianvGU" target="_blank">CENATE 20.08.2025 (Uso de aplicativos)</a></li>
+                <li><a href="https://www.youtube.com/live/lJyopRFUAag?si=5E35Icv-C9htTxAE" target="_blank">CENATE 20.07.2025 (Actividades del Médico de Control)</a></li>
+                <li><a href="https://www.youtube.com/live/9V1TZwRH0Xw?si=9dRQePwtBjC82iH4" target="_blank">CENATE 20.06.2025 (Pase a la COMECI)</a></li>
+                <li><a href="https://www.youtube.com/live/JxMMLKFnI2A" target="_blank">CENATE 14.05.2025 (RESUMEN General)</a></li>
+                <li><a href="https://youtu.be/R3tkxfIi7cY" target="_blank">SESIÓN 1 (Normativa Vigente)</a></li>
+                <li><a href="https://youtu.be/9gcG5xsQ7n8" target="_blank">SESIÓN 2 (Procesos de Emisión CITT)</a></li>
+                <li><a href="https://youtu.be/o-cQVxfB-ww" target="_blank">SESIÓN 3 (Metodología y Actividades)</a></li>
+                <li><a href="https://youtu.be/h0X7MqMWCp0" target="_blank">SESIÓN 4 (Análisis ITP y Derivación)</a></li>
+            </ul>
         </div>
     </div>
 
     <script>
-        // RED /IPRESS-OSPE
         const datosExcel = [
             { "codigoRed": 2, "red": "ALMENARA", "tipo": "PRESTACIONAL", "codigoIpress": 478, "ipress": "CAP III ALFREDO PIAZZA ROBERTS" },
             { "codigoRed": 2, "red": "ALMENARA", "tipo": "PRESTACIONAL", "codigoIpress": 446, "ipress": "CAP III EL AGUSTINO" },
@@ -764,7 +894,6 @@
             { "codigoRed": 28, "red": "UCAYALI", "tipo": "ASISTENCIAL", "codigoIpress": 515, "ipress": "CAP I MANANTAY" }
         ];
 
-
         const auditoresPorRed = {
             'maria.delgadom@essalud.gob.pe': ['CAJAMARCA', 'GCSPE', 'CUSCO', 'ICA', 'SABOGAL', 'TARAPOTO'],
             'monica.echarry@essalud.gob.pe': ['AMAZONAS', 'AYACUCHO', 'HUANUCO', 'LAMBAYEQUE', 'REBAGLIATI', 'TUMBES'],
@@ -828,9 +957,9 @@
 
         function padearDocumento(input) {
             const tipo = document.getElementById('tipoDoc').value;
-            const longitud = tipo === 'DNI' ? 8 : 9;
+            const longitud = tipo === 'DNI' ? 8 : 12; // CE puede tener hasta 12
             let valor = input.value.replace(/\D/g, '');
-            if (valor) {
+            if (valor && tipo === 'DNI') {
                 input.value = valor.padStart(longitud, '0');
             }
         }
@@ -844,28 +973,24 @@
 
         function togglePlanilla(checkbox) {
             const inputPlanilla = document.getElementById('codigoPlanilla');
+            const formGroup = inputPlanilla.closest('.form-group');
             if (checkbox.checked) {
                 inputPlanilla.value = 'PERSONAL DE IPRESS EXTERNA';
                 inputPlanilla.readOnly = true;
+                inputPlanilla.required = false;
+                // Forzar un evento para que el CSS de validación reaccione
+                inputPlanilla.dispatchEvent(new Event('input'));
             } else {
                 inputPlanilla.value = '';
                 inputPlanilla.readOnly = false;
+                inputPlanilla.required = true;
             }
         }
 
-        function validarFechas() {
-            const emision = document.getElementById('fechaEmision').value;
-            const termino = document.getElementById('fechaTermino').value;
-            if (emision && termino && new Date(termino) < new Date(emision)) {
-                alert('La fecha de término de vigencia no puede ser anterior a la fecha de emisión.');
-                document.getElementById('fechaTermino').value = '';
-            }
-        }
         function calcularDuracion(fechaInicio, fechaFin) {
                     let inicio = new Date(fechaInicio);
                     let fin = new Date(fechaFin);
 
-                    // Aseguramos que las fechas estén en la zona horaria local para evitar problemas de un día de diferencia
                     inicio.setMinutes(inicio.getMinutes() + inicio.getTimezoneOffset());
                     fin.setMinutes(fin.getMinutes() + fin.getTimezoneOffset());
 
@@ -873,14 +998,11 @@
                     let meses = fin.getMonth() - inicio.getMonth();
                     let dias = fin.getDate() - inicio.getDate();
 
-                    // Ajuste si los días son negativos
                     if (dias < 0) {
                         meses--;
-                        // Obtenemos el último día del mes anterior a la fecha final
                         dias += new Date(fin.getFullYear(), fin.getMonth(), 0).getDate();
                     }
 
-                    // Ajuste si los meses son negativos
                     if (meses < 0) {
                         anios--;
                         meses += 12;
@@ -896,7 +1018,6 @@
             const emision = emisionInput.value;
             const termino = terminoInput.value;
 
-            // Limpiar duración si alguna fecha está vacía
             duracionDiv.textContent = '';
 
             if (emision && termino) {
@@ -904,7 +1025,6 @@
                     alert('La fecha de término de vigencia no puede ser anterior a la fecha de emisión.');
                     terminoInput.value = '';
                 } else {
-                    // Si las fechas son válidas, calcula y muestra la duración
                     const duracion = calcularDuracion(emision, termino);
                     let textoDuracion = 'Duración de la vigencia: ';
                     if (duracion.anios > 0) textoDuracion += `${duracion.anios} año(s) `;
@@ -921,14 +1041,15 @@
             document.getElementById('tipo').value = '';
             document.getElementById('codigoIpress').value = '';
             document.getElementById('auditor').value = '';
-            document.getElementById('duracionVigencia').textContent = ''; // <-- Línea añadida
+            document.getElementById('duracionVigencia').textContent = '';
             document.getElementById('tipoDoc').dispatchEvent(new Event('change'));
+            togglePlanilla(document.getElementById('esExterna'));
         }
         
         function validarFormulario() {
             const form = document.getElementById('formulario');
             if (!form.checkValidity()) {
-                alert('Por favor, complete todos los campos requeridos.');
+                alert('Por favor, complete todos los campos requeridos marcados con un asterisco.');
                 form.reportValidity();
                 return false;
             }
@@ -990,21 +1111,17 @@
         }
 
         function enviarAGoogle(data) {
-            // URL de tu Web App de Google Apps Script
             const url = 'https://script.google.com/macros/s/AKfycbx78VHM17wHa1dDho7Zn-j-sXpC_oHyc--4MAuBJF6i3SuPWjpeno4AY_VsArdrnyeQXg/exec'; 
-
-            // ¡Hemos eliminado 'mode: 'no-cors',' de aquí!
             fetch(url, {
                 method: 'POST',
-                // mode: 'no-cors',  <-- LÍNEA ELIMINADA
                 cache: 'no-cache',
                 redirect: 'follow',
                 headers: {
-                    'Content-Type': 'text/plain;charset=utf-8', // Cambiado para mayor compatibilidad
+                    'Content-Type': 'text/plain;charset=utf-8',
                 },
                 body: JSON.stringify(data) 
             })
-            .then(res => res.json()) // Procesamos la respuesta del script
+            .then(res => res.json())
             .then(response => {
                 console.log('Success:', response);
                 alert('¡Registro grabado satisfactoriamente! Se ha enviado una copia a los correos registrados.');
@@ -1016,6 +1133,20 @@
             });
         }
         
+        function updateEmailDatalist(input, datalistId) {
+            const datalist = document.getElementById(datalistId);
+            const currentValue = input.value;
+            if (currentValue.includes('@')) {
+                const alias = currentValue.split('@')[0];
+                const originalOptions = Array.from(datalist.options).map(opt => opt.value);
+                datalist.innerHTML = '';
+                originalOptions.forEach(domain => {
+                    const newOption = document.createElement('option');
+                    newOption.value = alias + domain;
+                    datalist.appendChild(newOption);
+                });
+            }
+        }
 
         document.addEventListener('DOMContentLoaded', function() {
             const redSelect = document.getElementById('red');
@@ -1025,7 +1156,7 @@
             function actualizarPlaceholderDoc() {
                 const tipoDocSelect = document.getElementById('tipoDoc');
                 const numeroDocInput = document.getElementById('numeroDoc');
-                numeroDocInput.placeholder = (tipoDocSelect.value === 'DNI') ? '8 dígitos' : '9 dígitos, incluye 0 a la izquierda';
+                numeroDocInput.placeholder = (tipoDocSelect.value === 'DNI') ? '8 dígitos' : 'Hasta 12 dígitos';
             }
             document.getElementById('tipoDoc').addEventListener('change', actualizarPlaceholderDoc);
             actualizarPlaceholderDoc();
@@ -1046,7 +1177,8 @@
             }
 
             ['numeroDoc', 'telefono', 'telefonoIpress', 'colegiatura'].forEach(id => {
-                document.getElementById(id).addEventListener('input', function() { this.value = this.value.replace(/\D/g, ''); });
+                const el = document.getElementById(id);
+                if(el) el.addEventListener('input', function() { this.value = this.value.replace(/\D/g, ''); });
             });
 
             const correoInstInput = document.getElementById('correoInstitucional');
@@ -1054,12 +1186,43 @@
                 correoInstInput.addEventListener('blur', function() {
                     let valor = this.value.trim().toLowerCase();
                     if (valor && !valor.includes('@')) { this.value = valor + '@essalud.gob.pe'; }
+                    this.dispatchEvent(new Event('input'));
                 });
             }
             
             const correoPartInput = document.getElementById('correoParticular');
             if (correoPartInput) {
-                correoPartInput.addEventListener('blur', function() { this.value = this.value.trim().toLowerCase(); });
+                correoPartInput.addEventListener('blur', function() { 
+                    this.value = this.value.trim().toLowerCase(); 
+                    this.dispatchEvent(new Event('input'));
+                });
+            }
+
+            const videoModal = document.getElementById('video-modal');
+            const openModalButton = document.getElementById('open-video-modal');
+            const closeModalButton = document.getElementById('close-modal-button');
+
+            const openModal = () => videoModal.style.display = 'flex';
+            const closeModal = () => videoModal.style.display = 'none';
+
+            openModalButton.addEventListener('click', openModal);
+            closeModalButton.addEventListener('click', closeModal);
+            videoModal.addEventListener('click', (event) => {
+                if (event.target === videoModal) {
+                    closeModal();
+                }
+            });
+
+            const telefonoIpressInput = document.getElementById('telefonoIpress');
+            if (telefonoIpressInput) {
+                telefonoIpressInput.addEventListener('input', function() {
+                    const formGroup = this.parentElement;
+                    if (this.value.trim() !== '') {
+                        formGroup.classList.add('is-valid-optional');
+                    } else {
+                        formGroup.classList.remove('is-valid-optional');
+                    }
+                });
             }
         });
     </script>
