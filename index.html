@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF--8">
+    <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Formulario de Registro - GPE</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -208,6 +208,110 @@
         .modal-container li { margin-bottom: 10px; }
         .modal-container a { color: var(--secondary-color); text-decoration: none; font-weight: 500; }
         .modal-container a:hover { text-decoration: underline; }
+
+        /* --- INICIO: ESTILOS PARA LA NUEVA MODAL DE VERIFICACIÓN --- */
+        #existingUserModal .modal-container {
+            max-width: 750px;
+            display: flex;
+            flex-direction: column;
+        }
+        #existingUserModal .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #eee;
+            position: relative;
+            gap: 15px;
+        }
+        #existingUserModal .modal-header h3 {
+            margin: 0;
+            font-size: 1.4rem;
+            color: var(--primary-color);
+            flex-grow: 1;
+            padding: 0;
+            border: none;
+        }
+        #existingUserModal .modal-copy-indicator {
+            cursor: pointer;
+            font-size: 0.9rem;
+            color: #6c757d;
+            padding: 5px 10px;
+            border-radius: 5px;
+            background-color: var(--light-gray);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: background-color 0.2s ease;
+            border: 1px solid var(--border-color);
+            white-space: nowrap;
+        }
+        #existingUserModal .modal-copy-indicator:hover {
+            background-color: #d1d6db;
+        }
+        #existingUserModal .modal-body {
+            max-height: 45vh;
+            overflow-y: auto;
+            padding-right: 10px;
+            margin-top: 20px;
+        }
+        #existingUserModal .modal-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 14px;
+        }
+        #existingUserModal .modal-table th,
+        #existingUserModal .modal-table td {
+            padding: 10px 12px;
+            text-align: left;
+            border-bottom: 1px solid #eee;
+        }
+        #existingUserModal .modal-table th {
+            background-color: var(--light-gray);
+            color: var(--text-color);
+            font-weight: 500;
+            width: 35%;
+        }
+        #existingUserModal .highlight-text {
+            background-color: #fff3cd;
+            font-weight: bold;
+            padding: 2px 5px;
+            border-radius: 3px;
+        }
+        #existingUserModal .modal-footer {
+            display: flex;
+            justify-content: flex-end;
+            gap: 15px;
+            padding-top: 20px;
+            margin-top: 20px;
+            border-top: 1px solid #eee;
+        }
+        #existingUserModal .modal-button {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 500;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+        }
+        #existingUserModal .modal-button.accept {
+            background-color: var(--error-color);
+            color: white;
+        }
+        #existingUserModal .modal-button.accept:hover {
+            background-color: #c82333;
+            transform: translateY(-2px);
+        }
+        #existingUserModal .modal-button.continue {
+            background-color: var(--secondary-color);
+            color: white;
+        }
+        #existingUserModal .modal-button.continue:hover {
+            background-color: var(--primary-color);
+            transform: translateY(-2px);
+        }
+        /* --- FIN: ESTILOS PARA LA NUEVA MODAL DE VERIFICACIÓN --- */
     </style>
 </head>
 <body>
@@ -463,7 +567,221 @@
         </div>
     </div>
 
+    <div id="existingUserModal" class="modal-overlay">
+        <div class="modal-container">
+            <div class="modal-header">
+                <h3 id="modalTitle">Registro Encontrado</h3>
+                <div class="modal-copy-indicator" onclick="copyModalContentToClipboard()">
+                    <i class="fa-solid fa-copy"></i> Copiar
+                </div>
+                <span class="modal-close" onclick="closeCheckModal()">&times;</span>
+            </div>
+            <div class="modal-body" id="modalBodyContent">
+                <p>Cargando datos...</p>
+            </div>
+            <div class="modal-footer">
+                <button class="modal-button accept" onclick="closeCheckModal()">ACEPTAR, no realizar registro</button>
+                <button class="modal-button continue" onclick="continueWithExistingData()">CONTINUAR con nuevo registro</button>
+            </div>
+        </div>
+    </div>
     <script>
+        // =========================================================================
+        // INICIO: LÓGICA PARA VERIFICACIÓN DE USUARIO EXISTENTE
+        // =========================================================================
+
+        // --- CONFIGURACIÓN ---
+        const SHEETS_API_URL = 'https://script.google.com/macros/s/AKfycbx78VHM17wHa1dDho7Zn-j-sXpC_oHyc--4MAuBJF6i3SuPWjpeno4AY_VsArdrnyeQXg/exec';
+
+        const numeroDocInput = document.getElementById('numeroDoc');
+        const existingUserModal = document.getElementById('existingUserModal');
+        const modalTitle = document.getElementById('modalTitle');
+        const modalBodyContent = document.getElementById('modalBodyContent');
+
+        // Agregamos el listener sin sobreescribir el onblur existente
+        numeroDocInput.addEventListener('blur', checkExistingUser);
+
+        async function checkExistingUser() {
+            const numeroDocumento = numeroDocInput.value.trim();
+            if (numeroDocumento === '') return;
+
+            // Muestra un indicador de carga (opcional)
+            numeroDocInput.style.cursor = 'wait';
+
+            try {
+                const response = await fetch(SHEETS_API_URL);
+                if (!response.ok) throw new Error(`Error HTTP: ${response.status}`);
+                
+                const data = await response.json();
+                
+                // Busca de atrás hacia adelante para encontrar el registro MÁS RECIENTE
+                const existingRecord = data.reverse().find(record => 
+                    record['NumeroDocumento'] && String(record['NumeroDocumento']).trim() === numeroDocumento
+                );
+
+                if (existingRecord) {
+                    showModal(existingRecord);
+                }
+            } catch (error) {
+                console.error('Error al verificar el documento:', error);
+                alert('Ocurrió un error al verificar el documento. Por favor, revisa la consola para más detalles.');
+            } finally {
+                // Quita el indicador de carga
+                numeroDocInput.style.cursor = 'default';
+            }
+        }
+
+        function showModal(record) {
+            const { Cargo, Red, IPRESS, Nombres, Apellidos } = record;
+            
+            modalTitle.textContent = `ACCESO AL SIGI - ${Cargo || ''} - ${Red || ''} - ${IPRESS || ''} - ${Nombres || ''} ${Apellidos || ''}`;
+
+            // Mapeo de los campos a mostrar. Asegúrate que las 'key' coincidan EXACTAMENTE
+            // con los nombres de las columnas en tu Google Sheet (la primera fila).
+            const fieldsToShow = [
+                { label: 'RED', key: 'Red', highlight: false },
+                { label: 'IPRESS', key: 'IPRESS', highlight: false },
+                { label: 'Apellidos', key: 'Apellidos', highlight: true },
+                { label: 'Nombres', key: 'Nombres', highlight: true },
+                { label: 'Tipo Documento', key: 'TipoDocumento', highlight: false },
+                { label: 'Nro Documento', key: 'NumeroDocumento', highlight: true },
+                { label: 'Cargo', key: 'Cargo', highlight: false },
+                { label: 'Profesional', key: 'Profesional', highlight: false },
+                { label: 'Colegiatura (CMP)', key: 'Colegiatura', highlight: false },
+                { label: 'N° Resolución', key: 'Resolucion', highlight: false },
+                { label: 'Inicio Vigencia', key: 'FechaEmision', isDate: true },
+                { label: 'Fin Vigencia', key: 'FechaTermino', isDate: true },
+                { label: 'Celular', key: 'Telefono', highlight: false },
+                { label: 'Correo Institucional', key: 'CorreoInstitucional', highlight: false },
+                { label: 'Correo Personal', key: 'CorreoParticular', highlight: false },
+                { label: 'Url Archivo', key: 'UrlArchivo', isLink: true }
+            ];
+
+            let tableHTML = `<table class="modal-table"><tbody>`;
+            fieldsToShow.forEach(({ label, key, highlight, isDate, isLink }) => {
+                let value = record[key] || 'No registrado';
+                let displayValue = value;
+                
+                if (isDate && value !== 'No registrado') {
+                    displayValue = new Date(value).toLocaleDateString('es-PE', { timeZone: 'UTC' });
+                }
+                if (isLink && value !== 'No registrado') {
+                    displayValue = `<a href="${value}" target="_blank">Ver Archivo</a>`;
+                }
+                if (highlight) {
+                    displayValue = `<span class="highlight-text">${displayValue}</span>`;
+                }
+
+                tableHTML += `<tr><th>${label}:</th><td>${displayValue}</td></tr>`;
+            });
+            tableHTML += `</tbody></table>`;
+            
+            modalBodyContent.innerHTML = tableHTML;
+            existingUserModal.style.display = 'flex';
+        }
+
+        function closeCheckModal() {
+            existingUserModal.style.display = 'none';
+        }
+
+        async function copyModalContentToClipboard() {
+            const title = modalTitle.textContent;
+            const table = modalBodyContent.querySelector('.modal-table');
+            if (!table) return;
+
+            let textToCopy = `${title}\n\n`;
+            table.querySelectorAll('tr').forEach(row => {
+                const th = row.querySelector('th').textContent;
+                const td = row.querySelector('td').textContent;
+                textToCopy += `${th} ${td}\n`;
+            });
+
+            try {
+                await navigator.clipboard.writeText(textToCopy);
+                alert('¡Datos copiados al portapapeles!');
+            } catch (err) {
+                console.error('Error al copiar:', err);
+                alert('No se pudo copiar. Inténtalo manualmente.');
+            }
+        }
+
+        async function continueWithExistingData() {
+            const numeroDocumento = numeroDocInput.value.trim();
+            if (numeroDocumento === '') return;
+            
+            try {
+                const response = await fetch(SHEETS_API_URL);
+                const data = await response.json();
+                const existingRecord = data.reverse().find(record => 
+                    record['NumeroDocumento'] && String(record['NumeroDocumento']).trim() === numeroDocumento
+                );
+
+                if (existingRecord) {
+                    fillFormWithData(existingRecord);
+                    closeCheckModal();
+                    alert('Formulario rellenado con los datos existentes. Puedes modificar y enviar.');
+                } else {
+                    alert('Error: No se encontró el registro para rellenar.');
+                }
+            } catch (error) {
+                console.error('Error al rellenar el formulario:', error);
+            }
+        }
+
+        function fillFormWithData(record) {
+            // Mapeo entre las CLAVES de la hoja de cálculo y los IDs de los inputs del formulario
+            const formFieldMap = {
+                'Red': 'red',
+                'IPRESS': 'ipress',
+                'CodigoIPRESS': 'codigoIpress',
+                'Apellidos': 'apellidos',
+                'Nombres': 'nombres',
+                'TipoDocumento': 'tipoDoc',
+                'NumeroDocumento': 'numeroDoc',
+                'Cargo': 'cargo',
+                'Profesional': 'profesional',
+                'CodigoPlanilla': 'codigoPlanilla',
+                'Colegiatura': 'colegiatura',
+                'Resolucion': 'numResolucion',
+                'FechaEmision': 'fechaEmision',
+                'FechaTermino': 'fechaTermino',
+                'Telefono': 'telefono',
+                'CorreoInstitucional': 'correoInstitucional',
+                'CorreoParticular': 'correoParticular',
+                'TipoSolicitud': 'solicitud',
+                'Auditor': 'auditor'
+            };
+
+            // Llenar RED y disparar el evento para cargar las IPRESS
+            const redSelect = document.getElementById('red');
+            redSelect.value = record['Red'];
+            actualizarIpress();
+
+            // Usamos un pequeño delay para que la lista de IPRESS se cargue antes de seleccionarla
+            setTimeout(() => {
+                for (const sheetKey in formFieldMap) {
+                    const inputId = formFieldMap[sheetKey];
+                    const inputElement = document.getElementById(inputId);
+                    let value = record[sheetKey];
+
+                    if (inputElement && (value !== undefined && value !== null)) {
+                        if (inputElement.type === 'date' && value) {
+                            inputElement.value = value.substring(0, 10); // Formato YYYY-MM-DD
+                        } else {
+                            inputElement.value = value;
+                        }
+                    }
+                }
+                // Después de llenar todos los campos, asignamos el código de IPRESS y validamos fechas
+                asignarCodigoIpress();
+                validarFechas();
+            }, 200); // 200ms de espera
+        }
+
+        // =========================================================================
+        // FIN: LÓGICA PARA VERIFICACIÓN DE USUARIO EXISTENTE
+        // =========================================================================
+
         const datosExcel = [
             { "codigoRed": 2, "red": "ALMENARA", "tipo": "PRESTACIONAL", "codigoIpress": 478, "ipress": "CAP III ALFREDO PIAZZA ROBERTS" },
             { "codigoRed": 2, "red": "ALMENARA", "tipo": "PRESTACIONAL", "codigoIpress": 446, "ipress": "CAP III EL AGUSTINO" },
@@ -1263,7 +1581,6 @@
     </script>
 </body>
 </html>
-
 
 
 
