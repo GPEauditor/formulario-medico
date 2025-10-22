@@ -588,6 +588,34 @@
             </div>
         </div>
     </div>
+    
+    <div id="instrucciones-modal" class="modal-overlay" style="display: flex;"> <div class="modal-container" style="max-width: 650px;">
+            <span id="close-instrucciones-modal" class="modal-close">&times;</span>
+            
+            <h3 style="text-align: center; margin-bottom: 10px; font-size: 1.5em;">INSTRUCCIONES IMPORTANTES</h3>
+            <p style="text-align: center; font-weight: 500; color: var(--primary-color); margin-top: 0; font-size: 1.1em;">
+                PLAZOS DE CREACIÓN Y/O REACTIVACIÓN
+            </p>
+            
+            <div class="modal-body" style="max-height: none; padding-right: 0; margin-top: 0;">
+                <ul style="list-style-type: decimal; padding-left: 25px; line-height: 1.7; font-size: 0.95em;">
+                    <li style="margin-bottom: 12px;">
+                        Para usuarios nuevos, luego de rellenar el Formulario el <strong>ADMINISTRADOR SIGI</strong> (<a href="mailto:adminsigi@essalud.gob.pe" style="color: var(--secondary-color); font-weight: 500;">adminsigi@essalud.gob.pe</a>) remitirá un correo con su usuario y contraseña al correo personal consignado, en un plazo de <strong>5 días hábiles</strong>.
+                    </li>
+                    <li style="margin-bottom: 12px;">
+                        Si desea realizar un <strong>cambio de datos registrados</strong> (ej. correo, IPRESS, nueva resolución, etc.), debe informar el cambio a su <strong>Médico Auditor</strong> y completar nuevamente el Formulario con los datos actualizados.
+                    </li>
+                    <li style="margin-bottom: 12px;">
+                        Para <strong>renovar o recuperar su contraseña</strong>, dirija un correo a <a href="mailto:adminsigi@essalud.gob.pe" style="color: var(--secondary-color); font-weight: 500;">adminsigi@essalud.gob.pe</a> con el asunto: "<strong>SOLICITUD DE RENOVACION DE CONTRASEÑAS</strong>" consignando en el cuerpo de correo la RED/IPRESS, Apellidos/Nombres y Nº DNI.
+                    </li>
+                </ul>
+            </div>
+            
+            <div class="modal-footer" style="justify-content: center;">
+                <button id="btn-entendido" class="modal-button continue">Entendido</button>
+            </div>
+        </div>
+    </div>
     <script>
         // =========================================================================
         // INICIO: LÓGICA PARA VERIFICACIÓN DE USUARIO EXISTENTE
@@ -700,7 +728,7 @@
                 alert('¡Datos copiados al portapapeles!');
             } catch (err) {
                 console.error('Error al copiar:', err);
-                alert('No se pudo copiar. Inténtalo manualmente.');
+                alert('No se pudo copiar. Inténtalo manually.');
             }
         }
 
@@ -893,7 +921,7 @@
             { "codigoRed": 90, "red": "GCSPE", "tipo": "GERENCIA", "codigoIpress": 118, "ipress": "OSPE COMAS" },
             { "codigoRed": 90, "red": "GCSPE", "tipo": "GERENCIA", "codigoIpress": 120, "ipress": "OSPE HUACHO" },
             { "codigoRed": 90, "red": "GCSPE", "tipo": "GERENCIA", "codigoIpress": 130, "ipress": "OSPE PASCO" },
-            { "codigoRed": 90, "red": "GCSPE", "tipo": "GERencia", "codigoIpress": 140, "ipress": "OSPE JUNIN" },
+            { "codigoRed": 90, "red": "GCSPE", "tipo": "GERENCIA", "codigoIpress": 140, "ipress": "OSPE JUNIN" },
             { "codigoRed": 90, "red": "GCSPE", "tipo": "GERENCIA", "codigoIpress": 150, "ipress": "OSPE ICA" },
             { "codigoRed": 90, "red": "GCSPE", "tipo": "GERENCIA", "codigoIpress": 160, "ipress": "OSPE HUANCAVELICA" },
             { "codigoRed": 90, "red": "GCSPE", "tipo": "GERENCIA", "codigoIpress": 170, "ipress": "OSPE AYACUCHO" },
@@ -1539,6 +1567,30 @@
                     closeModal();
                 }
             });
+            
+            // --- Lógica para el Modal de Instrucciones ---
+            const instruccionesModal = document.getElementById('instrucciones-modal');
+            const closeInstruccionesBtn = document.getElementById('close-instrucciones-modal');
+            const entendidoBtn = document.getElementById('btn-entendido');
+
+            const closeInstruccionesModal = () => {
+                if (instruccionesModal) {
+                    instruccionesModal.style.display = 'none';
+                }
+            };
+
+            if(instruccionesModal) {
+                closeInstruccionesBtn.addEventListener('click', closeInstruccionesModal);
+                entendidoBtn.addEventListener('click', closeInstruccionesModal);
+
+                // Opcional: Cerrar si hace clic fuera del contenido del modal
+                instruccionesModal.addEventListener('click', (event) => {
+                    if (event.target === instruccionesModal) {
+                        closeInstruccionesModal();
+                    }
+                });
+            }
+            // --- Fin de la lógica del Modal de Instrucciones ---
 
             const telefonoIpressInput = document.getElementById('telefonoIpress');
             if (telefonoIpressInput) {
