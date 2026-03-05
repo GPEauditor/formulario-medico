@@ -9,13 +9,13 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
     <style>
         :root {
             --primary-color: #0d47a1;
             --secondary-color: #1565c0;
             --title-color: #2980b9;
-            /* Color unificado para títulos */
             --light-blue-bg: #e3f2fd;
             --light-gray: #f4f7f6;
             --text-color: #333;
@@ -38,7 +38,6 @@
             padding: 15px 20px;
             display: flex;
             justify-content: center;
-            /* Centra el contenido de la cabecera */
             align-items: center;
             box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
         }
@@ -47,11 +46,8 @@
             display: flex;
             align-items: center;
             gap: 20px;
-            /* Espacio entre el logo y el título */
             flex-wrap: wrap;
-            /* Permite que el texto se ajuste en pantallas pequeñas */
             justify-content: center;
-            /* Centra en caso de ajuste de línea */
         }
 
         .header-banner img {
@@ -62,7 +58,6 @@
             color: #ffffff;
             font-size: 1.8em;
             margin: 0;
-            /* Resetea el margen para un mejor alineamiento */
             border: none;
             padding: 0;
             text-align: center;
@@ -73,8 +68,6 @@
                 font-size: 1.4em;
             }
         }
-
-        /* --- FIN DE AJUSTE DE CABECERA --- */
 
         .container {
             max-width: 800px;
@@ -430,9 +423,7 @@
             box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
             position: relative;
             max-height: 80vh;
-            /* Límite de altura */
             overflow-y: auto;
-            /* Scroll si el contenido es muy largo */
         }
 
         .modal-close {
@@ -474,7 +465,6 @@
             text-decoration: underline;
         }
 
-        /* --- INICIO: ESTILOS PARA LA NUEVA MODAL DE VERIFICACIÓN --- */
         #existingUserModal .modal-container {
             max-width: 750px;
             display: flex;
@@ -591,8 +581,6 @@
             background-color: var(--primary-color);
             transform: translateY(-2px);
         }
-
-        /* --- ESTILO TABLA --- */
     </style>
 </head>
 
@@ -808,56 +796,68 @@
                     </tr>
                 </thead>
                 <tbody>
-
+                    <tr>
+                        <td class="auditor-cell">
+                            <b>MOTTA CANDELA JEANNETTE MILAGROS</b><br>
+                            <a href="mailto:jeannette.motta@essalud.gob.pe">jeannette.motta@essalud.gob.pe</a><br>
+                            <i>Suplente: Dr. ROMERO</i>
+                        </td>
+                        <td>ÁNCASH, JUNÍN, PASCO, PIURA</td>
+                    </tr>
+                    <tr>
+                        <td class="auditor-cell">
+                            <b>ROMERO ROMERO DAVID CARLOS</b><br>
+                            <a href="mailto:david.romero@essalud.gob.pe">david.romero@essalud.gob.pe</a><br>
+                            <i>Suplente: Dra. MOTTA</i>
+                        </td>
+                        <td>AREQUIPA, JULIACA, TACNA, JAÉN, MOYOBAMBA, CNSR</td>
+                    </tr>
+                    <tr>
+                        <td class="auditor-cell">
+                            <b>ECHARRY ZEGARRA MONICA ANELVI</b><br>
+                            <a href="mailto:monica.echarry@essalud.gob.pe">monica.echarry@essalud.gob.pe</a><br>
+                            <i>Suplente: Dra. DELGADO</i>
+                        </td>
+                        <td>AMAZONAS, AYACUCHO, LAMBAYEQUE, REBAGLIATI, TUMBES, HUÁNUCO</td>
+                    </tr>
+                    <tr>
+                        <td class="auditor-cell">
+                            <b>DELGADO MALDONADO MARIA SALOMÉ</b><br>
+                            <a href="mailto:maria.delgadom@essalud.gob.pe">maria.delgadom@essalud.gob.pe</a><br>
+                            <i>Suplente: Dra. ECHARRY</i>
+                        </td>
+                        <td>CAJAMARCA, CEVIT CENTRAL, CUSCO, SABOGAL, TARAPOTO</td>
+                    </tr>
+                    <tr>
+                        <td class="auditor-cell">
+                            <b>TORRES CORONACIÓN YOHNY WALTER</b><br>
+                            <a href="mailto:yohny.torres@essalud.gob.pe">yohny.torres@essalud.gob.pe</a><br>
+                            <i>Suplente: Dr. PEÑA</i>
+                        </td>
+                        <td>APURÍMAC, LORETO, MOQUEGUA, PUNO, UCAYALI, OFERTA FLEXIBLE, ICA, MADRE DE DIOS, INCOR</td>
+                    </tr>
+                    <tr>
+                        <td class="auditor-cell">
+                            <b>PEÑA CARHUANCHO RUBEN MARCOS</b><br>
+                            <a href="mailto:ruben.pena@essalud.gob.pe">ruben.pena@essalud.gob.pe</a><br>
+                            <i>Suplente: Dr. TORRES</i>
+                        </td>
+                        <td>ALMENARA, LA LIBERTAD, HUANCAVELICA, HUARAZ</td>
+                    </tr>
                     <tr>
                         <td class="auditor-cell">
                             <b>VEGA DIAZ KATHIA DEL PILAR</b><br>
-                            <b><a href="mailto:kathia.vega@essalud.gob.pe">kathia.vega@essalud.gob.pe</a></b><br>
-                            <b>ROMERO ROMERO DAVID CARLOS</b><br>
-                            <a href="mailto:david.romero@essalud.gob.pe">david.romero@essalud.gob.pe</a>
+                            <a href="mailto:kathia.vega@essalud.gob.pe">kathia.vega@essalud.gob.pe</a><br>
+                            <i>Suplente: Dr. ROMERO</i>
                         </td>
                         <td>CITT DIGITAL</td>
                     </tr>
                     <tr>
                         <td class="auditor-cell">
-                            <b>DELGADO MALDONADO MARIA SALOMÉ</b><br>
-                            <a href="mailto:maria.delgadom@essalud.gob.pe">maria.delgadom@essalud.gob.pe</a>
-                        </td>
-                        <td>CAJAMARCA, CEVIT CENTRAL, CUSCO, ICA, SABOGAL, TARAPOTO</td>
-                    </tr>
-                    <tr>
-                        <td class="auditor-cell">
-                            <b>ECHARRY ZEGARRA MONICA ANELVI</b><br>
-                            <a href="mailto:monica.echarry@essalud.gob.pe">monica.echarry@essalud.gob.pe</a>
-                        </td>
-                        <td>AMAZONAS, AYACUCHO, HUÁNUCO, LAMBAYEQUE, REBAGLIATI, TUMBES</td>
-                    </tr>
-                    <tr>
-                        <td class="auditor-cell">
-                            <b>MOTTA CANDELA JEANNETTE MILAGROS</b><br>
-                            <a href="mailto:jeannette.motta@essalud.gob.pe">jeannette.motta@essalud.gob.pe</a>
-                        </td>
-                        <td>ANCASH, JUNÍN, PASCO, PIURA</td>
-                    </tr>
-                    <tr>
-                        <td class="auditor-cell">
-                            <b>PEÑA CARHUANCHO RUBEN MARCOS</b><br>
-                            <a href="mailto:ruben.pena@essalud.gob.pe">ruben.pena@essalud.gob.pe</a>
-                        </td>
-                        <td>ALMENARA, AREQUIPA, CNSR, HUANCAVELICA, HUARAZ, INCOR, JAÉN, JULIACA, LA LIBERTAD, MADRE DE
-                            DIOS, MOYOBAMBA, TACNA</td>
-                    </tr>
-                    <tr>
-                        <td class="auditor-cell">
-                            <b>TORRES CORONACIÓN YOHNY WALTER</b><br>
-                            <a href="mailto:yohny.torres@essalud.gob.pe">yohny.torres@essalud.gob.pe</a>
-                        </td>
-                        <td>APURIMAC, OFERTA FLEXIBLE, LORETO, MOQUEGUA, PUNO, UCAYALI</td>
-                    </tr>
-                    <tr>
-                        <td class="auditor-cell">
-                            <b>SÁNCHEZ PINTO ERNESTO JOSÉ</b><br>
-                            <a href="mailto:ernesto.sanchez@essalud.gob.pe">ernesto.sanchez@essalud.gob.pe</a>
+                            <b>Lic. SÁNCHEZ PINTO ERNESTO JOSÉ</b><br>
+                            <a href="mailto:ernesto.sanchez@essalud.gob.pe">ernesto.sanchez@essalud.gob.pe</a><br>
+                            <i>Suplente: Lic. MACEDO ACOSTUPA DIANA</i>
+                            <a href="mailto:diana.macedo@essalud.gob.pe">diana.macedo@essalud.gob.pe</a><br>
                         </td>
                         <td>AUDITORÍA DE PRESTACIONES ECONÓMICAS EN OSPEs</td>
                     </tr>
@@ -865,8 +865,8 @@
                         <td class="auditor-cell">
                             <b>ADMINISTRADOR SIGI</b><br>
                             <b><a href="mailto:adminsigi@essalud.gob.pe">adminsigi@essalud.gob.pe</a></b><br>
-                            <b>Ing. ARANA VELARDE WILLIAM (suplente)</b><br>
-                            <a href="mailto:william.arana@essalud.gob.pe">william.arana@essalud.gob.pe</a>
+                            <i>Suplente: Ing. ARANA VELARDE WILLIAM</i>
+                            <b><a href="mailto:william.arana@essalud.gob.pe">william.arana@essalud.gob.pe</a></b><br>
                         </td>
                         <td>RENOVACIÓN DE CONTRASEÑAS SIGI, para usuarios con resolución vigente</td>
                     </tr>
@@ -923,13 +923,11 @@
     <div id="instrucciones-modal" class="modal-overlay" style="display: flex;">
         <div class="modal-container" style="max-width: 650px;">
             <span id="close-instrucciones-modal" class="modal-close">&times;</span>
-
             <h3 style="text-align: center; margin-bottom: 10px; font-size: 1.5em;">INSTRUCCIONES IMPORTANTES</h3>
             <p
                 style="text-align: center; font-weight: 500; color: var(--primary-color); margin-top: 0; font-size: 1.1em;">
                 PLAZOS DE CREACIÓN Y/O REACTIVACIÓN
             </p>
-
             <div class="modal-body" style="max-height: none; padding-right: 0; margin-top: 0;">
                 <ul style="list-style-type: decimal; padding-left: 25px; line-height: 1.7; font-size: 0.95em;">
                     <li style="margin-bottom: 12px;">
@@ -954,31 +952,28 @@
                     </li>
                 </ul>
             </div>
-
             <div class="modal-footer" style="justify-content: center;">
                 <button id="btn-entendido" class="modal-button continue">Entendido</button>
             </div>
         </div>
     </div>
+    
     <script>
         // =========================================================================
         // LÓGICA PARA VERIFICACIÓN DE USUARIO EXISTENTE
         // =========================================================================
-
-        // --- CONFIGURACIÓN ---
         const SHEETS_API_URL = 'https://script.google.com/macros/s/AKfycbx78VHM17wHa1dDho7Zn-j-sXpC_oHyc--4MAuBJF6i3SuPWjpeno4AY_VsArdrnyeQXg/exec';
 
         const numeroDocInput = document.getElementById('numeroDoc');
         const existingUserModal = document.getElementById('existingUserModal');
         const modalTitle = document.getElementById('modalTitle');
         const modalBodyContent = document.getElementById('modalBodyContent');
-        let registroEncontrado = null; // MEJORA 2b: Variable para guardar el registro
+        let registroEncontrado = null;
 
-        // Agregamos el listener sin sobreescribir el onblur existente
         numeroDocInput.addEventListener('blur', checkExistingUser);
 
         async function checkExistingUser() {
-            registroEncontrado = null; // Limpiamos el registro anterior
+            registroEncontrado = null;
             const numeroDocumento = numeroDocInput.value.trim();
             if (numeroDocumento === '') return;
 
@@ -995,12 +990,16 @@
                 );
 
                 if (existingRecord) {
-                    registroEncontrado = existingRecord; // MEJORA 2b: Guardamos el registro
+                    registroEncontrado = existingRecord;
                     showModal(existingRecord);
                 }
             } catch (error) {
                 console.error('Error al verificar el documento:', error);
-                alert('Ocurrió un error al verificar el documento. Por favor, revisa la consola para más detalles.');
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error de verificación',
+                    text: 'Ocurrió un error al verificar el documento. Por favor, revisa la consola para más detalles.'
+                });
             } finally {
                 numeroDocInput.style.cursor = 'default';
             }
@@ -1069,21 +1068,38 @@
 
             try {
                 await navigator.clipboard.writeText(textToCopy);
-                alert('¡Datos copiados al portapapeles!');
+                Swal.fire({
+                    icon: 'success',
+                    title: '¡Copiado!',
+                    text: 'Datos copiados al portapapeles.',
+                    timer: 1500,
+                    showConfirmButton: false
+                });
             } catch (err) {
                 console.error('Error al copiar:', err);
-                alert('No se pudo copiar. Inténtalo manually.');
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: 'No se pudo copiar. Inténtalo manualmente.'
+                });
             }
         }
 
-        // MEJORA 2b: La función ahora es más simple y rápida
         function continueWithExistingData() {
             if (registroEncontrado) {
                 fillFormWithData(registroEncontrado);
                 closeCheckModal();
-                alert('Formulario rellenado con los datos existentes. Puedes modificar y enviar.');
+                Swal.fire({
+                    icon: 'info',
+                    title: 'Datos cargados',
+                    text: 'Formulario rellenado con los datos existentes. Puedes modificar y enviar.'
+                });
             } else {
-                alert('Error: No se encontró el registro para rellenar el formulario.');
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: 'No se encontró el registro para rellenar el formulario.'
+                });
             }
         }
 
@@ -1562,12 +1578,15 @@
             { "codigoRed": 28, "red": "UCAYALI", "tipo": "ASISTENCIAL", "codigoIpress": 515, "ipress": "CAP I MANANTAY" }
         ];
 
+        // ACTUALIZACIÓN DE REDES Y AUDITORES SEGÚN NUEVA DISTRIBUCIÓN
         const auditoresPorRed = {
-            'maria.delgadom@essalud.gob.pe': ['CAJAMARCA', 'CUSCO', 'ICA', 'SABOGAL', 'TARAPOTO'],
-            'monica.echarry@essalud.gob.pe': ['AMAZONAS', 'AYACUCHO', 'HUANUCO', 'LAMBAYEQUE', 'REBAGLIATI', 'TUMBES'],
             'jeannette.motta@essalud.gob.pe': ['ANCASH', 'JUNIN', 'PASCO', 'PIURA'],
-            'yohny.torres@essalud.gob.pe': ['APURIMAC', 'OFERTA FLEXIBLE', 'LORETO', 'MOQUEGUA', 'PUNO', 'UCAYALI'],
-            'ruben.pena@essalud.gob.pe': ['ALMENARA', 'AREQUIPA', 'CENTRO NACIONAL DE SALUD RENAL', 'HUANCAVELICA', 'HUARAZ', 'INSTITUTO NACIONAL CARDIOVASCULAR', 'JAEN', 'JULIACA', 'LA LIBERTAD', 'MADRE DE DIOS', 'MOYOBAMBA', 'TACNA']
+            'david.romero@essalud.gob.pe': ['AREQUIPA', 'JULIACA', 'TACNA', 'JAEN', 'MOYOBAMBA', 'CENTRO NACIONAL DE SALUD RENAL'],
+            'monica.echarry@essalud.gob.pe': ['AMAZONAS', 'AYACUCHO', 'LAMBAYEQUE', 'REBAGLIATI', 'TUMBES', 'HUANUCO'],
+            'maria.delgadom@essalud.gob.pe': ['CAJAMARCA', 'CUSCO', 'SABOGAL', 'TARAPOTO'],
+            'yohny.torres@essalud.gob.pe': ['APURIMAC', 'LORETO', 'MOQUEGUA', 'PUNO', 'UCAYALI', 'OFERTA FLEXIBLE', 'ICA', 'MADRE DE DIOS', 'INSTITUTO NACIONAL CARDIOVASCULAR'],
+            'ruben.pena@essalud.gob.pe': ['ALMENARA', 'LA LIBERTAD', 'HUANCAVELICA', 'HUARAZ'],
+            'kathia.vega@essalud.gob.pe': ['CITT DIGITAL']
         };
 
         function actualizarIpress() {
@@ -1623,7 +1642,7 @@
 
         function padearDocumento(input) {
             const tipo = document.getElementById('tipoDoc').value;
-            const longitud = tipo === 'DNI' ? 8 : 12; // CE puede tener hasta 12
+            const longitud = tipo === 'DNI' ? 8 : 12;
             let valor = input.value.replace(/\D/g, '');
             if (valor && tipo === 'DNI') {
                 input.value = valor.padStart(longitud, '0');
@@ -1639,7 +1658,6 @@
 
         function togglePlanilla(checkbox) {
             const inputPlanilla = document.getElementById('codigoPlanilla');
-            const formGroup = inputPlanilla.closest('.form-group');
             if (checkbox.checked) {
                 inputPlanilla.value = 'IPRESS EXTERNA - MEDICO SERUMS';
                 inputPlanilla.readOnly = true;
@@ -1683,6 +1701,7 @@
             }
             return { anios, meses, dias };
         }
+
         function validarFechas() {
             const emisionInput = document.getElementById('fechaEmision');
             const terminoInput = document.getElementById('fechaTermino');
@@ -1692,7 +1711,11 @@
             duracionDiv.textContent = '';
             if (emision && termino) {
                 if (new Date(termino) < new Date(emision)) {
-                    alert('La fecha de término de vigencia no puede ser anterior a la fecha de emisión.');
+                    Swal.fire({
+                        icon: 'warning',
+                        title: 'Fecha inválida',
+                        text: 'La fecha de término de vigencia no puede ser anterior a la fecha de emisión.'
+                    });
                     terminoInput.value = '';
                 } else {
                     const duracion = calcularDuracion(emision, termino);
@@ -1704,6 +1727,7 @@
                 }
             }
         }
+
         function limpiarFormulario() {
             document.getElementById('formulario').reset();
             const ipressSelect = document.getElementById('ipress');
@@ -1722,30 +1746,45 @@
         function validarFormulario() {
             const form = document.getElementById('formulario');
             if (!form.checkValidity()) {
-                alert('Por favor, complete todos los campos requeridos marcados con un asterisco.');
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Atención',
+                    text: 'Por favor, complete todos los campos requeridos marcados con un asterisco.'
+                });
                 form.reportValidity();
                 return false;
             }
             const telefono = document.getElementById('telefono').value;
             if (!/^9\d{8}$/.test(telefono)) {
-                alert('Error en TELÉFONO PERSONAL: Debe empezar con 9 y tener 9 dígitos.');
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Teléfono inválido',
+                    text: 'Error en TELÉFONO PERSONAL: Debe empezar con 9 y tener 9 dígitos.'
+                });
                 return false;
             }
             const correoInstitucional = document.getElementById('correoInstitucional').value;
             const noCorreoCheckbox = document.getElementById('noCorreoInstitucional');
             if (!noCorreoCheckbox.checked && !/.+@essalud\.gob\.pe$/.test(correoInstitucional)) {
-                alert('Error en CORREO INSTITUCIONAL: Debe terminar en @essalud.gob.pe o marque la casilla "Sin correo @essalud.gob.pe".');
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Correo Institucional',
+                    text: 'Debe terminar en @essalud.gob.pe o marque la casilla "Sin correo @essalud.gob.pe".'
+                });
                 return false;
             }
             const correoParticular = document.getElementById('correoParticular').value;
             if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(correoParticular)) {
-                alert('Error en CORREO PARTICULAR: El formato no es válido.');
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Correo Particular',
+                    text: 'El formato del correo particular no es válido.'
+                });
                 return false;
             }
             return true;
         }
 
-        // MEJORA 1a: Se elimina el alert('Procesando...') y se añade el indicador de carga
         function guardarDatos() {
             if (!validarFormulario()) { return; }
 
@@ -1789,7 +1828,6 @@
             }
         }
 
-        // MEJORA 2a: Se centraliza el uso de la URL
         function enviarAGoogle(data) {
             const btnGuardar = document.getElementById('btn-guardar');
             fetch(SHEETS_API_URL, {
@@ -1802,14 +1840,22 @@
                 .then(res => res.json())
                 .then(response => {
                     console.log('Success:', response);
-                    alert('¡Registro grabado satisfactoriamente! Se ha enviado una copia a los correos registrados.');
+                    Swal.fire({
+                        icon: 'success',
+                        title: '¡Éxito!',
+                        text: '¡Registro grabado satisfactoriamente! Se ha enviado una copia a los correos registrados.'
+                    });
                     limpiarFormulario();
                 })
                 .catch(error => {
                     console.error('Error:', error);
-                    alert('Error al guardar el registro. Revise la consola para más detalles.');
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error de conexión',
+                        text: 'Error al guardar el registro. Revise la consola para más detalles.'
+                    });
                 })
-                .finally(() => { // MEJORA 1a: Se restaura el botón al finalizar
+                .finally(() => {
                     btnGuardar.disabled = false;
                     btnGuardar.innerHTML = 'Guardar';
                 });
@@ -1843,12 +1889,10 @@
             document.getElementById('tipoDoc').addEventListener('change', actualizarPlaceholderDoc);
             actualizarPlaceholderDoc();
 
-            // MEJORA 1b: Validación de Fechas Proactiva
             document.getElementById('fechaEmision').addEventListener('change', function () {
                 const fechaTerminoInput = document.getElementById('fechaTermino');
                 if (this.value) {
                     fechaTerminoInput.min = this.value;
-                    // Si la fecha de término ya seleccionada es inválida, la reseteamos
                     if (fechaTerminoInput.value && fechaTerminoInput.value < this.value) {
                         fechaTerminoInput.value = '';
                     }
@@ -1865,7 +1909,11 @@
                 });
                 codigoPlanillaInput.addEventListener('blur', () => {
                     if (!esExternaCheckbox.checked && codigoPlanillaInput.value && !/^1\d{7}$/.test(codigoPlanillaInput.value)) {
-                        alert('El CÓDIGO DE PLANILLA para personal de Essalud debe ser de 8 dígitos y empezar con 1.');
+                        Swal.fire({
+                            icon: 'warning',
+                            title: 'Código Inválido',
+                            text: 'El CÓDIGO DE PLANILLA para personal de Essalud debe ser de 8 dígitos y empezar con 1.'
+                        });
                     }
                 });
             }
@@ -1910,7 +1958,6 @@
                 }
             });
 
-            // --- Lógica para el Modal de Instrucciones ---
             const instruccionesModal = document.getElementById('instrucciones-modal');
             const closeInstruccionesBtn = document.getElementById('close-instrucciones-modal');
             const entendidoBtn = document.getElementById('btn-entendido');
@@ -1925,14 +1972,12 @@
                 closeInstruccionesBtn.addEventListener('click', closeInstruccionesModal);
                 entendidoBtn.addEventListener('click', closeInstruccionesModal);
 
-                // Opcional: Cerrar si hace clic fuera del contenido del modal
                 instruccionesModal.addEventListener('click', (event) => {
                     if (event.target === instruccionesModal) {
                         closeInstruccionesModal();
                     }
                 });
             }
-            // --- Fin de la lógica del Modal de Instrucciones ---
 
             const telefonoIpressInput = document.getElementById('telefonoIpress');
             if (telefonoIpressInput) {
