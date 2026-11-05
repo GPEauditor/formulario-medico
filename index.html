@@ -2561,7 +2561,8 @@
             numeroDocInput.style.cursor = 'wait';
 
             try {
-                const response = await fetch(SHEETS_API_URL);
+                // El script solo devuelve el registro de este documento (no toda la base)
+                const response = await fetch(`${SHEETS_API_URL}?doc=${encodeURIComponent(numeroDocumento)}`);
                 if (!response.ok) throw new Error(`Error HTTP: ${response.status}`);
 
                 const data = await response.json();
@@ -2694,7 +2695,7 @@
                 'Cargo': 'cargo', 'Profesional': 'profesional',
                 'CodigoPlanilla': 'codigoPlanilla', 'Colegiatura': 'colegiatura',
                 'Resolucion': 'numResolucion', 'FechaEmision': 'fechaEmision',
-                'FechaTermino': 'fechaTermino', 'Telefono': 'telefono',
+                'FechaTermino': 'fechaTermino', 'Telefono': 'telefono', 'TelefonoIpress': 'telefonoIpress',
                 'CorreoInstitucional': 'correoInstitucional',
                 'CorreoParticular': 'correoParticular', 'TipoSolicitud': 'solicitud',
                 'Auditor': 'auditor'
@@ -3022,7 +3023,6 @@
             { "codigoRed": 17, "red": "LAMBAYEQUE", "tipo": "PRESTACIONAL", "codigoIpress": 260, "ipress": "PM UCUPE" },
             { "codigoRed": 17, "red": "LAMBAYEQUE", "tipo": "PRESTACIONAL", "codigoIpress": 384, "ipress": "POL AGUSTIN GAVIDIA SALCEDO" },
             { "codigoRed": 17, "red": "LAMBAYEQUE", "tipo": "PRESTACIONAL", "codigoIpress": 370, "ipress": "POL CHICLAYO OESTE" },
-            { "codigoRed": 17, "red": "LAMBAYEQUE", "tipo": "PRESTACIONAL", "codigoIpress": 775, "ipress": "PCC CUTERVO" },
             { "codigoRed": 17, "red": "LAMBAYEQUE", "tipo": "PRESTACIONAL", "codigoIpress": 776, "ipress": "HOSPITAL MODULAR BICENTENARIO GILBERTO VILLENA ARROBAS – CHOTA" },
             { "codigoRed": 19, "red": "LORETO", "tipo": "ASISTENCIAL", "codigoIpress": 64, "ipress": "CAP II CABALLOCOCHA" },
             { "codigoRed": 19, "red": "LORETO", "tipo": "ASISTENCIAL", "codigoIpress": 65, "ipress": "CAP II NAUTA" },
@@ -3151,6 +3151,7 @@
             { "codigoRed": 25, "red": "TARAPOTO", "tipo": "ASISTENCIAL", "codigoIpress": 285, "ipress": "PM BELLAVISTA" },
             { "codigoRed": 25, "red": "TARAPOTO", "tipo": "ASISTENCIAL", "codigoIpress": 286, "ipress": "PM LAMAS" },
             { "codigoRed": 25, "red": "TARAPOTO", "tipo": "ASISTENCIAL", "codigoIpress": 289, "ipress": "PM SAPOSOA" },
+            { "codigoRed": 25, "red": "TARAPOTO", "tipo": "ASISTENCIAL", "codigoIpress": 708, "ipress": "CAP I MORALES" },
             { "codigoRed": 25, "red": "TARAPOTO", "tipo": "ASISTENCIAL", "codigoIpress": 709, "ipress": "CM METROPOLITANO" },
             { "codigoRed": 27, "red": "TUMBES", "tipo": "ASISTENCIAL", "codigoIpress": 292, "ipress": "HI CARLOS ALBERTO CORTEZ JIMENEZ" },
             { "codigoRed": 27, "red": "TUMBES", "tipo": "ASISTENCIAL", "codigoIpress": 293, "ipress": "PM LA CRUZ" },
@@ -3162,7 +3163,28 @@
             { "codigoRed": 28, "red": "UCAYALI", "tipo": "ASISTENCIAL", "codigoIpress": 352, "ipress": "PM ATALAYA" },
             { "codigoRed": 28, "red": "UCAYALI", "tipo": "ASISTENCIAL", "codigoIpress": 355, "ipress": "PM CONTAMANA" },
             { "codigoRed": 28, "red": "UCAYALI", "tipo": "ASISTENCIAL", "codigoIpress": 503, "ipress": "CAP I CAMPOVERDE" },
-            { "codigoRed": 28, "red": "UCAYALI", "tipo": "ASISTENCIAL", "codigoIpress": 515, "ipress": "CAP I MANANTAY" }
+            { "codigoRed": 28, "red": "UCAYALI", "tipo": "ASISTENCIAL", "codigoIpress": 515, "ipress": "CAP I MANANTAY" },
+            // Red 99 · CITT DIGITAL: clínicas con convenio (códigos oficiales E01–E19, según el maestro de IPRESS de la GCPP del 05/11/2026)
+            { "codigoRed": 99, "red": "CITT DIGITAL", "tipo": "CONVENIO INTERINSTITUCIONAL", "codigoIpress": "E01", "ipress": "CLINICA JAVIER PRADO" },
+            { "codigoRed": 99, "red": "CITT DIGITAL", "tipo": "CONVENIO INTERINSTITUCIONAL", "codigoIpress": "E02", "ipress": "CLINICA PADRE LUIS TEZZA" },
+            { "codigoRed": 99, "red": "CITT DIGITAL", "tipo": "CONVENIO INTERINSTITUCIONAL", "codigoIpress": "E03", "ipress": "CLINICA SANNA SAN BORJA" },
+            { "codigoRed": 99, "red": "CITT DIGITAL", "tipo": "CONVENIO INTERINSTITUCIONAL", "codigoIpress": "E04", "ipress": "CLINICA SAN JUDAS TADEO" },
+            { "codigoRed": 99, "red": "CITT DIGITAL", "tipo": "CONVENIO INTERINSTITUCIONAL", "codigoIpress": "E05", "ipress": "CLINICA SAN GABRIEL" },
+            { "codigoRed": 99, "red": "CITT DIGITAL", "tipo": "CONVENIO INTERINSTITUCIONAL", "codigoIpress": "E06", "ipress": "CLINICA SAN JUAN BAUTISTA" },
+            { "codigoRed": 99, "red": "CITT DIGITAL", "tipo": "CONVENIO INTERINSTITUCIONAL", "codigoIpress": "E07", "ipress": "CLINICA SANTA MARTHA DEL SUR" },
+            { "codigoRed": 99, "red": "CITT DIGITAL", "tipo": "CONVENIO INTERINSTITUCIONAL", "codigoIpress": "E08", "ipress": "CLINICA SAN PABLO DE SURCO" },
+            { "codigoRed": 99, "red": "CITT DIGITAL", "tipo": "CONVENIO INTERINSTITUCIONAL", "codigoIpress": "E09", "ipress": "CLINICA JESUS DEL NORTE" },
+            { "codigoRed": 99, "red": "CITT DIGITAL", "tipo": "CONVENIO INTERINSTITUCIONAL", "codigoIpress": "E10", "ipress": "CLINICA LA SOLIDARIDAD DE BARRANCA" },
+            { "codigoRed": 99, "red": "CITT DIGITAL", "tipo": "CONVENIO INTERINSTITUCIONAL", "codigoIpress": "E11", "ipress": "CLINICA RICARDO PALMA" },
+            { "codigoRed": 99, "red": "CITT DIGITAL", "tipo": "CONVENIO INTERINSTITUCIONAL", "codigoIpress": "E12", "ipress": "CLINICA MEDEX" },
+            { "codigoRed": 99, "red": "CITT DIGITAL", "tipo": "CONVENIO INTERINSTITUCIONAL", "codigoIpress": "E13", "ipress": "CLINICA AUNA BELLAVISTA" },
+            { "codigoRed": 99, "red": "CITT DIGITAL", "tipo": "CONVENIO INTERINSTITUCIONAL", "codigoIpress": "E14", "ipress": "CLINICA MONTEFIORI" },
+            { "codigoRed": 99, "red": "CITT DIGITAL", "tipo": "CONVENIO INTERINSTITUCIONAL", "codigoIpress": "E15", "ipress": "CLINICA AVIVA LIMA CENTRO" },
+            { "codigoRed": 99, "red": "CITT DIGITAL", "tipo": "CONVENIO INTERINSTITUCIONAL", "codigoIpress": "E16", "ipress": "CLINICA AVIVA LOS OLIVOS" },
+            { "codigoRed": 99, "red": "CITT DIGITAL", "tipo": "CONVENIO INTERINSTITUCIONAL", "codigoIpress": "E17", "ipress": "CLINICA SAN PABLO AREQUIPA" },
+            { "codigoRed": 99, "red": "CITT DIGITAL", "tipo": "CONVENIO INTERINSTITUCIONAL", "codigoIpress": "E18", "ipress": "CLINICA SAN PABLO HUARAZ" },
+            { "codigoRed": 99, "red": "CITT DIGITAL", "tipo": "CONVENIO INTERINSTITUCIONAL", "codigoIpress": "E19", "ipress": "CLINICA SAN PABLO TRUJILLO" },
+            { "codigoRed": 99, "red": "CITT DIGITAL", "tipo": "CONVENIO INTERINSTITUCIONAL", "codigoIpress": "E20", "ipress": "CLINICA SAN JUAN DE DIOS AREQUIPA" }
         ];
 
         // ACTUALIZACIÓN DE REDES Y AUDITORES SEGÚN NUEVA DISTRIBUCIÓN
@@ -3389,11 +3411,17 @@
             })
                 .then(res => res.json())
                 .then(response => {
-                    console.log('Success:', response);
+                    if (response.status !== 'success') {
+                        throw new Error(response.message || 'El servidor no pudo guardar el registro.');
+                    }
+                    const codigo = response.registro ? `<br><small>N.º de registro: <b>${esc(response.registro)}</b></small>` : '';
+                    const correoOk = response.correo !== 'fallido';
                     Swal.fire({
-                        icon: 'success',
-                        title: '¡Éxito!',
-                        text: '¡Registro grabado satisfactoriamente! Se ha enviado una copia a los correos registrados.'
+                        icon: correoOk ? 'success' : 'warning',
+                        title: correoOk ? '¡Registro exitoso!' : 'Registro guardado',
+                        html: (correoOk
+                            ? 'Su registro fue grabado y se envió una copia a los correos registrados.'
+                            : 'Su registro fue grabado, pero no se pudo enviar el correo de confirmación. Comuníquese con su Médico Auditor.') + codigo
                     });
                     limpiarFormulario();
                 })
@@ -3401,8 +3429,10 @@
                     console.error('Error:', error);
                     Swal.fire({
                         icon: 'error',
-                        title: 'Error de conexión',
-                        text: 'Error al guardar el registro. Revise la consola para más detalles.'
+                        title: 'No se pudo guardar',
+                        text: error instanceof TypeError
+                            ? 'Error de conexión. Verifique su internet e intente nuevamente.'
+                            : error.message
                     });
                 })
                 .finally(() => {
@@ -3578,6 +3608,56 @@
             { n: 'Lic. SÁNCHEZ PINTO ERNESTO JOSÉ', e: 'ernesto.sanchez@essalud.gob.pe', s: 'Lic. MACEDO ACOSTUPA DIANA', se: 'diana.macedo@essalud.gob.pe', r: ['AUDITORÍA DE PRESTACIONES ECONÓMICAS EN OSPEs'] }
         ];
         const ADMIN_SIGI = { n: 'ADMINISTRADOR SIGI', e: 'adminsigi@essalud.gob.pe', s: 'Ing. ARANA VELARDE WILLIAM', se: 'william.arana@essalud.gob.pe', r: ['RENOVACIÓN DE CONTRASEÑAS SIGI, para usuarios con resolución vigente'], admin: true };
+
+        // =========================================================================
+        // DIRECTORIO DINÁMICO (05/11/2026): redes, IPRESS y auditores salen de la pestaña «Directorio» que publica el
+        // sistema SGAPE (script del formulario: ?accion=directorio). Lo escrito arriba (datosExcel, auditoresPorRed,
+        // AUDITORES) queda como RESPALDO si no hay conexión. Una IPRESS o un auditor nuevo agregado aquí a mano NO se
+        // publica solo: llega al administrador del sistema como propuesta.
+        // =========================================================================
+        (function directorioDinamico() {
+            const CLAVE = 'sgape_directorio_v1';
+            const VISIBLE = { 'ANCASH': 'ÁNCASH', 'JUNIN': 'JUNÍN', 'JAEN': 'JAÉN', 'HUANUCO': 'HUÁNUCO', 'APURIMAC': 'APURÍMAC',
+                'CENTRO NACIONAL DE SALUD RENAL': 'CNSR', 'INSTITUTO NACIONAL CARDIOVASCULAR': 'INCOR' };
+            const sinTilde = s => String(s).normalize('NFD').replace(/[̀-ͯ]/g, '').toUpperCase().trim();
+            const valido = d => !!d && Array.isArray(d.ipress) && d.ipress.length >= 100 && !!d.auditoresPorRed && typeof d.auditoresPorRed === 'object' &&
+                d.ipress.every(x => Number.isInteger(x.codigoRed) && (Number.isInteger(x.codigoIpress) || /^[A-Z]\d{1,3}$/.test(String(x.codigoIpress))) && x.red && x.ipress && x.tipo);
+            let aplicada = '';
+            function aplicar(d) {
+                datosExcel.splice(0, datosExcel.length, ...d.ipress.map(x => ({ codigoRed: x.codigoRed, red: x.red, tipo: x.tipo, codigoIpress: x.codigoIpress, ipress: x.ipress })));
+                Object.keys(auditoresPorRed).forEach(k => delete auditoresPorRed[k]);
+                Object.entries(d.auditoresPorRed).forEach(([k, v]) => { if (Array.isArray(v)) auditoresPorRed[k] = v; });
+                const conocidas = new Set(d.ipress.map(x => sinTilde(x.red)));
+                const esRed = r => conocidas.has(sinTilde(r)) || Object.values(VISIBLE).includes(r);
+                AUDITORES.forEach(a => {
+                    const redes = auditoresPorRed[a.e];
+                    if (!redes) return;                               // auditor que la hoja no trae: queda como está
+                    const extras = a.r.filter(r => !esRed(r));        // p. ej. CEVIT CENTRAL, que no es una red del listado
+                    a.r = [...new Set([...redes.map(r => VISIBLE[r] || r), ...extras])].sort((x, y) => x.localeCompare(y, 'es'));
+                });
+            }
+            let cache = null;
+            try { cache = JSON.parse(localStorage.getItem(CLAVE) || 'null'); } catch (e) { cache = null; }
+            if (valido(cache)) { aplicar(cache); aplicada = cache.version || ''; }
+
+            let tocado = false;
+            document.addEventListener('input', () => { tocado = true; }, true);
+            function aviso() {
+                if (document.getElementById('aviso-directorio')) return;
+                const b = document.createElement('div');
+                b.id = 'aviso-directorio';
+                b.style.cssText = 'position:fixed;left:12px;right:12px;bottom:12px;z-index:9999;background:#0a2c63;color:#fff;padding:10px 14px;border-radius:10px;font:14px system-ui;display:flex;gap:12px;align-items:center;justify-content:space-between;box-shadow:0 4px 16px rgba(0,0,0,.3)';
+                b.innerHTML = '<span>Se actualizó la lista de redes, IPRESS y auditores. Al terminar de llenar el formulario, recargue la página.</span><button style="background:#c9a24a;border:0;border-radius:8px;padding:6px 12px;font-weight:700;cursor:pointer">Recargar</button>';
+                b.querySelector('button').onclick = () => location.reload();
+                document.body.appendChild(b);
+            }
+            fetch(SHEETS_API_URL + '?accion=directorio', { cache: 'no-store' }).then(r => r.json()).then(d => {
+                if (!d || d.status !== 'ok' || !valido(d) || d.version === aplicada) return;
+                try { localStorage.setItem(CLAVE, JSON.stringify(d)); } catch (e) { /* sin almacenamiento: se usa en la próxima carga si hay */ }
+                if (!tocado && !sessionStorage.getItem('sgape_dir_recarga')) { sessionStorage.setItem('sgape_dir_recarga', d.version); location.reload(); }
+                else aviso();
+            }).catch(() => { /* sin conexión o sin hoja «Directorio»: se queda con lo que ya hay */ });
+        })();
 
         function iniciales(nombre) {
             const p = nombre.replace(/^(Lic|Dr|Dra|Ing)\.\s*/i, '').split(/\s+/);
@@ -3851,7 +3931,15 @@
                 chip.hidden = !f;
                 if (f) nombre.textContent = `${f.name} (${(f.size / 1024 < 1024 ? Math.round(f.size / 1024) + ' KB' : (f.size / 1048576).toFixed(1) + ' MB')})`;
             };
-            input.addEventListener('change', mostrar);
+            const MAX_MB = 10;   // debe coincidir con MAX_ARCHIVO_MB del Apps Script
+            input.addEventListener('change', () => {
+                const f = input.files[0];
+                if (f && f.size > MAX_MB * 1048576) {
+                    input.value = '';
+                    Swal.fire({ icon: 'warning', title: 'Archivo muy grande', text: `La resolución no debe superar los ${MAX_MB} MB. Reduzca el tamaño del PDF o la imagen.` });
+                }
+                mostrar();
+            });
             ['dragenter', 'dragover'].forEach(ev => dz.addEventListener(ev, e => { e.preventDefault(); dz.classList.add('drag'); }));
             ['dragleave', 'drop'].forEach(ev => dz.addEventListener(ev, () => dz.classList.remove('drag')));
         })();
@@ -4074,3 +4162,4 @@
 </body>
 
 </html>
+
